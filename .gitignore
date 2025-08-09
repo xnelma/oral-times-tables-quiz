@@ -52,3 +52,9 @@ compile_commands.json
 *creator.user*
 
 *_qmlcache.qrc
+
+# cmake build directory
+build/
+
+# project-related but temporary files
+scratch/
