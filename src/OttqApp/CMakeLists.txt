@@ -1,6 +1,6 @@
 qt_add_executable(OTTQ main.cpp)
 
-target_link_libraries(OTTQ PRIVATE Qt6::Quick)
+target_link_libraries(OTTQ PRIVATE Qt6::Quick Qt6::TextToSpeech)
 
 qt_add_qml_module(OTTQ
     URI OttqApp
