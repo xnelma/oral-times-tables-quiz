@@ -2,6 +2,7 @@
 
 qt_path=
 build_path=
+qml_dirs=
 
 printf "Running linter and dry-running formatter on source files.\n"
 
@@ -60,11 +61,31 @@ then
     exit 1
 fi
 
+if [ -z "$qml_dirs" ];
+then
+    # The needed directory contains the file describing c++ components
+    qml_dirs=$(find $build_path -name *"qmltyperegistrations.cpp" \
+        | head -n 1 \
+        | xargs realpath -m --relative-to=. \
+        | xargs dirname)
+fi
+
+if [ -z "$qml_dirs" ];
+then
+    printf "Directory of QML type registration file not found. %s %s\n" \
+        "Linting of QML source files might fail." \
+        "Please check the path in the pre-commit file."
+fi
+
 for file in $(git diff-index --cached --name-only HEAD \
               | grep -iE '\.(qml)$');
 do
-    printf "file $file\n"
-    $qt_path/qmllint $file
+    if [ -z "$qml_dirs" ];
+    then
+        $qt_path/qmllint $file
+    else
+        $qt_path/qmllint $file --qmldirs $qml_dirs
+    fi
     res=$(( $res | $? ))
 
     $qt_path/qmlformat $file \

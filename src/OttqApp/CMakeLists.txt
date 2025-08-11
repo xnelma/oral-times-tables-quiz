@@ -9,6 +9,9 @@ qt_add_qml_module(OTTQ
         Main.qml
         SetupView.qml
         QuizView.qml
+    SOURCES
+        backend.hpp
+        backend.cpp
 )
 
 qt_add_translations(OTTQ

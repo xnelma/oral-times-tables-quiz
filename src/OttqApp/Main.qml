@@ -1,3 +1,4 @@
+import OttqApp
 import QtQuick
 import QtQuick.Controls.Basic
 import QtQuick.Layouts
@@ -68,6 +69,11 @@ ApplicationWindow {
                 onClicked: menu.popup(leftMargin, 0)
             }
         }
+    }
+
+    Backend {
+        id: backend
+
     }
 
     Dialog {
