@@ -71,11 +71,6 @@ ApplicationWindow {
         }
     }
 
-    Backend {
-        id: backend
-
-    }
-
     Dialog {
         id: dlgAbout
 
