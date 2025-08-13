@@ -30,5 +30,10 @@
         <source>Complete</source>
         <translation>Beenden</translation>
     </message>
+    <message>
+        <location filename="../QuizView.qml" line="70"/>
+        <source>%1 times %2</source>
+        <translation>%1 mal %2</translation>
+    </message>
 </context>
 </TS>

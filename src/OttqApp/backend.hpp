@@ -3,6 +3,7 @@
 
 #include <QObject>
 #include <qqml.h>
+#include <QTranslator>
 
 class Backend : public QObject
 {
@@ -12,6 +13,11 @@ class Backend : public QObject
 
 public:
     explicit Backend(QObject *parent = nullptr);
+
+    Q_INVOKABLE QString getQuestion();
+
+private:
+    QTranslator translator_;
 };
 
 #endif // BACKEND_H
