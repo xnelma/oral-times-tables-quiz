@@ -4,6 +4,8 @@
 #include <QLocale>
 #include <QtLogging>
 
+#include "placeholder.hpp"
+
 Backend::Backend(QObject *parent) : QObject{ parent }
 {
     bool ok = translator_.load(QString(":/qt/qml/OttqApp/i18n/qml_de.qm"));
@@ -14,5 +16,6 @@ Backend::Backend(QObject *parent) : QObject{ parent }
 
 QString Backend::getQuestion()
 {
-    return translator_.translate("Main", "%1 times %2").arg(2).arg(21);
+    Placeholder p;
+    return translator_.translate("Main", "%1 times %2").arg(p.a).arg(p.b);
 }

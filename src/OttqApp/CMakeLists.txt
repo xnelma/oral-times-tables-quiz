@@ -1,6 +1,14 @@
 qt_add_executable(OTTQ main.cpp)
 
-target_link_libraries(OTTQ PRIVATE Qt6::Quick Qt6::TextToSpeech)
+target_link_libraries(OTTQ PRIVATE
+    Qt6::Quick
+    Qt6::TextToSpeech
+    TimesTables
+)
+
+target_include_directories(OTTQ PRIVATE
+    "${PROJECT_SOURCE_DIR}/include/TimesTables"
+)
 
 qt_add_qml_module(OTTQ
     URI OttqApp
