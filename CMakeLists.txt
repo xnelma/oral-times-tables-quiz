@@ -27,3 +27,4 @@ qt_standard_project_setup(
 
 add_subdirectory(src/OttqApp)
 add_subdirectory(src/TimesTables)
+add_subdirectory(test)

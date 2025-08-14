@@ -2,6 +2,7 @@
 
 qt_path=
 build_path=
+test_path=
 qml_dirs=
 
 printf "Running linter and dry-running formatter on source files.\n"
@@ -98,14 +99,44 @@ do
 done
 
 #
-# Output result and set return code
+# Output linting and formatting result
 #
 
-if [ $res -eq 0 ];
+if [ $res -ne 0 ];
 then
-    printf "Ok\n"
-    exit 0
+    printf "Aborting commit due to one or more warnings or an error.\n"
+    exit 1
 fi
 
-printf "Aborting commit due to one or more warnings or an error.\n"
-exit 1
+printf "Ok\n"
+
+#
+# Run unit tests
+#
+
+printf "Running unit tests.\n"
+
+if [ -z "$test_path" ];
+then
+    test_path=$(find $build_path -maxdepth 1 -name "test" \
+        | head -n 1 \
+        | xargs realpath -m --relative-to=.)
+fi
+
+if [ -z "$test_path" ];
+then
+    printf "Aborting commit due to not finding the unit tests. %s\n" \
+        "Please check the path in the pre-commit file."
+    exit 1
+fi
+
+ctest --test-dir $test_path --output-on-failure
+res=$(( $res | $? ))
+
+if [ $res -ne 0 ];
+then
+    printf "Aborting commit\n"
+    exit 1
+fi
+
+printf "Ok\n"
