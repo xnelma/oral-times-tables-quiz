@@ -4,8 +4,9 @@ qt_path=
 build_path=
 test_path=
 qml_dirs=
+# the paths will be set by searching for keywords, if left empty.
 
-printf "Running linter and dry-running formatter on source files.\n"
+printf "Running linter and dry-running formatter on source files\n"
 
 res=0
 
@@ -23,7 +24,7 @@ fi
 if [ -z "$build_path" ];
 then
     printf "Aborting commit due to not finding the build directory. %s\n" \
-        "Please check the path in the pre-commit file."
+        "Please check the path in the pre-commit file"
     exit 1
 fi
 
@@ -58,7 +59,7 @@ fi
 if [ -z "$qt_path" ];
 then
     printf "Aborting commit due to not finding qmllint and qmlformat. %s\n" \
-        "Please check the path in the pre-commit file."
+        "Please check the path in the pre-commit file"
     exit 1
 fi
 
@@ -75,7 +76,7 @@ if [ -z "$qml_dirs" ];
 then
     printf "Directory of QML type registration file not found. %s %s\n" \
         "Linting of QML source files might fail." \
-        "Please check the path in the pre-commit file."
+        "Please check the path in the pre-commit file"
 fi
 
 for file in $(git diff-index --cached --name-only HEAD \
@@ -104,7 +105,7 @@ done
 
 if [ $res -ne 0 ];
 then
-    printf "Aborting commit due to one or more warnings or an error.\n"
+    printf "Aborting commit due to one or more warnings or an error\n"
     exit 1
 fi
 
@@ -114,7 +115,7 @@ printf "Ok\n"
 # Run unit tests
 #
 
-printf "Running unit tests.\n"
+printf "Running unit tests\n"
 
 if [ -z "$test_path" ];
 then
@@ -127,7 +128,7 @@ if [ -z "$test_path" ];
 then
     printf "No unit tests found. In case of cross compiling, %s %s\n" \
         "consider building the tests locally. In case they should run," \
-        "please check the path in the pre-commit file."
+        "please check the path in the pre-commit file"
     exit 0
 fi
 
