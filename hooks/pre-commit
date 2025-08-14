@@ -125,9 +125,10 @@ fi
 
 if [ -z "$test_path" ];
 then
-    printf "Aborting commit due to not finding the unit tests. %s\n" \
-        "Please check the path in the pre-commit file."
-    exit 1
+    printf "No unit tests found. In case of cross compiling, %s %s\n" \
+        "consider building the tests locally. In case they should run," \
+        "please check the path in the pre-commit file."
+    exit 0
 fi
 
 ctest --test-dir $test_path --output-on-failure

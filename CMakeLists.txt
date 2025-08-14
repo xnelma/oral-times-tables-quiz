@@ -27,4 +27,7 @@ qt_standard_project_setup(
 
 add_subdirectory(src/OttqApp)
 add_subdirectory(src/TimesTables)
-add_subdirectory(test)
+if(NOT ${CMAKE_SYSTEM_NAME} STREQUAL "Android")
+    # don't cross compile the unit tests for now
+    add_subdirectory(test)
+endif()
