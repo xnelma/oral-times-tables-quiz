@@ -14,5 +14,10 @@ int main(int argc, char *argv[])
         Qt::QueuedConnection);
     engine.loadFromModule("OttqApp", "Main");
 
+    // used by settings
+    QCoreApplication::setOrganizationName("xnelma");
+    QCoreApplication::setOrganizationDomain("github.com/xnelma");
+    QCoreApplication::setApplicationName("Oral Times Tables Quiz");
+
     return app.exec();
 }

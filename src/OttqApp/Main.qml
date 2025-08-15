@@ -34,6 +34,24 @@ ApplicationWindow {
                             }
                         }
                     }
+                },
+                State {
+                    name: "settings"
+
+                    PropertyChanges {
+                        btnMenu {
+                            visible: false
+                        }
+
+                        btnNav {
+                            text: qsTr("Go Back")
+
+                            onClicked: {
+                                state = "";
+                                stack.pop();
+                            }
+                        }
+                    }
                 }
             ]
 
@@ -88,6 +106,15 @@ ApplicationWindow {
 
             onClicked: dlgAbout.open()
         }
+
+        MenuItem {
+            text: qsTr("Settings")
+
+            onClicked: {
+                btnNav.state = "settings";
+                stack.push(settingsView);
+            }
+        }
     }
 
     StackView {
@@ -108,6 +135,13 @@ ApplicationWindow {
         id: quizView
 
         QuizView {
+        }
+    }
+
+    Component {
+        id: settingsView
+
+        SettingsView {
         }
     }
 }
