@@ -11,6 +11,11 @@ QString QuizBackend::localeName()
     return translator_.locale().name();
 }
 
+double QuizBackend::voiceRate()
+{
+    return 0.75;
+}
+
 QString QuizBackend::getQuestion()
 {
     Placeholder p;
