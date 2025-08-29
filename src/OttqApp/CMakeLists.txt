@@ -4,10 +4,12 @@ target_link_libraries(OTTQ PRIVATE
     Qt6::Quick
     Qt6::TextToSpeech
     TimesTables
+    TtsModule
 )
 
 target_include_directories(OTTQ PRIVATE
     "${PROJECT_SOURCE_DIR}/include/TimesTables"
+    "${PROJECT_SOURCE_DIR}/include/TtsModule"
 )
 
 qt_add_qml_module(OTTQ
@@ -21,6 +23,10 @@ qt_add_qml_module(OTTQ
     SOURCES
         backend.hpp
         backend.cpp
+        quiz_backend.hpp
+        quiz_backend.cpp
+        settings_backend.hpp
+        settings_backend.cpp
 )
 
 qt_add_translations(OTTQ

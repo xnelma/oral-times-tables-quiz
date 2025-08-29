@@ -142,6 +142,8 @@ ApplicationWindow {
         id: settingsView
 
         SettingsView {
+            parentWidth: width
+            width: Math.min(parent.width, 250)
         }
     }
 }

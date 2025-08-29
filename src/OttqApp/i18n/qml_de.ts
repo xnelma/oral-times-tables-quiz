@@ -40,10 +40,31 @@
         <source>Complete</source>
         <translation>Beenden</translation>
     </message>
+</context>
+<context>
+    <name>QuizView</name>
     <message>
-        <location filename="../QuizView.qml" line="23"/>
+        <location filename="../quiz_backend.cpp" line="5"/>
         <source>%1 times %2</source>
         <translation>%1 mal %2</translation>
+    </message>
+    <message>
+        <location filename="../QuizView.qml" line="17"/>
+        <source>Language Error</source>
+        <translation>Fehler (Sprachen)</translation>
+    </message>
+    <message>
+        <location filename="../QuizView.qml" line="21"/>
+        <source>Language for Text-to-Speech engine not found.</source>
+        <translation>Die Sprache für die Text-to-Speech Engine wurde nicht gefunden.</translation>
+    </message>
+</context>
+<context>
+    <name>SettingsView</name>
+    <message>
+        <location filename="../SettingsView.qml" line="22"/>
+        <source>Text-to-Speech Settings</source>
+        <translation>Text-to-Speech Einstellungen</translation>
     </message>
 </context>
 </TS>
