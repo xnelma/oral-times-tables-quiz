@@ -18,6 +18,7 @@ qt_add_qml_module(OTTQ
     QML_FILES
         Main.qml
         SetupView.qml
+        SetupViewSectionTitle.qml
         QuizView.qml
         SettingsView.qml
     SOURCES
