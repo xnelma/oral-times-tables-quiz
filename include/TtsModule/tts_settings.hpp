@@ -18,7 +18,7 @@ public:
 
     void saveLocaleSetting(const LocaleDescriptor &ld);
     void saveAutoLocaleSetting(const bool useAutoLocale);
-    void saveVoiceRateSetting(const double voiceRate);
+    void saveVoiceRateSetting(const double rate);
 
 private:
     const QString languageKey_;

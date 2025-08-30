@@ -3,6 +3,7 @@ add_library(TtsModule STATIC
     tts_language_settings.cpp
     quiz_translator.cpp
     auto_locale.cpp
+    tts_rate_settings.cpp
 )
 
 target_link_libraries(TtsModule PRIVATE

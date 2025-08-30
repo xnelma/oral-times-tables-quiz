@@ -26,6 +26,11 @@ QString SettingsBackend::autoLocaleName()
         .arg(autoLocale.nativeTerritoryName());
 }
 
+double SettingsBackend::voiceRate()
+{
+    return voiceRateSettings_.load();
+}
+
 void SettingsBackend::setLanguageIndex(const int index)
 {
     languageSettings_.setIndex(index);
@@ -41,4 +46,9 @@ void SettingsBackend::setUseAutoTtsLanguage(const bool useAutoTtsLanguage)
         languageSettings_.setToManualMode();
 
     emit useAutoTtsLanguageChanged();
+}
+
+void SettingsBackend::setVoiceRate(const double rate)
+{
+    voiceRateSettings_.save(rate);
 }
