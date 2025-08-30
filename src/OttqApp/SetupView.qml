@@ -20,6 +20,8 @@ Item {
                 id: timesTableNumber
 
                 anchors.horizontalCenter: parent.horizontalCenter
+                from: 1
+                to: 100
                 value: timesTableNumberDecimalStep.value
             }
 
@@ -69,7 +71,7 @@ Item {
 
             anchors.horizontalCenter: parent.horizontalCenter
             first.value: 10
-            from: 2
+            from: 1
             second.value: 20
             snapMode: RangeSlider.SnapAlways
             stepSize: 1
