@@ -1,0 +1,47 @@
+#include "quiz_translator.hpp"
+#include "tts_settings.hpp"
+#include "locale_descriptor.hpp"
+#include "auto_locale.hpp"
+
+Tts::QuizTranslator::QuizTranslator() : isAvailable_(true)
+{
+    locale_ = loadLocale();
+}
+
+QLocale Tts::QuizTranslator::locale()
+{
+    return locale_;
+}
+
+QString Tts::QuizTranslator::translate(const QString question)
+{
+    if (translator_.language() != locale_.languageToCode(locale_.language()))
+        loadTranslation();
+
+    return translator_.translate("QuizView", question.toStdString().c_str());
+}
+
+bool Tts::QuizTranslator::isAvailable()
+{
+    return isAvailable_;
+}
+
+QLocale Tts::QuizTranslator::loadLocale()
+{
+    bool useAutoLocale = loadAutoLocaleSetting();
+    if (useAutoLocale)
+        return autoLocale();
+
+    LocaleDescriptor ld = loadLocaleSetting();
+    if (ld.language <= QLocale::C)
+        return autoLocale();
+    // If the territory is QLocale::AnyTerritory, that's the same as the
+    // default argument for QLocale, so it doesn't need to be checked.
+
+    return QLocale(ld.language, ld.territory);
+}
+
+void Tts::QuizTranslator::loadTranslation()
+{
+    isAvailable_ = translator_.load(qmFilePath.arg(locale_.name()));
+}

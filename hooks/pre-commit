@@ -1,0 +1,144 @@
+#!/bin/sh
+
+qt_path=
+build_path=
+test_path=
+qml_dirs=
+# the paths will be set by searching for keywords, if left empty.
+
+printf "Running linter and dry-running formatter on source files\n"
+
+res=0
+
+#
+# Run clang-tidy and clang-format on C and C++ files
+#
+
+if [ -z "$build_path" ];
+then
+    build_path=$(find . -wholename \*/build/* \
+        | head -n 1 \
+        | xargs realpath -m --relative-to=.)
+fi
+
+if [ -z "$build_path" ];
+then
+    printf "Aborting commit due to not finding the build directory. %s\n" \
+        "Please check the path in the pre-commit file"
+    exit 1
+fi
+
+for file in $(git diff-index --cached --name-only HEAD \
+              | grep -iE '\.(c|cpp|h|hpp)$');
+do
+    # the checks are listed in the .clang-tidy config file
+    clang-tidy $file \
+        -p $build_path \
+        --warnings-as-errors=*
+    res=$(( $res | $? ))
+
+    clang-format $file \
+        --style=InheritParentConfig \
+        --dry-run \
+        --Werror
+    res=$(( $res | $? ))
+done
+
+#
+# Run qmllint and qmlformat on QML files
+#
+
+if [ -z "$qt_path" ];
+then
+    qt_path=$(find ~/Qt -maxdepth 4 -wholename \*/bin/qmllint \
+        | head -n 1 \
+        | xargs realpath \
+        | xargs dirname)
+fi
+
+if [ -z "$qt_path" ];
+then
+    printf "Aborting commit due to not finding qmllint and qmlformat. %s\n" \
+        "Please check the path in the pre-commit file"
+    exit 1
+fi
+
+if [ -z "$qml_dirs" ];
+then
+    # The needed directory contains the file describing c++ components
+    qml_dirs=$(find $build_path -name *"qmltyperegistrations.cpp" \
+        | head -n 1 \
+        | xargs realpath -m --relative-to=. \
+        | xargs dirname)
+fi
+
+if [ -z "$qml_dirs" ];
+then
+    printf "Directory of QML type registration file not found. %s %s\n" \
+        "Linting of QML source files might fail." \
+        "Please check the path in the pre-commit file"
+fi
+
+for file in $(git diff-index --cached --name-only HEAD \
+              | grep -iE '\.(qml)$');
+do
+    if [ -z "$qml_dirs" ];
+    then
+        $qt_path/qmllint $file
+    else
+        $qt_path/qmllint $file --qmldirs $qml_dirs
+    fi
+    res=$(( $res | $? ))
+
+    $qt_path/qmlformat $file \
+        | diff $file - \
+            --unchanged-line-format="" \
+            --old-line-format="[qmlformat:$file:%dn] %L" \
+            --new-line-format="   %dn | %L"
+    # The format for "new-line" matches the output format of clang-format
+    res=$(( $res | $? ))
+done
+
+#
+# Output linting and formatting result
+#
+
+if [ $res -ne 0 ];
+then
+    printf "Aborting commit due to one or more warnings or an error\n"
+    exit 1
+fi
+
+printf "Ok\n"
+
+#
+# Run unit tests
+#
+
+printf "Running unit tests\n"
+
+if [ -z "$test_path" ];
+then
+    test_path=$(find $build_path -maxdepth 1 -name "test" \
+        | head -n 1 \
+        | xargs realpath -m --relative-to=.)
+fi
+
+if [ -z "$test_path" ];
+then
+    printf "No unit tests found. In case of cross compiling, %s %s\n" \
+        "consider building the tests locally. In case they should run," \
+        "please check the path in the pre-commit file"
+    exit 0
+fi
+
+ctest --test-dir $test_path --output-on-failure
+res=$(( $res | $? ))
+
+if [ $res -ne 0 ];
+then
+    printf "Aborting commit\n"
+    exit 1
+fi
+
+printf "Ok\n"
