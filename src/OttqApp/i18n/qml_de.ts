@@ -66,5 +66,10 @@
         <source>Text-to-Speech Settings</source>
         <translation>Text-to-Speech Einstellungen</translation>
     </message>
+    <message>
+        <location filename="../SettingsView.qml" line="58"/>
+        <source>Voice rate:</source>
+        <translation>Sprechgeschwindigkeit:</translation>
+    </message>
 </context>
 </TS>

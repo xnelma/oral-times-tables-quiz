@@ -50,14 +50,13 @@ Item {
 
         function setUp() {
             tts.locale = Qt.locale(quizBackend.localeName);
+            tts.rate = quizBackend.voiceRate;
 
             // If the locale is not available, the property won't change.
             if (tts.locale.name != quizBackend.localeName) {
                 quizBackend.isAvailable = false;
                 dlgLocaleError.open();
             }
-
-        // TODO Have a setting for the tts rate
         }
     }
 

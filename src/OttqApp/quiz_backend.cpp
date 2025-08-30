@@ -1,5 +1,6 @@
 #include "quiz_backend.hpp"
 #include "placeholder.hpp"
+#include "tts_settings.hpp"
 
 QuizBackend::QuizBackend(QObject *parent)
     : QObject(parent), isAvailable_(true), question_("%1 times %2")
@@ -9,6 +10,13 @@ QuizBackend::QuizBackend(QObject *parent)
 QString QuizBackend::localeName()
 {
     return translator_.locale().name();
+}
+
+double QuizBackend::voiceRate()
+{
+    // Is only called once at setup
+    Tts::Settings settings;
+    return settings.loadVoiceRateSetting();
 }
 
 QString QuizBackend::getQuestion()

@@ -11,6 +11,7 @@ class QuizBackend : public QObject
 {
     Q_OBJECT
     Q_PROPERTY(QString localeName READ localeName NOTIFY localeNameChanged)
+    Q_PROPERTY(double voiceRate READ voiceRate NOTIFY voiceRateChanged)
     // clang-format off
     Q_PROPERTY(bool isAvailable
                READ isAvailable
@@ -23,12 +24,14 @@ public:
     explicit QuizBackend(QObject *parent = nullptr);
 
     QString localeName();
+    double voiceRate();
     bool isAvailable();
     void setAvailability(const bool &isAvailable);
     Q_INVOKABLE QString getQuestion();
 
 signals:
     void localeNameChanged();
+    void voiceRateChanged();
     void availabilityChanged();
 
 private:

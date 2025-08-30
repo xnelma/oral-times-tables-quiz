@@ -2,6 +2,7 @@
 #define SETTINGS_BACKEND_HPP
 
 #include "tts_language_settings.hpp"
+#include "tts_rate_settings.hpp"
 #include <QObject>
 #include <qqml.h>
 #include <QStringList>
@@ -22,6 +23,10 @@ class SettingsBackend : public QObject
     Q_PROPERTY(QString autoLocaleName
                READ autoLocaleName
                NOTIFY autoLocaleNameChanged)
+    Q_PROPERTY(double voiceRate
+               READ voiceRate
+               WRITE setVoiceRate
+               NOTIFY voiceRateChanged)
     // clang-format on
     QML_ELEMENT
 
@@ -32,18 +37,22 @@ public:
     int languageIndex();
     bool useAutoTtsLanguage();
     QString autoLocaleName();
+    double voiceRate();
 
     void setLanguageIndex(const int index);
     void setUseAutoTtsLanguage(const bool useAutoTtsLanguage);
+    void setVoiceRate(const double rate);
 
 signals:
     void languagesChanged();
     void languageIndexChanged();
     void useAutoTtsLanguageChanged();
     void autoLocaleNameChanged();
+    void voiceRateChanged();
 
 private:
     Tts::LanguageSettings languageSettings_;
+    Tts::VoiceRateSettings voiceRateSettings_;
 };
 
 #endif // SETTINGS_BACKEND_HPP

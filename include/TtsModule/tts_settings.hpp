@@ -14,13 +14,17 @@ public:
 
     LocaleDescriptor loadLocaleSetting();
     bool loadAutoLocaleSetting();
+    double loadVoiceRateSetting();
+
     void saveLocaleSetting(const LocaleDescriptor &ld);
     void saveAutoLocaleSetting(const bool useAutoLocale);
+    void saveVoiceRateSetting(const double rate);
 
 private:
     const QString languageKey_;
     const QString territoryKey_;
     const QString autoLocaleKey_;
+    const QString voiceRateKey_;
 
     QSettings settings_;
 };
