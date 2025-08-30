@@ -53,5 +53,23 @@ Item {
 
             onActivated: settingsBackend.languageIndex = currentIndex
         }
+
+        Label {
+            text: qsTr("Voice rate:")
+        }
+
+        SpinBox {
+            from: -10
+            textFromValue: function (value) {
+                // FIXME causes a binding loop
+
+                var rate = value / 10;
+                return Number(rate).toLocaleString(Qt.locale("C"), 'f', 1);
+            }
+            to: 10
+            value: settingsBackend.voiceRate * 10
+
+            onValueChanged: settingsBackend.voiceRate = value / 10
+        }
     }
 }
