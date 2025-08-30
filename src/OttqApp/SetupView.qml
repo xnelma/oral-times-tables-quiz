@@ -1,14 +1,23 @@
+import OttqApp
 import QtQuick
 import QtQuick.Controls.Basic
 
 Item {
+    SetupBackend {
+        id: setupBackend
+
+    }
+
     Column {
         anchors.centerIn: parent
         spacing: 10
 
         SetupViewSectionTitle {
             anchors.horizontalCenter: parent.horizontalCenter
-            subtitle: qsTr("Add a number") // Or the number list if not empty.
+            subtitle: {
+                var numbers = setupBackend.timesTableNumbers;
+                return numbers === "" ? qsTr("Add a number") : numbers;
+            }
             title: qsTr("Times Tables:")
         }
 
@@ -49,7 +58,7 @@ Item {
                 text: qsTr("Add")
                 width: timesTableNumber.width
 
-                onClicked: console.log(timesTableNumber.value)
+                onClicked: setupBackend.addTimesTable(timesTableNumber.value)
             }
         }
 
@@ -70,15 +79,15 @@ Item {
             property int low: Math.round(first.value)
 
             anchors.horizontalCenter: parent.horizontalCenter
-            first.value: 10
+            first.value: setupBackend.minFactor
             from: 1
-            second.value: 20
+            second.value: setupBackend.maxFactor
             snapMode: RangeSlider.SnapAlways
             stepSize: 1
             to: 100
 
-            first.onMoved: console.log(low)
-            second.onMoved: console.log(high)
+            first.onMoved: setupBackend.minFactor = low
+            second.onMoved: setupBackend.maxFactor = high
         }
     }
 }
