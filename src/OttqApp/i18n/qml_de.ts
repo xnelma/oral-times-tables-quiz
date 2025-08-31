@@ -72,4 +72,27 @@
         <translation>Sprechgeschwindigkeit:</translation>
     </message>
 </context>
+<context>
+    <name>SetupView</name>
+    <message>
+        <location filename="../SetupView.qml" line="18"/>
+        <source>Add a number</source>
+        <translation>Zahl hinzufügen</translation>
+    </message>
+    <message>
+        <location filename="../SetupView.qml" line="20"/>
+        <source>Times Tables:</source>
+        <translation>Reihen:</translation>
+    </message>
+    <message>
+        <location filename="../SetupView.qml" line="57"/>
+        <source>Add</source>
+        <translation>Hinzufügen</translation>
+    </message>
+    <message>
+        <location filename="../SetupView.qml" line="71"/>
+        <source>Factors:</source>
+        <translation>Faktoren:</translation>
+    </message>
+</context>
 </TS>

@@ -18,6 +18,7 @@ qt_add_qml_module(OTTQ
     QML_FILES
         Main.qml
         SetupView.qml
+        SetupViewSectionTitle.qml
         QuizView.qml
         SettingsView.qml
     SOURCES
@@ -27,6 +28,8 @@ qt_add_qml_module(OTTQ
         quiz_backend.cpp
         settings_backend.hpp
         settings_backend.cpp
+        setup_backend.hpp
+        setup_backend.cpp
 )
 
 qt_add_translations(OTTQ
