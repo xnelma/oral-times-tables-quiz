@@ -1,8 +1,8 @@
-#include "setup_backend.hpp"
+#include "quiz_configuration.hpp"
 
-SetupBackend::SetupBackend(QObject *parent) : QObject{ parent } { }
+QuizConfiguration::QuizConfiguration(QObject *parent) : QObject{ parent } { }
 
-QString SetupBackend::timesTableNumbers()
+QString QuizConfiguration::timesTablesStr()
 {
     QString timesTables;
     for (const int n : quizSettings_.timesTables())
@@ -13,17 +13,22 @@ QString SetupBackend::timesTableNumbers()
     return timesTables.first(timesTables.length() - 2);
 }
 
-int SetupBackend::minFactor()
+QList<int> QuizConfiguration::timesTables()
+{
+    return quizSettings_.timesTables();
+}
+
+int QuizConfiguration::minFactor()
 {
     return quizSettings_.factorRange().from;
 }
 
-int SetupBackend::maxFactor()
+int QuizConfiguration::maxFactor()
 {
     return quizSettings_.factorRange().to;
 }
 
-void SetupBackend::setMinFactor(const int min)
+void QuizConfiguration::setMinFactor(const int min)
 {
     if (minFactor() == min)
         return;
@@ -33,7 +38,7 @@ void SetupBackend::setMinFactor(const int min)
     emit minFactorChanged();
 }
 
-void SetupBackend::setMaxFactor(const int max)
+void QuizConfiguration::setMaxFactor(const int max)
 {
     if (maxFactor() == max)
         return;
@@ -43,9 +48,9 @@ void SetupBackend::setMaxFactor(const int max)
     emit maxFactorChanged();
 }
 
-void SetupBackend::addTimesTable(const int number)
+void QuizConfiguration::addTimesTable(const int number)
 {
     quizSettings_.addTimesTable(number);
 
-    emit timesTablesChanged();
+    emit timesTablesStrChanged();
 }

@@ -7,6 +7,9 @@ Item {
     QuizBackend {
         id: quizBackend
 
+        Component.onCompleted: {
+            startQuiz(QuizConfiguration.timesTables, QuizConfiguration.minFactor, QuizConfiguration.maxFactor);
+        }
     }
 
     Dialog {

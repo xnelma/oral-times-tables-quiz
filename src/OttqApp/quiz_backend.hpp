@@ -27,7 +27,10 @@ public:
     double voiceRate();
     bool isAvailable();
     void setAvailability(const bool &isAvailable);
+
     Q_INVOKABLE QString getQuestion();
+    Q_INVOKABLE void startQuiz(const QList<int> tables, const int minFactor,
+                               const int maxFactor);
 
 signals:
     void localeNameChanged();

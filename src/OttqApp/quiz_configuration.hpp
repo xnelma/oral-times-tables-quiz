@@ -5,12 +5,15 @@
 #include <QObject>
 #include <qqml.h>
 
-class SetupBackend : public QObject
+class QuizConfiguration : public QObject
 {
     Q_OBJECT
     // clang-format off
-    Q_PROPERTY(QString timesTableNumbers
-        READ timesTableNumbers
+    Q_PROPERTY(QString timesTablesStr
+        READ timesTablesStr
+        NOTIFY timesTablesStrChanged)
+    Q_PROPERTY(QList<int> timesTables
+        READ timesTables
         NOTIFY timesTablesChanged)
     Q_PROPERTY(int minFactor
         READ minFactor
@@ -21,14 +24,16 @@ class SetupBackend : public QObject
         WRITE setMaxFactor
         NOTIFY maxFactorChanged)
     // clang-format on
+    QML_SINGLETON
     QML_ELEMENT
 
 public:
-    explicit SetupBackend(QObject *parent = nullptr);
+    explicit QuizConfiguration(QObject *parent = nullptr);
 
     Q_INVOKABLE void addTimesTable(const int number);
 
-    QString timesTableNumbers();
+    QString timesTablesStr();
+    QList<int> timesTables();
     int minFactor();
     int maxFactor();
 
@@ -36,6 +41,7 @@ public:
     void setMaxFactor(const int max);
 
 signals:
+    void timesTablesStrChanged();
     void timesTablesChanged();
     void minFactorChanged();
     void maxFactorChanged();

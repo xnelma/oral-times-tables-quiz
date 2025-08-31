@@ -1,6 +1,7 @@
 #include "quiz_backend.hpp"
 #include "placeholder.hpp"
 #include "tts_settings.hpp"
+#include "quiz_configuration.hpp"
 
 QuizBackend::QuizBackend(QObject *parent)
     : QObject(parent), isAvailable_(true), question_("%1 times %2")
@@ -23,6 +24,12 @@ QString QuizBackend::getQuestion()
 {
     Placeholder p;
     return translator_.translate(question_).arg(p.a).arg(p.b);
+}
+
+// NOLINTNEXTLINE(bugprone-easily-swappable-parameters)
+void QuizBackend::startQuiz(const QList<int> tables, const int minFactor,
+                            const int maxFactor)
+{
 }
 
 bool QuizBackend::isAvailable()
