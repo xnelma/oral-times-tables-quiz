@@ -1,6 +1,7 @@
 #ifndef SETUP_BACKEND_HPP
 #define SETUP_BACKEND_HPP
 
+#include "quiz_settings.hpp"
 #include <QObject>
 #include <qqml.h>
 
@@ -10,7 +11,7 @@ class SetupBackend : public QObject
     // clang-format off
     Q_PROPERTY(QString timesTableNumbers
         READ timesTableNumbers
-        NOTIFY timesTableNumbersChanged)
+        NOTIFY timesTablesChanged)
     Q_PROPERTY(int minFactor
         READ minFactor
         WRITE setMinFactor
@@ -35,9 +36,12 @@ public:
     void setMaxFactor(const int max);
 
 signals:
-    void timesTableNumbersChanged();
+    void timesTablesChanged();
     void minFactorChanged();
     void maxFactorChanged();
+
+private:
+    TimesTables::Settings quizSettings_;
 };
 
 #endif // SETUP_BACKEND_HPP

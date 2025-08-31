@@ -4,30 +4,48 @@ SetupBackend::SetupBackend(QObject *parent) : QObject{ parent } { }
 
 QString SetupBackend::timesTableNumbers()
 {
-    return "";
+    QString timesTables;
+    for (const int n : quizSettings_.timesTables())
+        timesTables += QString::number(n) + ", ";
+
+    if (timesTables.length() < 2)
+        return "";
+    return timesTables.first(timesTables.length() - 2);
 }
 
 int SetupBackend::minFactor()
 {
-    return 2;
+    return quizSettings_.factorRange().from;
 }
 
 int SetupBackend::maxFactor()
 {
-    return 20;
+    return quizSettings_.factorRange().to;
 }
 
 void SetupBackend::setMinFactor(const int min)
 {
-    int m = min;
+    if (minFactor() == min)
+        return;
+
+    quizSettings_.setMinFactor(min);
+
+    emit minFactorChanged();
 }
 
 void SetupBackend::setMaxFactor(const int max)
 {
-    int m = max;
+    if (maxFactor() == max)
+        return;
+
+    quizSettings_.setMaxFactor(max);
+
+    emit maxFactorChanged();
 }
 
 void SetupBackend::addTimesTable(const int number)
 {
-    int n = number;
+    quizSettings_.addTimesTable(number);
+
+    emit timesTablesChanged();
 }
