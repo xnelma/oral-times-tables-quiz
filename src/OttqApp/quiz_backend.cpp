@@ -2,9 +2,11 @@
 #include "placeholder.hpp"
 #include "tts_settings.hpp"
 #include "quiz_configuration.hpp"
+#include "factor_range.hpp"
+#include "question.hpp"
 
 QuizBackend::QuizBackend(QObject *parent)
-    : QObject(parent), isAvailable_(true), question_("%1 times %2")
+    : QObject(parent), isAvailable_(true), questionBase_("%1 times %2")
 {
 }
 
@@ -20,16 +22,22 @@ double QuizBackend::voiceRate()
     return settings.loadVoiceRateSetting();
 }
 
-QString QuizBackend::getQuestion()
-{
-    Placeholder p;
-    return translator_.translate(question_).arg(p.a).arg(p.b);
-}
-
 // NOLINTNEXTLINE(bugprone-easily-swappable-parameters)
 void QuizBackend::startQuiz(const QList<int> tables, const int minFactor,
                             const int maxFactor)
 {
+    quiz_.reset(tables, TimesTables::FactorRange(minFactor, maxFactor));
+    translator_.translate(questionBase_);
+
+    // NOLINTNEXTLINE(cppcoreguidelines-pro-type-member-init)
+    if (TimesTables::Question q; quiz_.nextQuestion(q)) {
+        emit questionChanged(questionBase_.arg(q.number).arg(q.factor));
+    } else {
+        // Shouldn't happen because at least one question should be in the list
+        // after setup.
+        isAvailable_ = false;
+        emit availabilityChanged();
+    }
 }
 
 bool QuizBackend::isAvailable()

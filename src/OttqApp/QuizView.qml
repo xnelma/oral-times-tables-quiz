@@ -15,8 +15,8 @@ FocusScope {
     QuizBackend {
         id: quizBackend
 
-        Component.onCompleted: {
-            startQuiz(QuizConfiguration.timesTables, QuizConfiguration.minFactor, QuizConfiguration.maxFactor);
+        onQuestionChanged: question => {
+            tts.enqueue(question);
         }
     }
 
@@ -91,6 +91,23 @@ FocusScope {
                 dlgLocaleError.open();
             }
         }
+    }
+
+    Connections {
+        id: connectionTtsReady
+
+        // The quiz should get started after the tts becomes available the
+        // first time. Otherwise enqueueing the first question, in case of an
+        // initial error state, would not be possible.
+
+        function onStateChanged() {
+            if (tts.state == TextToSpeech.Ready) {
+                quizBackend.startQuiz(QuizConfiguration.timesTables, QuizConfiguration.minFactor, QuizConfiguration.maxFactor);
+                target = null; // Call once.
+            }
+        }
+
+        target: tts
     }
 
     Connections {

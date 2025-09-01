@@ -13,12 +13,12 @@ QLocale Tts::QuizTranslator::locale()
     return locale_;
 }
 
-QString Tts::QuizTranslator::translate(const QString question)
+void Tts::QuizTranslator::translate(QString &question)
 {
     if (translator_.language() != locale_.languageToCode(locale_.language()))
         loadTranslation();
 
-    return translator_.translate("QuizView", question.toStdString().c_str());
+    question = translator_.translate("QuizView", question.toLocal8Bit().data());
 }
 
 bool Tts::QuizTranslator::isAvailable()

@@ -2,6 +2,7 @@
 #define QUIZ_BACKEND_HPP
 
 #include "quiz_translator.hpp"
+#include "quiz.hpp"
 #include <QObject>
 #include <qqml.h>
 #include <QLocale>
@@ -32,7 +33,6 @@ public:
     void setAvailability(const bool &isAvailable);
     int numQuestionsRemaining();
 
-    Q_INVOKABLE QString getQuestion();
     Q_INVOKABLE void startQuiz(const QList<int> tables, const int minFactor,
                                const int maxFactor);
 
@@ -41,11 +41,13 @@ signals:
     void voiceRateChanged();
     void availabilityChanged();
     void numQuestionsRemainingChanged();
+    void questionChanged(QString question);
 
 private:
     Tts::QuizTranslator translator_;
     bool isAvailable_;
-    const QString question_;
+    TimesTables::Quiz quiz_;
+    QString questionBase_;
 };
 
 #endif // QUIZ_BACKEND_HPP
