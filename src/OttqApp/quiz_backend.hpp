@@ -30,11 +30,13 @@ public:
     QString localeName();
     double voiceRate();
     bool isAvailable();
-    void setAvailability(const bool &isAvailable);
     int numQuestionsRemaining();
+
+    void setAvailability(const bool &isAvailable);
 
     Q_INVOKABLE void startQuiz(const QList<int> tables, const int minFactor,
                                const int maxFactor);
+    Q_INVOKABLE void check(const QString input);
 
 signals:
     void localeNameChanged();
@@ -44,6 +46,8 @@ signals:
     void questionChanged(QString question);
 
 private:
+    void nextQuestion();
+
     Tts::QuizTranslator translator_;
     bool isAvailable_;
     TimesTables::Quiz quiz_;

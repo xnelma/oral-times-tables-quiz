@@ -22,6 +22,25 @@ double QuizBackend::voiceRate()
     return settings.loadVoiceRateSetting();
 }
 
+bool QuizBackend::isAvailable()
+{
+    return isAvailable_ && translator_.isAvailable();
+}
+
+int QuizBackend::numQuestionsRemaining()
+{
+    return 1;
+}
+
+void QuizBackend::setAvailability(const bool &isAvailable)
+{
+    if (isAvailable == isAvailable_)
+        return;
+
+    isAvailable_ = isAvailable;
+    emit availabilityChanged();
+}
+
 // NOLINTNEXTLINE(bugprone-easily-swappable-parameters)
 void QuizBackend::startQuiz(const QList<int> tables, const int minFactor,
                             const int maxFactor)
@@ -40,21 +59,23 @@ void QuizBackend::startQuiz(const QList<int> tables, const int minFactor,
     }
 }
 
-bool QuizBackend::isAvailable()
+void QuizBackend::check(const QString input)
 {
-    return isAvailable_ && translator_.isAvailable();
-}
-
-int QuizBackend::numQuestionsRemaining()
-{
-    return 1;
-}
-
-void QuizBackend::setAvailability(const bool &isAvailable)
-{
-    if (isAvailable == isAvailable_)
+    if (input == "")
         return;
 
-    isAvailable_ = isAvailable;
-    emit availabilityChanged();
+    bool inputIsValid = false;
+    int inputNum = input.toInt(&inputIsValid);
+    if (inputIsValid && quiz_.answerIsCorrect(inputNum))
+        nextQuestion();
+}
+
+void QuizBackend::nextQuestion()
+{
+    // NOLINTNEXTLINE(cppcoreguidelines-pro-type-member-init)
+    if (TimesTables::Question q; quiz_.nextQuestion(q))
+        emit questionChanged(questionBase_.arg(q.number).arg(q.factor));
+    else
+        return;
+    // TODO notify about the quiz being done
 }

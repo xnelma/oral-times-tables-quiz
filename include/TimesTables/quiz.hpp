@@ -13,7 +13,7 @@ class Quiz
 public:
     void reset(QList<int> timesTables, FactorRange factorRange);
     bool nextQuestion(Question &question);
-    bool checkAnswer(int product);
+    bool answerIsCorrect(const int answer);
 
     int numQuestionsRemaining();
 

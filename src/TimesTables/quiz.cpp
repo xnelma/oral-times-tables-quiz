@@ -18,6 +18,12 @@ bool TimesTables::Quiz::nextQuestion(Question &question)
     return true;
 }
 
+bool TimesTables::Quiz::answerIsCorrect(const int answer)
+{
+    Question question = { 2, 7 }; // maybe the first in the queue?
+    return question.check(answer);
+}
+
 int TimesTables::Quiz::numQuestionsRemaining()
 {
     return 1;

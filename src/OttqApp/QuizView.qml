@@ -16,6 +16,7 @@ FocusScope {
         id: quizBackend
 
         onQuestionChanged: question => {
+            answerInput.text = "";
             tts.enqueue(question);
         }
     }
@@ -48,6 +49,7 @@ FocusScope {
         onInputMethodHintsChanged: {
             forceActiveFocus();
         }
+        onTextChanged: quizBackend.check(text)
     }
 
     // Text-to-Speech:

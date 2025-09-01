@@ -5,6 +5,8 @@ namespace TimesTables {
 
 struct Question
 {
+    bool check(const int product) { return factor * number == product; }
+
     int number;
     int factor;
 };
