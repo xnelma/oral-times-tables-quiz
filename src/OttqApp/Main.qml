@@ -135,6 +135,8 @@ ApplicationWindow {
         id: quizView
 
         QuizView {
+            parentHeight: height
+            parentWidth: width
         }
     }
 

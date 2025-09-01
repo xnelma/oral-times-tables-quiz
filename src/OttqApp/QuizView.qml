@@ -3,7 +3,15 @@ import QtQuick
 import QtQuick.Controls.Basic
 import QtTextToSpeech
 
-Item {
+FocusScope {
+    id: qRoot
+
+    required property int parentHeight
+    required property int parentWidth
+
+    height: parentHeight
+    width: parentWidth
+
     QuizBackend {
         id: quizBackend
 
@@ -11,6 +19,38 @@ Item {
             startQuiz(QuizConfiguration.timesTables, QuizConfiguration.minFactor, QuizConfiguration.maxFactor);
         }
     }
+
+    // Times Tables:
+
+    Label {
+        anchors.right: parent.right
+        anchors.rightMargin: 2
+        anchors.top: parent.top
+        anchors.topMargin: 2
+        opacity: 0.5
+        text: {
+            var num = quizBackend.numQuestionsRemaining;
+            return num <= 0 ? "" : num + " " + qsTr("left");
+        }
+    }
+
+    TextArea {
+        id: answerInput
+
+        anchors.horizontalCenter: parent.horizontalCenter
+        anchors.top: parent.top
+        anchors.topMargin: qRoot.parentHeight / 3
+        focus: true
+        font.bold: true
+        inputMethodHints: Qt.ImhDigitsOnly
+        placeholderText: qsTr("Result")
+
+        onInputMethodHintsChanged: {
+            forceActiveFocus();
+        }
+    }
+
+    // Text-to-Speech:
 
     Dialog {
         id: dlgLocaleError
@@ -27,16 +67,6 @@ Item {
             width: parent.width
             wrapMode: Text.WordWrap
         }
-    }
-
-    Button {
-        // for trying out tts
-        anchors.horizontalCenter: parent.horizontalCenter
-        anchors.verticalCenter: parent.verticalCenter
-        enabled: tts.state == TextToSpeech.Ready && quizBackend.isAvailable
-        text: "Say '2 x 21'"
-
-        onClicked: tts.say(quizBackend.getQuestion())
     }
 
     Label {

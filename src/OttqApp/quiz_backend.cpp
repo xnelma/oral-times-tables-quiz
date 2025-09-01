@@ -37,6 +37,11 @@ bool QuizBackend::isAvailable()
     return isAvailable_ && translator_.isAvailable();
 }
 
+int QuizBackend::numQuestionsRemaining()
+{
+    return 1;
+}
+
 void QuizBackend::setAvailability(const bool &isAvailable)
 {
     if (isAvailable == isAvailable_)

@@ -17,6 +17,9 @@ class QuizBackend : public QObject
                READ isAvailable
                WRITE setAvailability
                NOTIFY availabilityChanged)
+    Q_PROPERTY(int numQuestionsRemaining
+               READ numQuestionsRemaining
+               NOTIFY numQuestionsRemainingChanged)
     // clang-format on
     QML_ELEMENT
 
@@ -27,6 +30,7 @@ public:
     double voiceRate();
     bool isAvailable();
     void setAvailability(const bool &isAvailable);
+    int numQuestionsRemaining();
 
     Q_INVOKABLE QString getQuestion();
     Q_INVOKABLE void startQuiz(const QList<int> tables, const int minFactor,
@@ -36,6 +40,7 @@ signals:
     void localeNameChanged();
     void voiceRateChanged();
     void availabilityChanged();
+    void numQuestionsRemainingChanged();
 
 private:
     Tts::QuizTranslator translator_;
