@@ -58,6 +58,16 @@
         <source>Language for Text-to-Speech engine not found.</source>
         <translation>Die Sprache für die Text-to-Speech Engine wurde nicht gefunden.</translation>
     </message>
+    <message>
+        <location filename="../QuizView.qml" line="33"/>
+        <source>left</source>
+        <translation>übrig</translation>
+    </message>
+    <message>
+        <location filename="../QuizView.qml" line="46"/>
+        <source>Result</source>
+        <translation>Ergebnis</translation>
+    </message>
 </context>
 <context>
     <name>SettingsView</name>
