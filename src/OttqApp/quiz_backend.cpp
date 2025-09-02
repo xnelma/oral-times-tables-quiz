@@ -4,6 +4,7 @@
 #include "quiz_configuration.hpp"
 #include "factor_range.hpp"
 #include "question.hpp"
+#include <QtLogging>
 
 QuizBackend::QuizBackend(QObject *parent)
     : QObject(parent), isAvailable_(true), questionBase_("%1 times %2")
@@ -27,9 +28,9 @@ bool QuizBackend::isAvailable()
     return isAvailable_ && translator_.isAvailable();
 }
 
-int QuizBackend::numQuestionsRemaining()
+std::size_t QuizBackend::numQuestionsRemaining()
 {
-    return 1;
+    return quiz_.numQuestionsRemaining();
 }
 
 void QuizBackend::setAvailability(const bool &isAvailable)
@@ -48,15 +49,9 @@ void QuizBackend::startQuiz(const QList<int> tables, const int minFactor,
     quiz_.reset(tables, TimesTables::FactorRange(minFactor, maxFactor));
     translator_.translate(questionBase_);
 
-    // NOLINTNEXTLINE(cppcoreguidelines-pro-type-member-init)
-    if (TimesTables::Question q; quiz_.nextQuestion(q)) {
-        emit questionChanged(questionBase_.arg(q.number).arg(q.factor));
-    } else {
-        // Shouldn't happen because at least one question should be in the list
-        // after setup.
-        isAvailable_ = false;
-        emit availabilityChanged();
-    }
+    TimesTables::Question q = quiz_.firstQuestion();
+    emit questionChanged(questionBase_.arg(q.factor).arg(q.number));
+    emit numQuestionsRemainingChanged();
 }
 
 void QuizBackend::check(const QString input)
@@ -64,18 +59,27 @@ void QuizBackend::check(const QString input)
     if (input == "")
         return;
 
-    bool inputIsValid = false;
-    int inputNum = input.toInt(&inputIsValid);
-    if (inputIsValid && quiz_.answerIsCorrect(inputNum))
+    bool valid = false, correct = false;
+    int inputNum = input.toInt(&valid);
+    try {
+        correct = quiz_.answerIsCorrect(inputNum);
+    } catch (std::out_of_range &e) {
+        // TODO show an error dialog and end the quiz
+        qCritical("Couldn't check input: %s", e.what());
+    }
+
+    if (valid && correct)
         nextQuestion();
 }
 
 void QuizBackend::nextQuestion()
 {
     // NOLINTNEXTLINE(cppcoreguidelines-pro-type-member-init)
-    if (TimesTables::Question q; quiz_.nextQuestion(q))
-        emit questionChanged(questionBase_.arg(q.number).arg(q.factor));
-    else
+    if (TimesTables::Question q; quiz_.nextQuestion(q)) {
+        emit questionChanged(questionBase_.arg(q.factor).arg(q.number));
+        emit numQuestionsRemainingChanged();
+    } else {
         return;
-    // TODO notify about the quiz being done
+        // TODO notify about the quiz being done
+    }
 }

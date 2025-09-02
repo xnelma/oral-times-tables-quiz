@@ -4,7 +4,7 @@
 #include "factor_range.hpp"
 #include "question.hpp"
 #include <QList>
-#include <queue>
+#include <vector>
 
 namespace TimesTables {
 
@@ -12,15 +12,17 @@ class Quiz
 {
 public:
     void reset(QList<int> timesTables, FactorRange factorRange);
+    Question firstQuestion();
     bool nextQuestion(Question &question);
     bool answerIsCorrect(const int answer);
 
-    int numQuestionsRemaining();
+    std::size_t numQuestionsRemaining();
 
 private:
-    void generateQuestions(QList<int> timesTables, FactorRange factorRange);
+    void generateQuestions(const QList<int> timesTables,
+                           const FactorRange factorRange);
 
-    std::queue<Question> questions_;
+    std::vector<Question> questions_;
 };
 
 } // namespace TimesTables
