@@ -18,25 +18,7 @@ ApplicationWindow {
 
             states: [
                 State {
-                    name: "running"
-
-                    PropertyChanges {
-                        btnMenu {
-                            visible: false
-                        }
-
-                        btnNav {
-                            text: qsTr("Complete")
-
-                            onClicked: {
-                                state = "";
-                                stack.pop();
-                            }
-                        }
-                    }
-                },
-                State {
-                    name: "settings"
+                    name: "back"
 
                     PropertyChanges {
                         btnMenu {
@@ -56,7 +38,7 @@ ApplicationWindow {
             ]
 
             onClicked: {
-                state = "running";
+                state = "back";
                 stack.push(quizView);
             }
         }
@@ -111,7 +93,7 @@ ApplicationWindow {
             text: qsTr("Settings")
 
             onClicked: {
-                btnNav.state = "settings";
+                btnNav.state = "back";
                 stack.push(settingsView);
             }
         }
@@ -135,6 +117,8 @@ ApplicationWindow {
         id: quizView
 
         QuizView {
+            parentHeight: height
+            parentWidth: width
         }
     }
 

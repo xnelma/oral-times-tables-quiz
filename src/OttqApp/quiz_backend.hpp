@@ -2,6 +2,7 @@
 #define QUIZ_BACKEND_HPP
 
 #include "quiz_translator.hpp"
+#include "quiz.hpp"
 #include <QObject>
 #include <qqml.h>
 #include <QLocale>
@@ -17,6 +18,9 @@ class QuizBackend : public QObject
                READ isAvailable
                WRITE setAvailability
                NOTIFY availabilityChanged)
+    Q_PROPERTY(int numQuestionsRemaining
+               READ numQuestionsRemaining
+               NOTIFY numQuestionsRemainingChanged)
     // clang-format on
     QML_ELEMENT
 
@@ -26,18 +30,29 @@ public:
     QString localeName();
     double voiceRate();
     bool isAvailable();
+    int numQuestionsRemaining();
+
     void setAvailability(const bool &isAvailable);
-    Q_INVOKABLE QString getQuestion();
+
+    Q_INVOKABLE void startQuiz(const QList<int> tables, const int minFactor,
+                               const int maxFactor);
+    Q_INVOKABLE void check(const QString input);
 
 signals:
     void localeNameChanged();
     void voiceRateChanged();
     void availabilityChanged();
+    void numQuestionsRemainingChanged();
+    void questionChanged(QString question);
+    void quizCompleted();
 
 private:
+    void nextQuestion();
+
     Tts::QuizTranslator translator_;
     bool isAvailable_;
-    const QString question_;
+    TimesTables::Quiz quiz_;
+    QString questionBase_;
 };
 
 #endif // QUIZ_BACKEND_HPP

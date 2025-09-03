@@ -28,8 +28,8 @@ qt_add_qml_module(OTTQ
         quiz_backend.cpp
         settings_backend.hpp
         settings_backend.cpp
-        setup_backend.hpp
-        setup_backend.cpp
+        quiz_configuration.hpp
+        quiz_configuration.cpp
 )
 
 qt_add_translations(OTTQ

@@ -35,11 +35,6 @@
         <source>Start</source>
         <translation>Starten</translation>
     </message>
-    <message>
-        <location filename="../Main.qml" line="29"/>
-        <source>Complete</source>
-        <translation>Beenden</translation>
-    </message>
 </context>
 <context>
     <name>QuizView</name>
@@ -49,14 +44,34 @@
         <translation>%1 mal %2</translation>
     </message>
     <message>
-        <location filename="../QuizView.qml" line="17"/>
+        <location filename="../QuizView.qml" line="76"/>
         <source>Language Error</source>
         <translation>Fehler (Sprachen)</translation>
     </message>
     <message>
-        <location filename="../QuizView.qml" line="21"/>
+        <location filename="../QuizView.qml" line="81"/>
         <source>Language for Text-to-Speech engine not found.</source>
         <translation>Die Sprache für die Text-to-Speech Engine wurde nicht gefunden.</translation>
+    </message>
+    <message>
+        <location filename="../QuizView.qml" line="23"/>
+        <source>Unavailable</source>
+        <translation>Nicht verfügbar</translation>
+    </message>
+    <message>
+        <location filename="../QuizView.qml" line="33"/>
+        <source>left</source>
+        <translation>übrig</translation>
+    </message>
+    <message>
+        <location filename="../QuizView.qml" line="46"/>
+        <source>Result</source>
+        <translation>Ergebnis</translation>
+    </message>
+    <message>
+        <location filename="../QuizView.qml" line="25"/>
+        <source>Completed</source>
+        <translation>Beendet</translation>
     </message>
 </context>
 <context>

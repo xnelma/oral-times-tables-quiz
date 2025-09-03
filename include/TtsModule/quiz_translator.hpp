@@ -14,7 +14,7 @@ public:
     QuizTranslator();
 
     QLocale locale();
-    QString translate(const QString question);
+    void translate(QString &question);
     bool isAvailable();
 
 private:
