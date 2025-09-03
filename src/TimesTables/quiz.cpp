@@ -22,6 +22,8 @@ void TimesTables::Quiz::generateQuestions(const QList<int> tables,
 
 auto TimesTables::Quiz::firstQuestion() -> Question
 {
+    if (questions_.size() == 0)
+        throw std::out_of_range("questions_ is empty");
     return questions_.back();
 }
 

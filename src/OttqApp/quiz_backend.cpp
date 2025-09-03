@@ -49,9 +49,14 @@ void QuizBackend::startQuiz(const QList<int> tables, const int minFactor,
     quiz_.reset(tables, TimesTables::FactorRange(minFactor, maxFactor));
     translator_.translate(questionBase_);
 
-    TimesTables::Question q = quiz_.firstQuestion();
-    emit questionChanged(questionBase_.arg(q.factor).arg(q.number));
-    emit numQuestionsRemainingChanged();
+    try {
+        TimesTables::Question q = quiz_.firstQuestion();
+        emit questionChanged(questionBase_.arg(q.factor).arg(q.number));
+        emit numQuestionsRemainingChanged();
+    } catch (std::out_of_range &e) {
+        // TODO error dialog
+        qCritical("Couldn't get the first question: %s", e.what());
+    }
 }
 
 void QuizBackend::check(const QString input)
