@@ -7,7 +7,7 @@
 #include <QtLogging>
 
 QuizBackend::QuizBackend(QObject *parent)
-    : QObject(parent), isAvailable_(true), questionBase_("%1 times %2")
+    : QObject(parent), isAvailable_(false), questionBase_("%1 times %2")
 {
 }
 
@@ -57,10 +57,11 @@ void QuizBackend::startQuiz(const QList<int> tables, const int minFactor,
 
     try {
         TimesTables::Question q = quiz_.firstQuestion();
+        setAvailability(true);
         emit questionChanged(questionBase_.arg(q.factor).arg(q.number));
         emit numQuestionsRemainingChanged();
     } catch (std::out_of_range &e) {
-        // TODO error dialog
+        setAvailability(false);
         qCritical("Couldn't get the first question: %s", e.what());
     }
 }
@@ -75,7 +76,7 @@ void QuizBackend::check(const QString input)
     try {
         correct = quiz_.answerIsCorrect(inputNum);
     } catch (std::out_of_range &e) {
-        // TODO show an error dialog and end the quiz
+        // TODO show an error dialog
         qCritical("Couldn't check input: %s", e.what());
     }
 

@@ -15,14 +15,20 @@ FocusScope {
     QuizBackend {
         id: quizBackend
 
+        onAvailabilityChanged: {
+            if (isAvailable) {
+                answerInput.state = "available";
+                return;
+            }
+            answerInput.state = "";
+            answerInput.text = "";
+        }
         onQuestionChanged: question => {
             answerInput.text = "";
             tts.enqueue(question);
         }
         onQuizCompleted: {
-            answerInput.enabled = false;
-            answerInput.placeholderText = qsTr("Completed");
-            answerInput.text = "";
+            answerInput.state = "completed";
         }
     }
 
@@ -46,13 +52,51 @@ FocusScope {
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.top: parent.top
         anchors.topMargin: qRoot.parentHeight / 3
-        focus: true
+        enabled: false
+        focus: false
         font.bold: true
         inputMethodHints: Qt.ImhDigitsOnly
-        placeholderText: qsTr("Result")
+        placeholderText: qsTr("Unavailable")
 
+        states: [
+            State {
+                name: "available"
+
+                PropertyChanges {
+                    answerInput {
+                        enabled: true
+                        focus: true
+                        placeholderText: qsTr("Result")
+                    }
+                }
+            },
+            State {
+                name: "completed"
+
+                PropertyChanges {
+                    answerInput {
+                        enabled: false
+                        focus: false
+                        placeholderText: qsTr("Completed")
+                        text: ""
+                    }
+                }
+            }
+        ]
+
+        onFocusChanged: {
+            if (!focus)
+                return;
+            if (inputMethodHints != Qt.ImhDigitsOnly) {
+                inputMethodHints = Qt.ImhDigitsOnly;
+                // calls forceActiveFocus()
+            } else {
+                forceActiveFocus();
+            }
+        }
         onInputMethodHintsChanged: {
-            forceActiveFocus();
+            if (focus && inputMethodHints == Qt.ImhDigitsOnly)
+                forceActiveFocus();
         }
         onTextChanged: quizBackend.check(text)
     }

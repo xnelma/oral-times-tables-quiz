@@ -44,14 +44,19 @@
         <translation>%1 mal %2</translation>
     </message>
     <message>
-        <location filename="../QuizView.qml" line="17"/>
+        <location filename="../QuizView.qml" line="76"/>
         <source>Language Error</source>
         <translation>Fehler (Sprachen)</translation>
     </message>
     <message>
-        <location filename="../QuizView.qml" line="21"/>
+        <location filename="../QuizView.qml" line="81"/>
         <source>Language for Text-to-Speech engine not found.</source>
         <translation>Die Sprache für die Text-to-Speech Engine wurde nicht gefunden.</translation>
+    </message>
+    <message>
+        <location filename="../QuizView.qml" line="23"/>
+        <source>Unavailable</source>
+        <translation>Nicht verfügbar</translation>
     </message>
     <message>
         <location filename="../QuizView.qml" line="33"/>
