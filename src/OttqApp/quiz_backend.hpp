@@ -18,7 +18,7 @@ class QuizBackend : public QObject
                READ isAvailable
                WRITE setAvailability
                NOTIFY availabilityChanged)
-    Q_PROPERTY(std::size_t numQuestionsRemaining
+    Q_PROPERTY(int numQuestionsRemaining
                READ numQuestionsRemaining
                NOTIFY numQuestionsRemainingChanged)
     // clang-format on
@@ -30,7 +30,7 @@ public:
     QString localeName();
     double voiceRate();
     bool isAvailable();
-    std::size_t numQuestionsRemaining();
+    int numQuestionsRemaining();
 
     void setAvailability(const bool &isAvailable);
 

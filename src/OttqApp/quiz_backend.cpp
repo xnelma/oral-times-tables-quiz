@@ -28,9 +28,15 @@ bool QuizBackend::isAvailable()
     return isAvailable_ && translator_.isAvailable();
 }
 
-std::size_t QuizBackend::numQuestionsRemaining()
+int QuizBackend::numQuestionsRemaining()
 {
-    return quiz_.numQuestionsRemaining();
+    std::size_t num = quiz_.numQuestionsRemaining();
+    if (num <= INT_MAX)
+        return static_cast<int>(num);
+
+    qCritical("number of questions remaining is larger than INT_MAX");
+    // (shouldn't be possible)
+    return INT_MAX;
 }
 
 void QuizBackend::setAvailability(const bool &isAvailable)
