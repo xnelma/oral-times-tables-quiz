@@ -90,7 +90,6 @@ void QuizBackend::nextQuestion()
         emit questionChanged(questionBase_.arg(q.factor).arg(q.number));
         emit numQuestionsRemainingChanged();
     } else {
-        return;
-        // TODO notify about the quiz being done
+        emit quizCompleted();
     }
 }

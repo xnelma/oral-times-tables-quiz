@@ -44,6 +44,7 @@ signals:
     void availabilityChanged();
     void numQuestionsRemainingChanged();
     void questionChanged(QString question);
+    void quizCompleted();
 
 private:
     void nextQuestion();

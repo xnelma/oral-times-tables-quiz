@@ -35,11 +35,6 @@
         <source>Start</source>
         <translation>Starten</translation>
     </message>
-    <message>
-        <location filename="../Main.qml" line="29"/>
-        <source>Complete</source>
-        <translation>Beenden</translation>
-    </message>
 </context>
 <context>
     <name>QuizView</name>
@@ -67,6 +62,11 @@
         <location filename="../QuizView.qml" line="46"/>
         <source>Result</source>
         <translation>Ergebnis</translation>
+    </message>
+    <message>
+        <location filename="../QuizView.qml" line="25"/>
+        <source>Completed</source>
+        <translation>Beendet</translation>
     </message>
 </context>
 <context>

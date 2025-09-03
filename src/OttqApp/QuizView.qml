@@ -19,6 +19,11 @@ FocusScope {
             answerInput.text = "";
             tts.enqueue(question);
         }
+        onQuizCompleted: {
+            answerInput.enabled = false;
+            answerInput.placeholderText = qsTr("Completed");
+            answerInput.text = "";
+        }
     }
 
     // Times Tables:
