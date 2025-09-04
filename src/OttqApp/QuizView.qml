@@ -120,6 +120,15 @@ FocusScope {
         }
     }
 
+    ProgressBar {
+        id: progressBarTtsLoading
+
+        anchors.centerIn: parent
+        indeterminate: true
+        visible: true
+        width: parent.width - 2 * 10
+    }
+
     Label {
         anchors.bottom: parent.bottom
         anchors.bottomMargin: 2
@@ -165,6 +174,17 @@ FocusScope {
         function onAboutToSynthesize() {
             tts.setUp();
             target = null; // Will be called only once.
+        }
+
+        target: tts
+    }
+
+    Connections {
+        function onStateChanged() {
+            if (tts.state == TextToSpeech.Speaking) {
+                progressBarTtsLoading.visible = false;
+                target = null; // Call once.
+            }
         }
 
         target: tts
