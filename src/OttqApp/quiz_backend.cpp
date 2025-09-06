@@ -56,7 +56,7 @@ bool QuizBackend::setupQuiz(const QList<int> tables, const int minFactor,
     translator_.translate(questionBase_);
 
     bool ok = quiz_.isAvailable();
-    setAvailability(ok);
+    isAvailable_ = ok; // initialize backend with quiz model availability
     return ok;
 }
 
