@@ -34,8 +34,9 @@ public:
 
     void setAvailability(const bool &isAvailable);
 
-    Q_INVOKABLE void startQuiz(const QList<int> tables, const int minFactor,
+    Q_INVOKABLE bool setupQuiz(const QList<int> tables, const int minFactor,
                                const int maxFactor);
+    Q_INVOKABLE void startQuiz();
     Q_INVOKABLE void check(const QString input);
 
 signals:

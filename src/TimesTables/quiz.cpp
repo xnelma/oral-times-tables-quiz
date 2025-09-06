@@ -2,10 +2,16 @@
 #include <ranges>
 #include <random>
 
-void TimesTables::Quiz::reset(QList<int> timesTables, FactorRange factorRange)
+void TimesTables::Quiz::setup(const QList<int> timesTables,
+                              const FactorRange factorRange)
 {
     questions_.clear();
     generateQuestions(timesTables, factorRange);
+}
+
+bool TimesTables::Quiz::isAvailable()
+{
+    return !questions_.empty();
 }
 
 void TimesTables::Quiz::generateQuestions(const QList<int> tables,

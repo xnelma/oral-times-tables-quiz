@@ -15,6 +15,18 @@ FocusScope {
     QuizBackend {
         id: quizBackend
 
+        Component.onCompleted: {
+            isAvailable = quizBackend.setupQuiz(QuizConfiguration.timesTables, QuizConfiguration.minFactor, QuizConfiguration.maxFactor);
+            if (!isAvailable)
+                return;
+            if (tts.state == TextToSpeech.Error) {
+                progressBarTtsLoading.visible = true;
+                connectionTtsReady.enabled = true;
+            } else {
+                progressBarTtsLoading.visible = false;
+                quizBackend.startQuiz();
+            }
+        }
         onAvailabilityChanged: {
             if (isAvailable) {
                 answerInput.state = "available";
@@ -125,7 +137,7 @@ FocusScope {
 
         anchors.centerIn: parent
         indeterminate: true
-        visible: true
+        visible: false
         width: parent.width - 2 * 10
     }
 
@@ -162,11 +174,12 @@ FocusScope {
 
         function onStateChanged() {
             if (tts.state == TextToSpeech.Ready) {
-                quizBackend.startQuiz(QuizConfiguration.timesTables, QuizConfiguration.minFactor, QuizConfiguration.maxFactor);
-                target = null; // Call once.
+                quizBackend.startQuiz();
+                target = null; // Start quiz only once.
             }
         }
 
+        enabled: false
         target: tts
     }
 
