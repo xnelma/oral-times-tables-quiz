@@ -154,6 +154,8 @@ FocusScope {
     }
 
     Connections {
+        id: connectionTtsReady
+
         // The quiz should get started after the tts becomes available the
         // first time. Otherwise enqueueing the first question, in case of an
         // initial error state, would not be possible.
