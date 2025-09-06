@@ -11,7 +11,8 @@ namespace TimesTables {
 class Quiz
 {
 public:
-    void reset(QList<int> timesTables, FactorRange factorRange);
+    void setup(const QList<int> timesTables, const FactorRange factorRange);
+    bool isAvailable();
     Question firstQuestion();
     bool nextQuestion(Question &question);
     bool answerIsCorrect(const int answer);
