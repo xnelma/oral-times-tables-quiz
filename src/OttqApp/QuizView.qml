@@ -32,6 +32,10 @@ FocusScope {
                 labelNumQuestionsRemaining {
                     visible: false
                 }
+
+                btnReplay {
+                    visible: false
+                }
             }
         },
         State {
@@ -50,6 +54,10 @@ FocusScope {
                 }
 
                 labelNumQuestionsRemaining {
+                    visible: false
+                }
+
+                btnReplay {
                     visible: false
                 }
             }
@@ -71,6 +79,10 @@ FocusScope {
                 labelNumQuestionsRemaining {
                     visible: true
                 }
+
+                btnReplay {
+                    visible: true
+                }
             }
         },
         State {
@@ -89,6 +101,10 @@ FocusScope {
                 }
 
                 labelNumQuestionsRemaining {
+                    visible: false
+                }
+
+                btnReplay {
                     visible: false
                 }
             }
@@ -144,9 +160,9 @@ FocusScope {
     TextArea {
         id: answerInput
 
+        anchors.bottom: btnReplay.top
+        anchors.bottomMargin: 10
         anchors.horizontalCenter: parent.horizontalCenter
-        anchors.top: parent.top
-        anchors.topMargin: qRoot.parentHeight / 3
         enabled: false
         focus: false
         font.bold: true
@@ -167,6 +183,18 @@ FocusScope {
                 forceActiveFocus();
         }
         onTextChanged: quizBackend.check(text)
+    }
+
+    Button {
+        id: btnReplay
+
+        anchors.horizontalCenter: parent.horizontalCenter
+        anchors.top: parent.top
+        anchors.topMargin: qRoot.parentHeight / 3
+        enabled: tts.state == TextToSpeech.Ready
+        text: qsTr("Replay")
+
+        onClicked: tts.enqueue(quizBackend.question)
     }
 
     // Text-to-Speech:

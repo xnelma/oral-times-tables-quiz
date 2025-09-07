@@ -44,39 +44,44 @@
         <translation>%1 mal %2</translation>
     </message>
     <message>
-        <location filename="../QuizView.qml" line="76"/>
+        <location filename="../QuizView.qml" line="208"/>
         <source>Language Error</source>
         <translation>Fehler (Sprachen)</translation>
     </message>
     <message>
-        <location filename="../QuizView.qml" line="81"/>
+        <location filename="../QuizView.qml" line="213"/>
         <source>Language for Text-to-Speech engine not found.</source>
         <translation>Die Sprache für die Text-to-Speech Engine wurde nicht gefunden.</translation>
     </message>
     <message>
-        <location filename="../QuizView.qml" line="23"/>
+        <location filename="../QuizView.qml" line="24"/>
         <source>Unavailable</source>
         <translation>Nicht verfügbar</translation>
     </message>
     <message>
-        <location filename="../QuizView.qml" line="33"/>
+        <location filename="../QuizView.qml" line="156"/>
         <source>left</source>
         <translation>übrig</translation>
     </message>
     <message>
-        <location filename="../QuizView.qml" line="46"/>
+        <location filename="../QuizView.qml" line="72"/>
         <source>Result</source>
         <translation>Ergebnis</translation>
     </message>
     <message>
-        <location filename="../QuizView.qml" line="25"/>
+        <location filename="../QuizView.qml" line="95"/>
         <source>Completed</source>
         <translation>Beendet</translation>
     </message>
     <message>
-        <location filename="../QuizView.qml" line="44"/>
+        <location filename="../QuizView.qml" line="48"/>
         <source>Text-to-Speech Loading</source>
         <translation>Text-to-Speech lädt</translation>
+    </message>
+    <message>
+        <location filename="../QuizView.qml" line="195"/>
+        <source>Replay</source>
+        <translation>Wiederholen</translation>
     </message>
 </context>
 <context>
