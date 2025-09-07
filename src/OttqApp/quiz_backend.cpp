@@ -7,7 +7,7 @@
 #include <QtLogging>
 
 QuizBackend::QuizBackend(QObject *parent)
-    : QObject(parent), isAvailable_(false), questionBase_("%1 times %2")
+    : QObject(parent), isAvailable_(true), questionBase_("%1 times %2")
 {
 }
 
@@ -54,10 +54,7 @@ bool QuizBackend::setupQuiz(const QList<int> tables, const int minFactor,
 {
     quiz_.setup(tables, TimesTables::FactorRange(minFactor, maxFactor));
     translator_.translate(questionBase_);
-
-    bool ok = quiz_.isAvailable();
-    isAvailable_ = ok; // initialize backend with quiz model availability
-    return ok;
+    return quiz_.isAvailable() && translator_.isAvailable();
 }
 
 void QuizBackend::startQuiz()
