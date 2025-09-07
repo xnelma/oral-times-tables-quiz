@@ -219,7 +219,9 @@ FocusScope {
     ProgressBar {
         id: progressBarTtsLoading
 
-        anchors.centerIn: parent
+        anchors.horizontalCenter: parent.horizontalCenter
+        anchors.top: answerInput.bottom
+        anchors.topMargin: 10
         indeterminate: true
         width: parent.width - 2 * 10
     }
