@@ -28,6 +28,10 @@ FocusScope {
                 progressBarTtsLoading {
                     visible: false
                 }
+
+                labelNumQuestionsRemaining {
+                    visible: false
+                }
             }
         },
         State {
@@ -44,6 +48,10 @@ FocusScope {
                 progressBarTtsLoading {
                     visible: true
                 }
+
+                labelNumQuestionsRemaining {
+                    visible: false
+                }
             }
         },
         State {
@@ -59,6 +67,10 @@ FocusScope {
                 progressBarTtsLoading {
                     visible: false
                 }
+
+                labelNumQuestionsRemaining {
+                    visible: true
+                }
             }
         },
         State {
@@ -73,6 +85,10 @@ FocusScope {
                 }
 
                 progressBarTtsLoading {
+                    visible: false
+                }
+
+                labelNumQuestionsRemaining {
                     visible: false
                 }
             }
@@ -112,6 +128,8 @@ FocusScope {
     // Times Tables:
 
     Label {
+        id: labelNumQuestionsRemaining
+
         anchors.right: parent.right
         anchors.rightMargin: 2
         anchors.top: parent.top
