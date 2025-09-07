@@ -73,6 +73,11 @@
         <source>Completed</source>
         <translation>Beendet</translation>
     </message>
+    <message>
+        <location filename="../QuizView.qml" line="44"/>
+        <source>Text-to-Speech Loading</source>
+        <translation>Text-to-Speech lädt</translation>
+    </message>
 </context>
 <context>
     <name>SettingsView</name>

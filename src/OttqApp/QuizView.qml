@@ -10,31 +10,126 @@ FocusScope {
     required property int parentWidth
 
     height: parentHeight
+    state: "unavailable"
     width: parentWidth
+
+    states: [
+        State {
+            name: "unavailable"
+
+            PropertyChanges {
+                answerInput {
+                    enabled: false
+                    focus: false
+                    placeholderText: qsTr("Unavailable")
+                    text: ""
+                }
+
+                progressBarTtsLoading {
+                    visible: false
+                }
+
+                labelNumQuestionsRemaining {
+                    visible: false
+                }
+            }
+        },
+        State {
+            name: "tts-loading"
+
+            PropertyChanges {
+                answerInput {
+                    enabled: false
+                    focus: false
+                    placeholderText: qsTr("Text-to-Speech Loading")
+                    text: ""
+                }
+
+                progressBarTtsLoading {
+                    visible: true
+                }
+
+                labelNumQuestionsRemaining {
+                    visible: false
+                }
+            }
+        },
+        State {
+            name: "available"
+
+            PropertyChanges {
+                answerInput {
+                    enabled: true
+                    focus: true
+                    placeholderText: qsTr("Result")
+                }
+
+                progressBarTtsLoading {
+                    visible: false
+                }
+
+                labelNumQuestionsRemaining {
+                    visible: true
+                }
+            }
+        },
+        State {
+            name: "completed"
+
+            PropertyChanges {
+                answerInput {
+                    enabled: false
+                    focus: false
+                    placeholderText: qsTr("Completed")
+                    text: ""
+                }
+
+                progressBarTtsLoading {
+                    visible: false
+                }
+
+                labelNumQuestionsRemaining {
+                    visible: false
+                }
+            }
+        }
+    ]
 
     QuizBackend {
         id: quizBackend
 
-        onAvailabilityChanged: {
-            if (isAvailable) {
-                answerInput.state = "available";
-                return;
+        Component.onCompleted: {
+            var ok = quizBackend.setupQuiz(QuizConfiguration.timesTables, QuizConfiguration.minFactor, QuizConfiguration.maxFactor);
+            if (!ok) {
+                qRoot.state = "unavailable";
+            } else if (tts.state == TextToSpeech.Error) {
+                qRoot.state = "tts-loading";
+                connectionTtsReady.enabled = true;
+            } else {
+                qRoot.state = "available";
+                quizBackend.startQuiz();
             }
-            answerInput.state = "";
-            answerInput.text = "";
+        }
+        onAvailabilityChanged: {
+            if (!isAvailable)
+                qRoot.state = "unavailable";
+            else if (isAvailable && qRoot.state != "tts-loading")
+                qRoot.state = "available";
         }
         onQuestionChanged: question => {
             answerInput.text = "";
             tts.enqueue(question);
         }
         onQuizCompleted: {
-            answerInput.state = "completed";
+            qRoot.state = "completed";
         }
     }
 
     // Times Tables:
 
     Label {
+        id: labelNumQuestionsRemaining
+
         anchors.right: parent.right
         anchors.rightMargin: 2
         anchors.top: parent.top
@@ -55,36 +150,9 @@ FocusScope {
         enabled: false
         focus: false
         font.bold: true
-        inputMethodHints: Qt.ImhDigitsOnly
-        placeholderText: qsTr("Unavailable")
-
-        states: [
-            State {
-                name: "available"
-
-                PropertyChanges {
-                    answerInput {
-                        enabled: true
-                        focus: true
-                        placeholderText: qsTr("Result")
-                    }
-                }
-            },
-            State {
-                name: "completed"
-
-                PropertyChanges {
-                    answerInput {
-                        enabled: false
-                        focus: false
-                        placeholderText: qsTr("Completed")
-                        text: ""
-                    }
-                }
-            }
-        ]
 
         onFocusChanged: {
+            // Force active focus.
             if (!focus)
                 return;
             if (inputMethodHints != Qt.ImhDigitsOnly) {
@@ -120,6 +188,14 @@ FocusScope {
         }
     }
 
+    ProgressBar {
+        id: progressBarTtsLoading
+
+        anchors.centerIn: parent
+        indeterminate: true
+        width: parent.width - 2 * 10
+    }
+
     Label {
         anchors.bottom: parent.bottom
         anchors.bottomMargin: 2
@@ -147,17 +223,14 @@ FocusScope {
     Connections {
         id: connectionTtsReady
 
-        // The quiz should get started after the tts becomes available the
-        // first time. Otherwise enqueueing the first question, in case of an
-        // initial error state, would not be possible.
-
         function onStateChanged() {
             if (tts.state == TextToSpeech.Ready) {
-                quizBackend.startQuiz(QuizConfiguration.timesTables, QuizConfiguration.minFactor, QuizConfiguration.maxFactor);
-                target = null; // Call once.
+                quizBackend.startQuiz();
+                target = null; // Start quiz only once.
             }
         }
 
+        enabled: false
         target: tts
     }
 
@@ -165,6 +238,17 @@ FocusScope {
         function onAboutToSynthesize() {
             tts.setUp();
             target = null; // Will be called only once.
+        }
+
+        target: tts
+    }
+
+    Connections {
+        function onStateChanged() {
+            if (tts.state == TextToSpeech.Speaking) {
+                qRoot.state = quizBackend.isAvailable ? "available" : "unavailable";
+                target = null; // Call once.
+            }
         }
 
         target: tts
