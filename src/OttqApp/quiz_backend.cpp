@@ -23,6 +23,19 @@ double QuizBackend::voiceRate()
     return settings.loadVoiceRateSetting();
 }
 
+QString QuizBackend::question()
+{
+    try {
+        TimesTables::Question q = quiz_.question();
+        return questionBase_.arg(q.factor).arg(q.number);
+    } catch (std::out_of_range &e) {
+        setAvailability(false);
+        qCritical("Couldn't get the question: %s", e.what());
+    }
+
+    return "";
+}
+
 bool QuizBackend::isAvailable()
 {
     return isAvailable_ && translator_.isAvailable() && quiz_.isAvailable();
@@ -59,14 +72,8 @@ bool QuizBackend::setupQuiz(const QList<int> tables, const int minFactor,
 
 void QuizBackend::startQuiz()
 {
-    try {
-        TimesTables::Question q = quiz_.firstQuestion();
-        emit questionChanged(questionBase_.arg(q.factor).arg(q.number));
-        emit numQuestionsRemainingChanged();
-    } catch (std::out_of_range &e) {
-        setAvailability(false);
-        qCritical("Couldn't get the first question: %s", e.what());
-    }
+    emit questionChanged();
+    emit numQuestionsRemainingChanged();
 }
 
 void QuizBackend::check(const QString input)
@@ -89,9 +96,8 @@ void QuizBackend::check(const QString input)
 
 void QuizBackend::nextQuestion()
 {
-    // NOLINTNEXTLINE(cppcoreguidelines-pro-type-member-init)
-    if (TimesTables::Question q; quiz_.nextQuestion(q)) {
-        emit questionChanged(questionBase_.arg(q.factor).arg(q.number));
+    if (quiz_.next()) {
+        emit questionChanged();
         emit numQuestionsRemainingChanged();
     } else {
         emit quizCompleted();

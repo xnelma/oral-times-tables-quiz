@@ -116,7 +116,7 @@ FocusScope {
             else if (isAvailable && qRoot.state != "tts-loading")
                 qRoot.state = "available";
         }
-        onQuestionChanged: question => {
+        onQuestionChanged: {
             answerInput.text = "";
             tts.enqueue(question);
         }
