@@ -194,7 +194,10 @@ FocusScope {
         enabled: tts.state == TextToSpeech.Ready
         text: qsTr("Replay")
 
-        onClicked: tts.enqueue(quizBackend.question)
+        onClicked: {
+            tts.enqueue(quizBackend.question);
+            answerInput.focus = true;
+        }
     }
 
     // Text-to-Speech:
