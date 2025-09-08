@@ -20,10 +20,7 @@ bool SettingsBackend::useAutoTtsLanguage()
 
 QString SettingsBackend::autoLocaleName()
 {
-    QLocale autoLocale = Tts::autoLocale();
-    return QString("%1 (%2)")
-        .arg(autoLocale.nativeLanguageName())
-        .arg(autoLocale.nativeTerritoryName());
+    return Tts::autoLocale().name();
 }
 
 double SettingsBackend::voiceRate()

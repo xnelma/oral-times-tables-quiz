@@ -30,7 +30,12 @@ Item {
                 elide: Text.ElideRight
                 maximumLineCount: 2
                 opacity: switchTtsLocale.checked ? 1 : 0.5
-                text: settingsBackend.autoLocaleName
+                text: {
+                    var l = Qt.locale(settingsBackend.autoLocaleName);
+                    var language = l.nativeLanguageName;
+                    var territory = l.nativeTerritoryName;
+                    return "%1\n(%2)".arg(language).arg(territory);
+                }
                 width: sRoot.parentWidth - switchTtsLocale.width - 3 * 10
                 wrapMode: Text.WordWrap
             }
