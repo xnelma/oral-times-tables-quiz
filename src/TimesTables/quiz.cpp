@@ -26,31 +26,27 @@ void TimesTables::Quiz::generateQuestions(const QList<int> tables,
     std::ranges::shuffle(questions_, gen);
 }
 
-auto TimesTables::Quiz::firstQuestion() -> Question
+auto TimesTables::Quiz::question() -> Question
 {
-    if (questions_.size() == 0)
+    if (questions_.empty())
         throw std::out_of_range("questions_ is empty");
     return questions_.back();
 }
 
-bool TimesTables::Quiz::nextQuestion(Question &question)
+bool TimesTables::Quiz::next()
 {
     questions_.pop_back();
-    if (questions_.size() == 0)
-        return false;
-
-    question = questions_.back();
-    return true;
+    return !questions_.empty();
 }
 
 bool TimesTables::Quiz::answerIsCorrect(const int answer)
 {
-    if (questions_.size() == 0)
+    if (questions_.empty())
         throw std::out_of_range("questions_ is empty");
     return questions_.back().check(answer);
 }
 
 std::size_t TimesTables::Quiz::numQuestionsRemaining()
 {
-    return questions_.size() == 0 ? 0 : questions_.size() - 1;
+    return questions_.empty() ? 0 : questions_.size() - 1;
 }

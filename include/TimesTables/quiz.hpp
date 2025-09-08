@@ -13,8 +13,8 @@ class Quiz
 public:
     void setup(const QList<int> timesTables, const FactorRange factorRange);
     bool isAvailable();
-    Question firstQuestion();
-    bool nextQuestion(Question &question);
+    Question question();
+    bool next();
     bool answerIsCorrect(const int answer);
 
     std::size_t numQuestionsRemaining();
