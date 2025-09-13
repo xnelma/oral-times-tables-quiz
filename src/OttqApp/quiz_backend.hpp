@@ -11,17 +11,22 @@
 class QuizBackend : public QObject
 {
     Q_OBJECT
-    Q_PROPERTY(QString localeName READ localeName NOTIFY localeNameChanged)
-    Q_PROPERTY(double voiceRate READ voiceRate NOTIFY voiceRateChanged)
-    Q_PROPERTY(QString question READ question NOTIFY questionChanged)
+    Q_PROPERTY(double voiceRate READ voiceRate NOTIFY voiceRateChanged FINAL)
+    Q_PROPERTY(QString question READ question NOTIFY questionChanged FINAL)
     // clang-format off
+    Q_PROPERTY(QString localeName
+               READ localeName
+               NOTIFY localeNameChanged
+               FINAL)
     Q_PROPERTY(bool isAvailable
                READ isAvailable
                WRITE setAvailability
-               NOTIFY availabilityChanged)
+               NOTIFY availabilityChanged
+               FINAL)
     Q_PROPERTY(int numQuestionsRemaining
                READ numQuestionsRemaining
-               NOTIFY numQuestionsRemainingChanged)
+               NOTIFY numQuestionsRemainingChanged
+               FINAL)
     // clang-format on
     QML_ELEMENT
 

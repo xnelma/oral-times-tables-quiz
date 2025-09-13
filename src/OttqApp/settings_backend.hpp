@@ -11,22 +11,29 @@ class SettingsBackend : public QObject
 {
     Q_OBJECT
     // clang-format off
-    Q_PROPERTY(QStringList languages READ languages NOTIFY languagesChanged)
+    Q_PROPERTY(QStringList languages
+               READ languages
+               NOTIFY languagesChanged
+               FINAL)
     Q_PROPERTY(int languageIndex
                READ languageIndex
                WRITE setLanguageIndex
-               NOTIFY languageIndexChanged)
+               NOTIFY languageIndexChanged
+               FINAL)
     Q_PROPERTY(bool useAutoTtsLanguage
                READ useAutoTtsLanguage
                WRITE setUseAutoTtsLanguage
-               NOTIFY useAutoTtsLanguageChanged)
+               NOTIFY useAutoTtsLanguageChanged
+               FINAL)
     Q_PROPERTY(QString autoLocaleName
                READ autoLocaleName
-               NOTIFY autoLocaleNameChanged)
+               NOTIFY autoLocaleNameChanged
+               FINAL)
     Q_PROPERTY(double voiceRate
                READ voiceRate
                WRITE setVoiceRate
-               NOTIFY voiceRateChanged)
+               NOTIFY voiceRateChanged
+               FINAL)
     // clang-format on
     QML_ELEMENT
 

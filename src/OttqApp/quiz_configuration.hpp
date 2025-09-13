@@ -10,19 +10,23 @@ class QuizConfiguration : public QObject
     Q_OBJECT
     // clang-format off
     Q_PROPERTY(QString timesTablesStr
-        READ timesTablesStr
-        NOTIFY timesTablesStrChanged)
+               READ timesTablesStr
+               NOTIFY timesTablesStrChanged
+               FINAL)
     Q_PROPERTY(QList<int> timesTables
-        READ timesTables
-        NOTIFY timesTablesChanged)
+               READ timesTables
+               NOTIFY timesTablesChanged
+               FINAL)
     Q_PROPERTY(int minFactor
-        READ minFactor
-        WRITE setMinFactor
-        NOTIFY minFactorChanged)
+               READ minFactor
+               WRITE setMinFactor
+               NOTIFY minFactorChanged
+               FINAL)
     Q_PROPERTY(int maxFactor
-        READ maxFactor
-        WRITE setMaxFactor
-        NOTIFY maxFactorChanged)
+               READ maxFactor
+               WRITE setMaxFactor
+               NOTIFY maxFactorChanged
+               FINAL)
     // clang-format on
     QML_SINGLETON
     QML_ELEMENT
