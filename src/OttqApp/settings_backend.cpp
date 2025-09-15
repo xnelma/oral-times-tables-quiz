@@ -1,7 +1,7 @@
 #include "settings_backend.hpp"
 #include "auto_locale.hpp"
 
-SettingsBackend::SettingsBackend(QObject *parent) : QObject{ parent } { }
+SettingsBackend::SettingsBackend(QObject *parent) : QObject(parent) { }
 
 QStringList SettingsBackend::languages()
 {
@@ -18,9 +18,10 @@ bool SettingsBackend::useAutoTtsLanguage()
     return languageSettings_.isInAutoMode();
 }
 
-QString SettingsBackend::autoLocaleName()
+auto SettingsBackend::autoLanguage() -> LanguageName
 {
-    return Tts::autoLocale().name();
+    LanguageName l(Tts::autoLocale());
+    return l;
 }
 
 double SettingsBackend::voiceRate()

@@ -3,6 +3,7 @@
 
 #include "tts_language_settings.hpp"
 #include "tts_rate_settings.hpp"
+#include "language_name.hpp"
 #include <QObject>
 #include <qqml.h>
 #include <QStringList>
@@ -25,9 +26,9 @@ class SettingsBackend : public QObject
                WRITE setUseAutoTtsLanguage
                NOTIFY useAutoTtsLanguageChanged
                FINAL)
-    Q_PROPERTY(QString autoLocaleName
-               READ autoLocaleName
-               NOTIFY autoLocaleNameChanged
+    Q_PROPERTY(LanguageName autoLanguage
+               READ autoLanguage
+               NOTIFY autoLanguageChanged
                FINAL)
     Q_PROPERTY(double voiceRate
                READ voiceRate
@@ -43,7 +44,7 @@ public:
     QStringList languages();
     int languageIndex();
     bool useAutoTtsLanguage();
-    QString autoLocaleName();
+    LanguageName autoLanguage();
     double voiceRate();
 
     void setLanguageIndex(const int index);
@@ -54,7 +55,7 @@ signals:
     void languagesChanged();
     void languageIndexChanged();
     void useAutoTtsLanguageChanged();
-    void autoLocaleNameChanged();
+    void autoLanguageChanged();
     void voiceRateChanged();
 
 private:
