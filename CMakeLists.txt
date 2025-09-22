@@ -25,9 +25,9 @@ qt_standard_project_setup(
     I18N_TRANSLATED_LANGUAGES de
 )
 
-add_subdirectory(src/OttqApp)
-add_subdirectory(src/TimesTables)
-add_subdirectory(src/TtsModule)
+add_subdirectory(src/app)
+add_subdirectory(src/timestables)
+add_subdirectory(src/tts)
 if(NOT ${CMAKE_SYSTEM_NAME} STREQUAL "Android")
     # don't cross compile the unit tests for now
     add_subdirectory(test)

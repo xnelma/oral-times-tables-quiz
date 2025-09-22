@@ -9,5 +9,5 @@ target_link_libraries(TimesTables PRIVATE
 )
 
 target_include_directories(TimesTables PRIVATE
-    "${PROJECT_SOURCE_DIR}/include/TimesTables"
+    "${PROJECT_SOURCE_DIR}/include/timestables"
 )

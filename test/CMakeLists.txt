@@ -25,7 +25,7 @@ target_link_libraries(PlaceholderTest PRIVATE
 )
 
 target_include_directories(PlaceholderTest PRIVATE
-    "${PROJECT_SOURCE_DIR}/include/TimesTables"
+    "${PROJECT_SOURCE_DIR}/include/timestables"
 )
 
 include(GoogleTest)

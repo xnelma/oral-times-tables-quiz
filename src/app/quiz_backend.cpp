@@ -1,5 +1,4 @@
 #include "quiz_backend.hpp"
-#include "placeholder.hpp"
 #include "tts_settings.hpp"
 #include "quiz_configuration.hpp"
 #include "factor_range.hpp"
