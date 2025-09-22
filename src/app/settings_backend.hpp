@@ -1,8 +1,8 @@
 #ifndef SETTINGS_BACKEND_HPP
 #define SETTINGS_BACKEND_HPP
 
-#include "tts_language_settings.hpp"
-#include "tts_rate_settings.hpp"
+#include "tts/tts_language_settings.hpp"
+#include "tts/tts_rate_settings.hpp"
 #include "language_name.hpp"
 #include <QObject>
 #include <qqml.h>

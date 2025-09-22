@@ -1,8 +1,8 @@
 #ifndef QUIZ_BACKEND_HPP
 #define QUIZ_BACKEND_HPP
 
-#include "quiz_translator.hpp"
-#include "quiz.hpp"
+#include "tts/quiz_translator.hpp"
+#include "timestables/quiz.hpp"
 #include <QObject>
 #include <qqml.h>
 #include <QLocale>

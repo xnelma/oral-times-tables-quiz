@@ -1,8 +1,8 @@
 #include "quiz_backend.hpp"
-#include "tts_settings.hpp"
+#include "tts/tts_settings.hpp"
 #include "quiz_configuration.hpp"
-#include "factor_range.hpp"
-#include "question.hpp"
+#include "timestables/factor_range.hpp"
+#include "timestables/question.hpp"
 #include <QtLogging>
 
 QuizBackend::QuizBackend(QObject *parent)

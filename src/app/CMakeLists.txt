@@ -8,8 +8,7 @@ target_link_libraries(OTTQ PRIVATE
 )
 
 target_include_directories(OTTQ PRIVATE
-    "${PROJECT_SOURCE_DIR}/include/timestables"
-    "${PROJECT_SOURCE_DIR}/include/tts"
+    "${PROJECT_SOURCE_DIR}/include"
 )
 
 qt_add_qml_module(OTTQ

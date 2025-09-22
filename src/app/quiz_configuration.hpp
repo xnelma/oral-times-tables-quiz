@@ -1,7 +1,7 @@
 #ifndef SETUP_BACKEND_HPP
 #define SETUP_BACKEND_HPP
 
-#include "quiz_settings.hpp"
+#include "timestables/quiz_settings.hpp"
 #include <QObject>
 #include <qqml.h>
 

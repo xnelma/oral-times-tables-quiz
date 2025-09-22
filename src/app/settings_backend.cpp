@@ -1,5 +1,5 @@
 #include "settings_backend.hpp"
-#include "auto_locale.hpp"
+#include "tts/auto_locale.hpp"
 
 SettingsBackend::SettingsBackend(QObject *parent) : QObject(parent) { }
 
