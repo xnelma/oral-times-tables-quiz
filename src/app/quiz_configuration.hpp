@@ -2,8 +2,10 @@
 #define SETUP_BACKEND_HPP
 
 #include "timestables/quiz_settings.hpp"
+#include "factor_range.hpp"
 #include <QObject>
 #include <qqml.h>
+#include <memory>
 
 class QuizConfiguration : public QObject
 {
@@ -17,15 +19,10 @@ class QuizConfiguration : public QObject
                READ timesTables
                NOTIFY timesTablesChanged
                FINAL)
-    Q_PROPERTY(int minFactor
-               READ minFactor
-               WRITE setMinFactor
-               NOTIFY minFactorChanged
-               FINAL)
-    Q_PROPERTY(int maxFactor
-               READ maxFactor
-               WRITE setMaxFactor
-               NOTIFY maxFactorChanged
+    Q_PROPERTY(FactorRange factorRange
+               READ factorRange
+               WRITE setFactorRange
+               NOTIFY factorRangeChanged
                FINAL)
     // clang-format on
     QML_SINGLETON
@@ -38,20 +35,19 @@ public:
 
     QString timesTablesStr();
     QList<int> timesTables();
-    int minFactor();
-    int maxFactor();
+    FactorRange factorRange() const;
 
-    void setMinFactor(const int min);
-    void setMaxFactor(const int max);
+    void setFactorRange(const FactorRange &fr);
 
 signals:
     void timesTablesStrChanged();
     void timesTablesChanged();
-    void minFactorChanged();
-    void maxFactorChanged();
+    void factorRangeChanged();
 
 private:
-    TimesTables::Settings quizSettings_;
+    std::shared_ptr<TimesTables::Settings> quizSettings_;
+
+    FactorRange factorRange_;
 };
 
 #endif // SETUP_BACKEND_HPP

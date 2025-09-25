@@ -30,6 +30,8 @@ qt_add_qml_module(OTTQ
         quiz_configuration.hpp
         quiz_configuration.cpp
         language_name.hpp
+        factor_range.hpp
+        factor_range.cpp
 )
 
 qt_add_translations(OTTQ

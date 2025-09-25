@@ -1,11 +1,16 @@
 #include "quiz_configuration.hpp"
 
-QuizConfiguration::QuizConfiguration(QObject *parent) : QObject{ parent } { }
+QuizConfiguration::QuizConfiguration(QObject *parent)
+    : QObject(parent),
+      quizSettings_(std::make_shared<TimesTables::Settings>()),
+      factorRange_(FactorRange(quizSettings_))
+{
+}
 
 QString QuizConfiguration::timesTablesStr()
 {
     QString timesTables;
-    for (const int n : quizSettings_.timesTables())
+    for (const int n : quizSettings_->timesTables())
         timesTables += QString::number(n) + ", ";
 
     if (timesTables.length() < 2)
@@ -15,42 +20,26 @@ QString QuizConfiguration::timesTablesStr()
 
 QList<int> QuizConfiguration::timesTables()
 {
-    return quizSettings_.timesTables();
+    return quizSettings_->timesTables();
 }
 
-int QuizConfiguration::minFactor()
+FactorRange QuizConfiguration::factorRange() const
 {
-    return quizSettings_.factorRange().from;
+    return factorRange_;
 }
 
-int QuizConfiguration::maxFactor()
+void QuizConfiguration::setFactorRange(const FactorRange &fr)
 {
-    return quizSettings_.factorRange().to;
-}
-
-void QuizConfiguration::setMinFactor(const int min)
-{
-    if (minFactor() == min)
+    if (factorRange_ == fr)
         return;
 
-    quizSettings_.setMinFactor(min);
-
-    emit minFactorChanged();
-}
-
-void QuizConfiguration::setMaxFactor(const int max)
-{
-    if (maxFactor() == max)
-        return;
-
-    quizSettings_.setMaxFactor(max);
-
-    emit maxFactorChanged();
+    factorRange_ = fr;
+    emit factorRangeChanged();
 }
 
 void QuizConfiguration::addTimesTable(const int number)
 {
-    quizSettings_.addTimesTable(number);
+    quizSettings_->addTimesTable(number);
 
     emit timesTablesStrChanged();
 }

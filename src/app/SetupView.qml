@@ -76,15 +76,15 @@ Item {
             property int low: Math.round(first.value)
 
             anchors.horizontalCenter: parent.horizontalCenter
-            first.value: QuizConfiguration.minFactor
+            first.value: QuizConfiguration.factorRange.min
             from: 1
-            second.value: QuizConfiguration.maxFactor
+            second.value: QuizConfiguration.factorRange.max
             snapMode: RangeSlider.SnapAlways
             stepSize: 1
             to: 100
 
-            first.onMoved: QuizConfiguration.minFactor = low
-            second.onMoved: QuizConfiguration.maxFactor = high
+            first.onMoved: QuizConfiguration.factorRange.min = low
+            second.onMoved: QuizConfiguration.factorRange.max = high
         }
     }
 }
