@@ -1,5 +1,5 @@
-#ifndef SETTINGS_BACKEND_HPP
-#define SETTINGS_BACKEND_HPP
+#ifndef OTTQ_20250829_1811_INCLUDE
+#define OTTQ_20250829_1811_INCLUDE
 
 #include "tts/tts_language_settings.hpp"
 #include "tts/tts_rate_settings.hpp"
@@ -63,4 +63,4 @@ private:
     Tts::VoiceRateSettings voiceRateSettings_;
 };
 
-#endif // SETTINGS_BACKEND_HPP
+#endif // OTTQ_20250829_1811_INCLUDE

@@ -1,5 +1,5 @@
-#ifndef LOCALE_DESCRIPTOR_HPP
-#define LOCALE_DESCRIPTOR_HPP
+#ifndef OTTQ_20250829_1805_INCLUDE
+#define OTTQ_20250829_1805_INCLUDE
 
 #include <QLocale>
 
@@ -28,4 +28,4 @@ struct LocaleDescriptor
 
 } // namespace Tts
 
-#endif // LOCALE_DESCRIPTOR_HPP
+#endif // OTTQ_20250829_1805_INCLUDE

@@ -1,5 +1,5 @@
-#ifndef QUIZ_TRANSLATOR_HPP
-#define QUIZ_TRANSLATOR_HPP
+#ifndef OTTQ_20250829_1807_INCLUDE
+#define OTTQ_20250829_1807_INCLUDE
 
 #include "tts_settings.hpp"
 #include <QLocale>
@@ -28,4 +28,4 @@ private:
 
 } // namespace Tts
 
-#endif // QUIZ_TRANSLATOR_HPP
+#endif // OTTQ_20250829_1807_INCLUDE

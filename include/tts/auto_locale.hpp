@@ -1,5 +1,5 @@
-#ifndef AUTO_LOCALE_HPP
-#define AUTO_LOCALE_HPP
+#ifndef OTTQ_20250829_1806_INCLUDE
+#define OTTQ_20250829_1806_INCLUDE
 
 #include "locale_descriptor.hpp"
 #include <QLocale>
@@ -28,4 +28,4 @@ const auto qmLocaleNameRegex =
 
 } // namespace Tts
 
-#endif // AUTO_LOCALE_HPP
+#endif // OTTQ_20250829_1806_INCLUDE

@@ -1,5 +1,5 @@
-#ifndef QUIZ_SETTINGS_HPP
-#define QUIZ_SETTINGS_HPP
+#ifndef OTTQ_20250831_1138_INCLUDE
+#define OTTQ_20250831_1138_INCLUDE
 
 #include "factor_range.hpp"
 #include <QList>
@@ -23,4 +23,4 @@ private:
 
 } // namespace TimesTables
 
-#endif // QUIZ_SETTINGS_HPP
+#endif // OTTQ_20250831_1138_INCLUDE

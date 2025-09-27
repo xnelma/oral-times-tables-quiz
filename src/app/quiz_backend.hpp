@@ -1,5 +1,5 @@
-#ifndef QUIZ_BACKEND_HPP
-#define QUIZ_BACKEND_HPP
+#ifndef OTTQ_20250829_1810_INCLUDE
+#define OTTQ_20250829_1810_INCLUDE
 
 #include "tts/quiz_translator.hpp"
 #include "timestables/quiz.hpp"
@@ -63,4 +63,4 @@ private:
     QString questionBase_;
 };
 
-#endif // QUIZ_BACKEND_HPP
+#endif // OTTQ_20250829_1810_INCLUDE

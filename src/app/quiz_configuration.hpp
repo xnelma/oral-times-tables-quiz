@@ -1,5 +1,5 @@
-#ifndef SETUP_BACKEND_HPP
-#define SETUP_BACKEND_HPP
+#ifndef OTTQ_20250830_2112_INCLUDE
+#define OTTQ_20250830_2112_INCLUDE
 
 #include "timestables/quiz_settings.hpp"
 #include "factor_range.hpp"
@@ -50,4 +50,4 @@ private:
     FactorRange factorRange_;
 };
 
-#endif // SETUP_BACKEND_HPP
+#endif // OTTQ_20250830_2112_INCLUDE

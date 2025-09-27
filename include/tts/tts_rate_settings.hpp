@@ -1,5 +1,5 @@
-#ifndef TTS_RATE_SETTINGS_HPP
-#define TTS_RATE_SETTINGS_HPP
+#ifndef OTTQ_20250830_0958_INCLUDE
+#define OTTQ_20250830_0958_INCLUDE
 
 #include "tts_settings.hpp"
 
@@ -19,4 +19,4 @@ private:
 
 } // namespace Tts
 
-#endif // TTS_RATE_SETTINGS_HPP
+#endif // OTTQ_20250830_0958_INCLUDE

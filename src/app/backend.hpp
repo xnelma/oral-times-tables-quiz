@@ -1,5 +1,5 @@
-#ifndef BACKEND_HPP
-#define BACKEND_HPP
+#ifndef OTTQ_20250811_1825_INCLUDE
+#define OTTQ_20250811_1825_INCLUDE
 
 #include <QObject>
 #include <qqml.h>
@@ -14,4 +14,4 @@ public:
     explicit Backend(QObject *parent = nullptr);
 };
 
-#endif // BACKEND_HPP
+#endif // OTTQ_20250811_1825_INCLUDE

@@ -1,5 +1,5 @@
-#ifndef TTS_SETTINGS_HPP
-#define TTS_SETTINGS_HPP
+#ifndef OTTQ_20250829_1809_INCLUDE
+#define OTTQ_20250829_1809_INCLUDE
 
 #include "locale_descriptor.hpp"
 #include <QString>
@@ -31,4 +31,4 @@ private:
 
 } // namespace Tts
 
-#endif // TTS_SETTINGS_HPP
+#endif // OTTQ_20250829_1809_INCLUDE

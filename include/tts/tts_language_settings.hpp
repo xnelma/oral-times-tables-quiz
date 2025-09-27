@@ -1,5 +1,5 @@
-#ifndef TTS_LANGUAGE_SETTINGS_HPP
-#define TTS_LANGUAGE_SETTINGS_HPP
+#ifndef OTTQ_20250829_1808_INCLUDE
+#define OTTQ_20250829_1808_INCLUDE
 
 #include "tts_settings.hpp"
 #include "locale_descriptor.hpp"
@@ -38,4 +38,4 @@ private:
 
 } // namespace Tts
 
-#endif // TTS_LANGUAGE_SETTINGS_HPP
+#endif // OTTQ_20250829_1808_INCLUDE

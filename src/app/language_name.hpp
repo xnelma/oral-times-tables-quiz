@@ -1,5 +1,5 @@
-#ifndef LANGUAGE_NAME_HPP
-#define LANGUAGE_NAME_HPP
+#ifndef OTTQ_20250915_1552_INCLUDE
+#define OTTQ_20250915_1552_INCLUDE
 
 #include <QObject>
 #include <qqml.h>
@@ -29,4 +29,4 @@ private:
     QString territory_;
 };
 
-#endif // LANGUAGE_NAME_HPP
+#endif // OTTQ_20250915_1552_INCLUDE

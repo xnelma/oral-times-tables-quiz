@@ -1,5 +1,5 @@
-#ifndef QUESTION_HPP
-#define QUESTION_HPP
+#ifndef OTTQ_20250901_2054_INCLUDE
+#define OTTQ_20250901_2054_INCLUDE
 
 namespace TimesTables {
 
@@ -13,4 +13,4 @@ struct Question
 
 } // namespace TimesTables
 
-#endif // QUESTION_HPP
+#endif // OTTQ_20250901_2054_INCLUDE

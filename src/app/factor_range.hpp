@@ -1,5 +1,5 @@
-#ifndef FACTOR_RANGE_GADGET_HPP
-#define FACTOR_RANGE_GADGET_HPP
+#ifndef OTTQ_20250925_2204_INCLUDE
+#define OTTQ_20250925_2204_INCLUDE
 
 #include "timestables/quiz_settings.hpp"
 #include <QObject>
@@ -29,4 +29,4 @@ private:
     std::shared_ptr<TimesTables::Settings> quizSettings_;
 };
 
-#endif // FACTOR_RANGE_GADGET_HPP
+#endif // OTTQ_20250925_2204_INCLUDE

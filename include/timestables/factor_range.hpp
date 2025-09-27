@@ -1,5 +1,5 @@
-#ifndef FACTOR_RANGE_HPP
-#define FACTOR_RANGE_HPP
+#ifndef OTTQ_20250831_1137_INCLUDE
+#define OTTQ_20250831_1137_INCLUDE
 
 namespace TimesTables {
 
@@ -15,4 +15,4 @@ struct FactorRange
 
 } // namespace TimesTables
 
-#endif // FACTOR_RANGE_HPP
+#endif // OTTQ_20250831_1137_INCLUDE
