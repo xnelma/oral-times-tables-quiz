@@ -3,14 +3,17 @@
 
 #include "factor_range.hpp"
 #include <QList>
+#include <memory>
 
 namespace TimesTables {
 
 class Settings
 {
 public:
+    Settings();
+
     QList<int> timesTables();
-    TimesTables::FactorRange factorRange();
+    std::shared_ptr<TimesTables::FactorRange> factorRange();
 
     void addTimesTable(const int number);
     void setMinFactor(const int min);
@@ -18,7 +21,7 @@ public:
 
 private:
     QList<int> timesTables_;
-    FactorRange factorRange_;
+    std::shared_ptr<FactorRange> factorRange_;
 };
 
 } // namespace TimesTables

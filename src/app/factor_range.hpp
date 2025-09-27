@@ -1,7 +1,7 @@
 #ifndef OTTQ_20250925_2204_INCLUDE
 #define OTTQ_20250925_2204_INCLUDE
 
-#include "timestables/quiz_settings.hpp"
+#include "timestables/factor_range.hpp"
 #include <QObject>
 #include <qqml.h>
 #include <memory>
@@ -15,7 +15,7 @@ struct FactorRange
 
 public:
     FactorRange();
-    FactorRange(std::shared_ptr<TimesTables::Settings> quizSettings);
+    FactorRange(std::shared_ptr<TimesTables::FactorRange> fr);
 
     int min() const;
     int max() const;
@@ -26,7 +26,7 @@ public:
     bool operator==(const FactorRange &fr);
 
 private:
-    std::shared_ptr<TimesTables::Settings> quizSettings_;
+    std::shared_ptr<TimesTables::FactorRange> factorRange_;
 };
 
 #endif // OTTQ_20250925_2204_INCLUDE

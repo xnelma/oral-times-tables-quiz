@@ -1,39 +1,39 @@
 #include "factor_range.hpp"
 #include "timestables/factor_range.hpp"
+#include <QtLogging>
 
-FactorRange::FactorRange() { } // NOLINT
+FactorRange::FactorRange()
+    : factorRange_(std::make_shared<TimesTables::FactorRange>())
+{
+}
 
-FactorRange::FactorRange(std::shared_ptr<TimesTables::Settings> quizSettings)
-    : quizSettings_(quizSettings)
+FactorRange::FactorRange(std::shared_ptr<TimesTables::FactorRange> fr)
+    : factorRange_(fr)
 {
 }
 
 int FactorRange::min() const
 {
-    if (quizSettings_ == nullptr)
-        return 0; // TODO error handling
-    return quizSettings_->factorRange().from;
+    return factorRange_->from;
 }
 
 int FactorRange::max() const
 {
-    if (quizSettings_ == nullptr)
-        return 0;
-    return quizSettings_->factorRange().to;
+    return factorRange_->to;
 }
 
 void FactorRange::setMin(const int min) const
 {
-    if (quizSettings_ == nullptr || quizSettings_->factorRange().from == min)
+    if (factorRange_->from == min)
         return;
-    quizSettings_->setMinFactor(min);
+    factorRange_->from = min;
 }
 
 void FactorRange::setMax(const int max) const
 {
-    if (quizSettings_ == nullptr || quizSettings_->factorRange().to == max)
+    if (factorRange_->to == max)
         return;
-    quizSettings_->setMaxFactor(max);
+    factorRange_->to = max;
 }
 
 bool FactorRange::operator==(const FactorRange &fr)

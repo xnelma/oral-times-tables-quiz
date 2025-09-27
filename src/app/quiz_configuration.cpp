@@ -3,7 +3,7 @@
 QuizConfiguration::QuizConfiguration(QObject *parent)
     : QObject(parent),
       quizSettings_(std::make_shared<TimesTables::Settings>()),
-      factorRange_(FactorRange(quizSettings_))
+      factorRange_(FactorRange(quizSettings_->factorRange()))
 {
 }
 
