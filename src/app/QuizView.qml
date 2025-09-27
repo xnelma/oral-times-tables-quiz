@@ -115,7 +115,7 @@ FocusScope {
         id: quizBackend
 
         Component.onCompleted: {
-            var ok = quizBackend.setupQuiz(QuizConfiguration.timesTables, QuizConfiguration.factorRange.min, QuizConfiguration.factorRange.max);
+            var ok = quizBackend.setupQuiz(QuizConfiguration.timesTables, QuizConfiguration.factorRange);
             if (!ok) {
                 qRoot.state = "unavailable";
             } else if (tts.state == TextToSpeech.Error) {

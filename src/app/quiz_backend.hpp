@@ -3,6 +3,7 @@
 
 #include "tts/quiz_translator.hpp"
 #include "timestables/quiz.hpp"
+#include "factor_range.hpp"
 #include <QObject>
 #include <qqml.h>
 #include <QLocale>
@@ -41,8 +42,8 @@ public:
 
     void setAvailability(const bool &isAvailable);
 
-    Q_INVOKABLE bool setupQuiz(const QList<int> tables, const int minFactor,
-                               const int maxFactor);
+    Q_INVOKABLE bool setupQuiz(const QList<int> tables,
+                               const FactorRange &range);
     Q_INVOKABLE void startQuiz();
     Q_INVOKABLE void check(const QString input);
 

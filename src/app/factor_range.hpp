@@ -19,6 +19,7 @@ public:
 
     int min() const;
     int max() const;
+    std::shared_ptr<TimesTables::FactorRange> get() const;
 
     void setMin(const int min) const;
     void setMax(const int max) const;

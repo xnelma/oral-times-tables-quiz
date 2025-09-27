@@ -1,6 +1,5 @@
 #include "quiz_backend.hpp"
 #include "tts/tts_settings.hpp"
-#include "quiz_configuration.hpp"
 #include "timestables/factor_range.hpp"
 #include "timestables/question.hpp"
 #include <QtLogging>
@@ -60,11 +59,9 @@ void QuizBackend::setAvailability(const bool &isAvailable)
     emit availabilityChanged();
 }
 
-// NOLINTNEXTLINE(bugprone-easily-swappable-parameters)
-bool QuizBackend::setupQuiz(const QList<int> tables, const int minFactor,
-                            const int maxFactor)
+bool QuizBackend::setupQuiz(const QList<int> tables, const FactorRange &range)
 {
-    quiz_.setup(tables, TimesTables::FactorRange(minFactor, maxFactor));
+    quiz_.setup(tables, range.get());
     translator_.translate(questionBase_);
     return quiz_.isAvailable() && translator_.isAvailable();
 }

@@ -5,13 +5,16 @@
 #include "question.hpp"
 #include <QList>
 #include <vector>
+#include <memory>
 
 namespace TimesTables {
+
+typedef std::shared_ptr<FactorRange> FactorRangePtr;
 
 class Quiz
 {
 public:
-    void setup(const QList<int> timesTables, const FactorRange factorRange);
+    void setup(const QList<int> timesTables, const FactorRangePtr factorRange);
     bool isAvailable();
     Question question();
     bool next();
@@ -21,7 +24,7 @@ public:
 
 private:
     void generateQuestions(const QList<int> timesTables,
-                           const FactorRange factorRange);
+                           const FactorRangePtr factorRange);
 
     std::vector<Question> questions_;
 };

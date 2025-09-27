@@ -3,7 +3,7 @@
 #include <random>
 
 void TimesTables::Quiz::setup(const QList<int> timesTables,
-                              const FactorRange factorRange)
+                              const FactorRangePtr factorRange)
 {
     questions_.clear();
     generateQuestions(timesTables, factorRange);
@@ -15,9 +15,9 @@ bool TimesTables::Quiz::isAvailable()
 }
 
 void TimesTables::Quiz::generateQuestions(const QList<int> tables,
-                                          const FactorRange range)
+                                          const FactorRangePtr range)
 {
-    auto factors = std::ranges::iota_view{ range.from, range.to + 1 };
+    auto factors = std::ranges::iota_view{ range->from, range->to + 1 };
     for (const int number : tables)
         for (const int factor : factors)
             questions_.push_back({ number, factor });

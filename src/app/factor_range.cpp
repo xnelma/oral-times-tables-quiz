@@ -22,6 +22,11 @@ int FactorRange::max() const
     return factorRange_->to;
 }
 
+std::shared_ptr<TimesTables::FactorRange> FactorRange::get() const
+{
+    return factorRange_;
+}
+
 void FactorRange::setMin(const int min) const
 {
     if (factorRange_->from == min)
