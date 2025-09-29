@@ -26,7 +26,7 @@ public:
 
 private:
     Settings();
-    ~Settings(); // defines a destructor
+    ~Settings();
 
     QList<int> timesTables_;
     std::shared_ptr<FactorRange> factorRange_;
