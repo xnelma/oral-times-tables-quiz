@@ -45,8 +45,7 @@ signals:
     void factorRangeChanged();
 
 private:
-    std::shared_ptr<TimesTables::Settings> quizSettings_;
-
+    TimesTables::Settings quizSettings_;
     FactorRange factorRange_;
 };
 
