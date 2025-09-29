@@ -5,7 +5,10 @@
 #include <QtLogging>
 
 QuizBackend::QuizBackend(QObject *parent)
-    : QObject(parent), isAvailable_(true), questionBase_("%1 times %2")
+    : QObject(parent),
+      isAvailable_(true),
+      questionBase_("%1 times %2"),
+      state_("unavailable")
 {
 }
 
@@ -50,6 +53,11 @@ int QuizBackend::numQuestionsRemaining()
     return INT_MAX;
 }
 
+QString QuizBackend::state()
+{
+    return state_;
+}
+
 void QuizBackend::setAvailability(const bool &isAvailable)
 {
     if (isAvailable == isAvailable_)
@@ -57,6 +65,15 @@ void QuizBackend::setAvailability(const bool &isAvailable)
 
     isAvailable_ = isAvailable;
     emit availabilityChanged();
+}
+
+void QuizBackend::setState(const QString &state)
+{
+    if (state_ == state)
+        return;
+
+    state_ = state;
+    emit stateChanged();
 }
 
 bool QuizBackend::setupQuiz()

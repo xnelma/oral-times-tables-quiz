@@ -10,7 +10,7 @@ FocusScope {
     required property int parentWidth
 
     height: parentHeight
-    state: "unavailable"
+    state: quizBackend.state
     width: parentWidth
 
     states: [
@@ -117,27 +117,27 @@ FocusScope {
         Component.onCompleted: {
             var ok = quizBackend.setupQuiz();
             if (!ok) {
-                qRoot.state = "unavailable";
+                state = "unavailable";
             } else if (tts.state == TextToSpeech.Error) {
-                qRoot.state = "tts-loading";
+                state = "tts-loading";
                 connectionTtsReady.enabled = true;
             } else {
-                qRoot.state = "available";
+                state = "available";
                 quizBackend.startQuiz();
             }
         }
         onAvailabilityChanged: {
             if (!isAvailable)
-                qRoot.state = "unavailable";
-            else if (isAvailable && qRoot.state != "tts-loading")
-                qRoot.state = "available";
+                state = "unavailable";
+            else if (isAvailable && state != "tts-loading")
+                state = "available";
         }
         onQuestionChanged: {
             answerInput.text = "";
             tts.enqueue(question);
         }
         onQuizCompleted: {
-            qRoot.state = "completed";
+            state = "completed";
         }
     }
 
@@ -279,7 +279,7 @@ FocusScope {
     Connections {
         function onStateChanged() {
             if (tts.state == TextToSpeech.Speaking) {
-                qRoot.state = quizBackend.isAvailable ? "available" : "unavailable";
+                quizBackend.state = quizBackend.isAvailable ? "available" : "unavailable";
                 target = null; // Call once.
             }
         }

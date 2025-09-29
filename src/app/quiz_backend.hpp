@@ -27,6 +27,11 @@ class QuizBackend : public QObject
                READ numQuestionsRemaining
                NOTIFY numQuestionsRemainingChanged
                FINAL)
+    Q_PROPERTY(QString state // TODO enum?
+               READ state
+               WRITE setState
+               NOTIFY stateChanged
+               FINAL)
     // clang-format on
     QML_ELEMENT
 
@@ -38,8 +43,10 @@ public:
     QString question();
     bool isAvailable();
     int numQuestionsRemaining();
+    QString state();
 
     void setAvailability(const bool &isAvailable);
+    void setState(const QString &state);
 
     Q_INVOKABLE bool setupQuiz();
     Q_INVOKABLE void startQuiz();
@@ -52,6 +59,7 @@ signals:
     void numQuestionsRemainingChanged();
     void questionChanged();
     void quizCompleted();
+    void stateChanged();
 
 private:
     void nextQuestion();
@@ -60,6 +68,7 @@ private:
     bool isAvailable_;
     TimesTables::Quiz quiz_;
     QString questionBase_;
+    QString state_;
 };
 
 #endif // OTTQ_20250829_1810_INCLUDE
