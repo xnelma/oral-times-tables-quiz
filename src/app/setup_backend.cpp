@@ -1,12 +1,12 @@
-#include "quiz_configuration.hpp"
+#include "setup_backend.hpp"
 
-QuizConfiguration::QuizConfiguration(QObject *parent)
+SetupBackend::SetupBackend(QObject *parent)
     : QObject(parent),
       factorRange_(FactorRange(TimesTables::Settings::instance().factorRange()))
 {
 }
 
-QString QuizConfiguration::timesTablesStr()
+QString SetupBackend::timesTablesStr()
 {
     QString timesTables;
     for (const int n : TimesTables::Settings::instance().timesTables())
@@ -17,17 +17,17 @@ QString QuizConfiguration::timesTablesStr()
     return timesTables.first(timesTables.length() - 2);
 }
 
-QList<int> QuizConfiguration::timesTables()
+QList<int> SetupBackend::timesTables()
 {
     return TimesTables::Settings::instance().timesTables();
 }
 
-FactorRange QuizConfiguration::factorRange() const
+FactorRange SetupBackend::factorRange() const
 {
     return factorRange_;
 }
 
-void QuizConfiguration::setFactorRange(const FactorRange &fr)
+void SetupBackend::setFactorRange(const FactorRange &fr)
 {
     if (factorRange_ == fr)
         return;
@@ -36,7 +36,7 @@ void QuizConfiguration::setFactorRange(const FactorRange &fr)
     emit factorRangeChanged();
 }
 
-void QuizConfiguration::addTimesTable(const int number)
+void SetupBackend::addTimesTable(const int number)
 {
     TimesTables::Settings::instance().addTimesTable(number);
 

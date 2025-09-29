@@ -27,8 +27,8 @@ qt_add_qml_module(OTTQ
         quiz_backend.cpp
         settings_backend.hpp
         settings_backend.cpp
-        quiz_configuration.hpp
-        quiz_configuration.cpp
+        setup_backend.hpp
+        setup_backend.cpp
         language_name.hpp
         factor_range.hpp
         factor_range.cpp

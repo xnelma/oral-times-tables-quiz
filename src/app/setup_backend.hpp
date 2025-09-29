@@ -7,7 +7,7 @@
 #include <qqml.h>
 #include <memory>
 
-class QuizConfiguration : public QObject
+class SetupBackend : public QObject
 {
     Q_OBJECT
     // clang-format off
@@ -28,7 +28,7 @@ class QuizConfiguration : public QObject
     QML_ELEMENT
 
 public:
-    explicit QuizConfiguration(QObject *parent = nullptr);
+    explicit SetupBackend(QObject *parent = nullptr);
 
     Q_INVOKABLE void addTimesTable(const int number);
 
