@@ -10,7 +10,12 @@ namespace TimesTables {
 class Settings
 {
 public:
-    Settings();
+    static Settings &instance();
+
+    Settings(const Settings &) = delete;
+    Settings(const Settings &&) = delete;
+    Settings &operator=(const Settings &) = delete;
+    Settings &operator=(const Settings &&) = delete;
 
     QList<int> timesTables();
     std::shared_ptr<TimesTables::FactorRange> factorRange();
@@ -20,6 +25,9 @@ public:
     void setMaxFactor(const int max);
 
 private:
+    Settings();
+    ~Settings(); // defines a destructor
+
     QList<int> timesTables_;
     std::shared_ptr<FactorRange> factorRange_;
 };

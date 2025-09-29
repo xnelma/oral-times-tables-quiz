@@ -25,7 +25,6 @@ class QuizConfiguration : public QObject
                NOTIFY factorRangeChanged
                FINAL)
     // clang-format on
-    QML_SINGLETON
     QML_ELEMENT
 
 public:
@@ -45,7 +44,6 @@ signals:
     void factorRangeChanged();
 
 private:
-    TimesTables::Settings quizSettings_;
     FactorRange factorRange_;
 };
 

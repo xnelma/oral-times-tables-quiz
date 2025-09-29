@@ -3,6 +3,11 @@ import QtQuick
 import QtQuick.Controls.Basic
 
 Item {
+    QuizConfiguration {
+        id: quizConfig
+
+    }
+
     Column {
         anchors.centerIn: parent
         spacing: 10
@@ -10,7 +15,7 @@ Item {
         SetupViewSectionTitle {
             anchors.horizontalCenter: parent.horizontalCenter
             subtitle: {
-                var numbers = QuizConfiguration.timesTablesStr;
+                var numbers = quizConfig.timesTablesStr;
                 return numbers === "" ? qsTr("Add a number") : numbers;
             }
             title: qsTr("Times Tables:")
@@ -54,7 +59,7 @@ Item {
                 width: timesTableNumber.width
 
                 onClicked: {
-                    QuizConfiguration.addTimesTable(timesTableNumber.value);
+                    quizConfig.addTimesTable(timesTableNumber.value);
                 }
             }
         }
@@ -76,15 +81,15 @@ Item {
             property int low: Math.round(first.value)
 
             anchors.horizontalCenter: parent.horizontalCenter
-            first.value: QuizConfiguration.factorRange.min
+            first.value: quizConfig.factorRange.min
             from: 1
-            second.value: QuizConfiguration.factorRange.max
+            second.value: quizConfig.factorRange.max
             snapMode: RangeSlider.SnapAlways
             stepSize: 1
             to: 100
 
-            first.onMoved: QuizConfiguration.factorRange.min = low
-            second.onMoved: QuizConfiguration.factorRange.max = high
+            first.onMoved: quizConfig.factorRange.min = low
+            second.onMoved: quizConfig.factorRange.max = high
         }
     }
 }

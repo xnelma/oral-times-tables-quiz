@@ -1,9 +1,17 @@
 #include "quiz_settings.hpp"
 
+TimesTables::Settings &TimesTables::Settings::instance()
+{
+    static Settings settings;
+    return settings;
+}
+
 TimesTables::Settings::Settings()
     : factorRange_(std::make_shared<FactorRange>())
 {
 }
+
+TimesTables::Settings::~Settings() { }
 
 QList<int> TimesTables::Settings::timesTables()
 {

@@ -1,14 +1,15 @@
 #include "quiz_configuration.hpp"
 
 QuizConfiguration::QuizConfiguration(QObject *parent)
-    : QObject(parent), factorRange_(FactorRange(quizSettings_.factorRange()))
+    : QObject(parent),
+      factorRange_(FactorRange(TimesTables::Settings::instance().factorRange()))
 {
 }
 
 QString QuizConfiguration::timesTablesStr()
 {
     QString timesTables;
-    for (const int n : quizSettings_.timesTables())
+    for (const int n : TimesTables::Settings::instance().timesTables())
         timesTables += QString::number(n) + ", ";
 
     if (timesTables.length() < 2)
@@ -18,7 +19,7 @@ QString QuizConfiguration::timesTablesStr()
 
 QList<int> QuizConfiguration::timesTables()
 {
-    return quizSettings_.timesTables();
+    return TimesTables::Settings::instance().timesTables();
 }
 
 FactorRange QuizConfiguration::factorRange() const
@@ -37,7 +38,7 @@ void QuizConfiguration::setFactorRange(const FactorRange &fr)
 
 void QuizConfiguration::addTimesTable(const int number)
 {
-    quizSettings_.addTimesTable(number);
+    TimesTables::Settings::instance().addTimesTable(number);
 
     emit timesTablesStrChanged();
 }

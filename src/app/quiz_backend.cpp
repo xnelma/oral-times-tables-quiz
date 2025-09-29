@@ -59,9 +59,9 @@ void QuizBackend::setAvailability(const bool &isAvailable)
     emit availabilityChanged();
 }
 
-bool QuizBackend::setupQuiz(const QList<int> tables, const FactorRange &range)
+bool QuizBackend::setupQuiz()
 {
-    quiz_.setup(tables, range.get());
+    quiz_.setup();
     translator_.translate(questionBase_);
     return quiz_.isAvailable() && translator_.isAvailable();
 }
