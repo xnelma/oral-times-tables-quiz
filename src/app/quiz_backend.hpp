@@ -18,18 +18,12 @@ class QuizBackend : public QObject
                READ localeName
                NOTIFY localeNameChanged
                FINAL)
-    Q_PROPERTY(bool isAvailable
-               READ isAvailable
-               WRITE setAvailability
-               NOTIFY availabilityChanged
-               FINAL)
     Q_PROPERTY(int numQuestionsRemaining
                READ numQuestionsRemaining
                NOTIFY numQuestionsRemainingChanged
                FINAL)
     Q_PROPERTY(QString state // TODO enum?
                READ state
-               WRITE setState
                NOTIFY stateChanged
                FINAL)
     // clang-format on
@@ -41,31 +35,31 @@ public:
     QString localeName();
     double voiceRate();
     QString question();
-    bool isAvailable();
     int numQuestionsRemaining();
     QString state();
 
-    void setAvailability(const bool &isAvailable);
-    void setState(const QString &state);
-
-    Q_INVOKABLE bool setupQuiz();
+    Q_INVOKABLE void invokeQuizSetup(const bool &ttsError);
     Q_INVOKABLE void startQuiz();
     Q_INVOKABLE void check(const QString input);
+    Q_INVOKABLE void setUnavailable();
+    Q_INVOKABLE void setStateToAvailability();
 
 signals:
     void localeNameChanged();
     void voiceRateChanged();
-    void availabilityChanged();
     void numQuestionsRemainingChanged();
     void questionChanged();
-    void quizCompleted();
     void stateChanged();
+    void ttsErrorFound();
 
 private:
     void nextQuestion();
+    bool setupQuiz();
+    bool isAvailable();
+    void setStateToCompleted();
 
     Tts::QuizTranslator translator_;
-    bool isAvailable_;
+    bool viewIsAvailable_;
     TimesTables::Quiz quiz_;
     QString questionBase_;
     QString state_;

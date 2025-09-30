@@ -114,30 +114,12 @@ FocusScope {
     QuizBackend {
         id: quizBackend
 
-        Component.onCompleted: {
-            var ok = quizBackend.setupQuiz();
-            if (!ok) {
-                state = "unavailable";
-            } else if (tts.state == TextToSpeech.Error) {
-                state = "tts-loading";
-                connectionTtsReady.enabled = true;
-            } else {
-                state = "available";
-                quizBackend.startQuiz();
-            }
-        }
-        onAvailabilityChanged: {
-            if (!isAvailable)
-                state = "unavailable";
-            else if (isAvailable && state != "tts-loading")
-                state = "available";
-        }
         onQuestionChanged: {
             answerInput.text = "";
             tts.enqueue(question);
         }
-        onQuizCompleted: {
-            state = "completed";
+        onTtsErrorFound: {
+            connectionTtsReady.enabled = true;
         }
     }
 
@@ -247,9 +229,13 @@ FocusScope {
 
             // If the locale is not available, the property won't change.
             if (tts.locale.name != quizBackend.localeName) {
-                quizBackend.isAvailable = false;
+                quizBackend.setUnavailable();
                 dlgLocaleError.open();
             }
+        }
+
+        Component.onCompleted: {
+            quizBackend.invokeQuizSetup(tts.state === TextToSpeech.Error);
         }
     }
 
@@ -279,7 +265,7 @@ FocusScope {
     Connections {
         function onStateChanged() {
             if (tts.state == TextToSpeech.Speaking) {
-                quizBackend.state = quizBackend.isAvailable ? "available" : "unavailable";
+                quizBackend.setStateToAvailability();
                 target = null; // Call once.
             }
         }

@@ -6,10 +6,45 @@
 
 QuizBackend::QuizBackend(QObject *parent)
     : QObject(parent),
-      isAvailable_(true),
+      viewIsAvailable_(true),
       questionBase_("%1 times %2"),
       state_("unavailable")
 {
+}
+
+void QuizBackend::invokeQuizSetup(const bool &ttsError)
+{
+    bool ok = setupQuiz();
+    if (!ok) {
+        state_ = "unavailable";
+    } else if (ttsError) {
+        state_ = "tts-loading";
+        emit ttsErrorFound();
+    } else {
+        state_ = "available";
+        startQuiz();
+    }
+
+    emit stateChanged();
+}
+
+void QuizBackend::setUnavailable()
+{
+    viewIsAvailable_ = false;
+    state_ = "unavailable";
+    emit stateChanged();
+}
+
+void QuizBackend::setStateToAvailability()
+{
+    state_ = isAvailable() ? "available" : "unavailable";
+    emit stateChanged();
+}
+
+void QuizBackend::setStateToCompleted()
+{
+    state_ = "completed";
+    emit stateChanged();
 }
 
 QString QuizBackend::localeName()
@@ -30,7 +65,7 @@ QString QuizBackend::question()
         TimesTables::Question q = quiz_.question();
         return questionBase_.arg(q.factor).arg(q.number);
     } catch (std::out_of_range &e) {
-        setAvailability(false);
+        setUnavailable();
         qCritical("Couldn't get the question: %s", e.what());
     }
 
@@ -39,7 +74,7 @@ QString QuizBackend::question()
 
 bool QuizBackend::isAvailable()
 {
-    return isAvailable_ && translator_.isAvailable() && quiz_.isAvailable();
+    return viewIsAvailable_ && translator_.isAvailable() && quiz_.isAvailable();
 }
 
 int QuizBackend::numQuestionsRemaining()
@@ -56,24 +91,6 @@ int QuizBackend::numQuestionsRemaining()
 QString QuizBackend::state()
 {
     return state_;
-}
-
-void QuizBackend::setAvailability(const bool &isAvailable)
-{
-    if (isAvailable == isAvailable_)
-        return;
-
-    isAvailable_ = isAvailable;
-    emit availabilityChanged();
-}
-
-void QuizBackend::setState(const QString &state)
-{
-    if (state_ == state)
-        return;
-
-    state_ = state;
-    emit stateChanged();
 }
 
 bool QuizBackend::setupQuiz()
@@ -113,6 +130,6 @@ void QuizBackend::nextQuestion()
         emit questionChanged();
         emit numQuestionsRemainingChanged();
     } else {
-        emit quizCompleted();
+        setStateToCompleted();
     }
 }
