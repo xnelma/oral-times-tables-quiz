@@ -14,8 +14,8 @@ QuizBackend::QuizBackend(QObject *parent)
 
 void QuizBackend::invokeQuizSetup(const bool &ttsError)
 {
-    bool ok = setupQuiz();
-    if (!ok) {
+    setupQuiz();
+    if (!isAvailable()) {
         state_ = "unavailable";
     } else if (ttsError) {
         state_ = "tts-loading";
@@ -93,11 +93,10 @@ QString QuizBackend::state()
     return state_;
 }
 
-bool QuizBackend::setupQuiz()
+void QuizBackend::setupQuiz()
 {
     quiz_.setup();
     translator_.translate(questionBase_);
-    return quiz_.isAvailable() && translator_.isAvailable();
 }
 
 void QuizBackend::startQuiz()

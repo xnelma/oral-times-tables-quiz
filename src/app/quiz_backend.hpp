@@ -54,7 +54,7 @@ signals:
 
 private:
     void nextQuestion();
-    bool setupQuiz();
+    void setupQuiz();
     bool isAvailable();
     void setStateToCompleted();
 
