@@ -11,8 +11,7 @@
 class QuizBackend : public QObject
 {
     Q_OBJECT
-    Q_PROPERTY(double voiceRate READ voiceRate NOTIFY voiceRateChanged FINAL)
-    Q_PROPERTY(QString question READ question NOTIFY questionChanged FINAL)
+    Q_PROPERTY(bool ttsReady READ ttsReady NOTIFY ttsReadyChanged FINAL)
     // clang-format off
     Q_PROPERTY(QString localeName
                READ localeName
@@ -24,6 +23,10 @@ class QuizBackend : public QObject
                FINAL)
     Q_PROPERTY(QString state // TODO enum?
                READ state
+               WRITE setState
+               // TODO maybe instead of the one-line assignProperty
+               // set the states in connect s.t. I don't need to expose the
+               // WRITE function to QML?
                NOTIFY stateChanged
                FINAL)
     // clang-format on
@@ -32,37 +35,42 @@ class QuizBackend : public QObject
 public:
     explicit QuizBackend(QObject *parent = nullptr);
 
-    QString localeName();
-    double voiceRate();
-    QString question();
-    int numQuestionsRemaining();
     QString state();
+    QString localeName();
+    int numQuestionsRemaining();
+    bool ttsReady();
 
-    Q_INVOKABLE void invokeQuizSetup(const bool &ttsError);
-    Q_INVOKABLE void startQuiz();
+    void setState(const QString &s);
+
     Q_INVOKABLE void check(const QString input);
-    Q_INVOKABLE void setUnavailable();
-    Q_INVOKABLE void setStateToAvailability();
+    Q_INVOKABLE void askAgain();
 
 signals:
     void localeNameChanged();
-    void voiceRateChanged();
     void numQuestionsRemainingChanged();
     void questionChanged();
     void stateChanged();
-    void ttsErrorFound();
+    void showLocaleError();
+    void ttsReadyChanged();
 
 private:
-    void nextQuestion();
+    void setupStateMachine();
+    double voiceRate();
     void setupQuiz();
+    void startQuiz();
     bool isAvailable();
-    void setStateToCompleted();
+    QString question();
+    void nextQuestion();
 
+    void setStateToCompleted();
+    void setStateToAvailability();
+    void setUnavailable();
+
+    QString state_;
     Tts::QuizTranslator translator_;
-    bool viewIsAvailable_;
     TimesTables::Quiz quiz_;
     QString questionBase_;
-    QString state_;
+    bool viewIsAvailable_;
 };
 
 #endif // OTTQ_20250829_1810_INCLUDE

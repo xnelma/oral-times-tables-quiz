@@ -17,6 +17,7 @@ find_package(Qt6
         LinguistTools
         TextToSpeech
         Test
+        StateMachine
 )
 
 set(CMAKE_INCLUDE_CURRENT_DIR ON)

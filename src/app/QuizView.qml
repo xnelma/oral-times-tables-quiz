@@ -1,7 +1,6 @@
 import OttqApp
 import QtQuick
 import QtQuick.Controls.Basic
-import QtTextToSpeech
 
 FocusScope {
     id: qRoot
@@ -140,10 +139,9 @@ FocusScope {
 
         onQuestionChanged: {
             answerInput.text = "";
-            tts.enqueue(question);
         }
-        onTtsErrorFound: {
-            connectionTtsReady.enabled = true;
+        onShowLocaleError: {
+            dlgLocaleError.open();
         }
     }
 
@@ -197,11 +195,11 @@ FocusScope {
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.top: parent.top
         anchors.topMargin: qRoot.parentHeight / 3
-        enabled: tts.state == TextToSpeech.Ready
+        enabled: quizBackend.ttsReady
         text: qsTr("Replay")
 
         onClicked: {
-            tts.enqueue(quizBackend.question);
+            quizBackend.askAgain();
             answerInput.focus = true;
         }
     }
@@ -242,58 +240,5 @@ FocusScope {
         anchors.rightMargin: 2
         opacity: 0.5
         text: quizBackend.localeName
-    }
-
-    TextToSpeech {
-        id: tts
-
-        function setUp() {
-            tts.locale = Qt.locale(quizBackend.localeName);
-            tts.rate = quizBackend.voiceRate;
-
-            // If the locale is not available, the property won't change.
-            if (tts.locale.name != quizBackend.localeName) {
-                quizBackend.setUnavailable();
-                dlgLocaleError.open();
-            }
-        }
-
-        Component.onCompleted: {
-            quizBackend.invokeQuizSetup(tts.state === TextToSpeech.Error);
-        }
-    }
-
-    Connections {
-        id: connectionTtsReady
-
-        function onStateChanged() {
-            if (tts.state == TextToSpeech.Ready) {
-                quizBackend.startQuiz();
-                target = null; // Start quiz only once.
-            }
-        }
-
-        enabled: false
-        target: tts
-    }
-
-    Connections {
-        function onAboutToSynthesize() {
-            tts.setUp();
-            target = null; // Will be called only once.
-        }
-
-        target: tts
-    }
-
-    Connections {
-        function onStateChanged() {
-            if (tts.state == TextToSpeech.Speaking) {
-                quizBackend.setStateToAvailability();
-                target = null; // Call once.
-            }
-        }
-
-        target: tts
     }
 }

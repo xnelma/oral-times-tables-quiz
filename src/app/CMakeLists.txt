@@ -3,6 +3,7 @@ qt_add_executable(OTTQ main.cpp)
 target_link_libraries(OTTQ PRIVATE
     Qt6::Quick
     Qt6::TextToSpeech
+    Qt6::StateMachine
     TimesTables
     Tts
 )
@@ -32,6 +33,9 @@ qt_add_qml_module(OTTQ
         language_name.hpp
         factor_range.hpp
         factor_range.cpp
+        tts_state_transition.hpp
+        tts_singleton.hpp
+        tts_singleton.cpp
 )
 
 qt_add_translations(OTTQ
