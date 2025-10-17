@@ -52,18 +52,18 @@ signals:
     void stateChanged();
     void showLocaleError();
     void ttsReadyChanged();
+    void completed();
+
+    void error();
+    void setupDoneAndTtsReady();
+    void setupDoneAndTtsError();
 
 private:
     void setupStateMachine();
     double voiceRate();
-    void setupQuiz();
-    void startQuiz();
-    bool isAvailable();
     QString question();
     void nextQuestion();
 
-    void setStateToCompleted();
-    void setStateToAvailability();
     void setUnavailable();
 
     QString state_;

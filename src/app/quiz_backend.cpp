@@ -6,6 +6,7 @@
 #include "timestables/question.hpp"
 #include <QtLogging>
 #include <QStateMachine>
+#include <QFinalState>
 
 QuizBackend::QuizBackend(QObject *parent)
     : QObject(parent),
@@ -13,9 +14,6 @@ QuizBackend::QuizBackend(QObject *parent)
       questionBase_("%1 times %2"),
       state_("unavailable")
 {
-    setupQuiz();
-    startQuiz();
-
     setupStateMachine();
 }
 
@@ -23,13 +21,19 @@ void QuizBackend::setupStateMachine()
 {
     // NOLINTBEGIN TODO
     auto *machine = new QStateMachine(this);
+    auto *setup = new QState();
     auto *loading = new QState();
     auto *synthesizing = new QState();
     auto *unavailable = new QState();
     auto *available = new QState();
     auto *completed = new QState();
+    auto *end = new QFinalState();
     // NOLINTEND
 
+    unavailable->addTransition(end);
+    completed->addTransition(end);
+
+    setup->assignProperty(this, "state", "unavailable");
     loading->assignProperty(this, "state", "tts-loading");
     synthesizing->assignProperty(this, "state", "tts-synthesizing");
     unavailable->assignProperty(this, "state", "unavailable");
@@ -37,6 +41,11 @@ void QuizBackend::setupStateMachine()
     completed->assignProperty(this, "state", "completed");
 
     // transitions
+    setup->addTransition(this, &QuizBackend::error, unavailable);
+    setup->addTransition(this, &QuizBackend::setupDoneAndTtsError, loading);
+    setup->addTransition(
+        this, &QuizBackend::setupDoneAndTtsReady, synthesizing);
+
     auto *tts_ready = new TtsStateTransition(TtsSingleton::instance().get(),
                                              QTextToSpeech::Ready);
     tts_ready->setTargetState(synthesizing);
@@ -44,26 +53,55 @@ void QuizBackend::setupStateMachine()
 
     auto *tts_speaking = new TtsStateTransition(TtsSingleton::instance().get(),
                                                 QTextToSpeech::Speaking);
-    tts_speaking->setTargetState(available /* or unavailable */);
+    tts_speaking->setTargetState(available);
     synthesizing->addTransition(tts_speaking);
+    synthesizing->addTransition(this, &QuizBackend::error, unavailable);
+
+    available->addTransition(this, &QuizBackend::completed, completed);
 
     // connections for defining/calling slots on state change
+    QObject::connect(setup, &QState::entered, this, [this, machine]() {
+        quiz_.setup();
+        if (!quiz_.isAvailable()) {
+            emit error();
+            return; // TODO have a grouped state?
+        }
+        translator_.translate(questionBase_);
+        if (!translator_.isAvailable()) {
+            // TODO maybe I could instead catch an exception?
+            emit error();
+            return;
+        }
+        emit numQuestionsRemainingChanged();
+
+        if (TtsSingleton::instance().isReady())
+            emit setupDoneAndTtsReady();
+        else
+            emit setupDoneAndTtsError();
+    });
     QObject::connect(synthesizing, &QState::entered, this, [this]() {
         Tts::Settings settings;
         double voiceRate = settings.loadVoiceRateSetting();
         TtsSingleton::instance().setup(translator_.locale(), voiceRate);
+        if (TtsSingleton::instance().get()->state() == QTextToSpeech::Error) {
+            // couldn't set translation
+            emit error();
+            emit showLocaleError(); // TODO move to state?
+            return;
+        }
 
         TtsSingleton::instance().say(question());
     });
 
+    machine->addState(setup);
     machine->addState(loading);
     machine->addState(synthesizing);
     machine->addState(unavailable);
     machine->addState(available);
     machine->addState(completed);
+    machine->addState(end);
 
-    machine->setInitialState(TtsSingleton::instance().isReady() ? synthesizing
-                                                                : loading);
+    machine->setInitialState(setup);
 
     machine->start();
 }
@@ -72,18 +110,6 @@ void QuizBackend::setUnavailable()
 {
     viewIsAvailable_ = false;
     state_ = "unavailable";
-    emit stateChanged();
-}
-
-void QuizBackend::setStateToAvailability()
-{
-    state_ = isAvailable() ? "available" : "unavailable";
-    emit stateChanged();
-}
-
-void QuizBackend::setStateToCompleted()
-{
-    state_ = "completed";
     emit stateChanged();
 }
 
@@ -107,16 +133,11 @@ QString QuizBackend::question()
         TimesTables::Question q = quiz_.question();
         return questionBase_.arg(q.factor).arg(q.number);
     } catch (std::out_of_range &e) {
-        setUnavailable();
+        setUnavailable(); // TODO move to FSM
         qCritical("Couldn't get the question: %s", e.what());
     }
 
     return "";
-}
-
-bool QuizBackend::isAvailable()
-{
-    return viewIsAvailable_ && translator_.isAvailable() && quiz_.isAvailable();
 }
 
 int QuizBackend::numQuestionsRemaining()
@@ -142,18 +163,6 @@ bool QuizBackend::ttsReady()
     // I would need a state change connecting to the tts speaking state
 }
 
-void QuizBackend::setupQuiz()
-{
-    quiz_.setup();
-    translator_.translate(questionBase_);
-}
-
-void QuizBackend::startQuiz()
-{
-    emit questionChanged();
-    emit numQuestionsRemainingChanged();
-}
-
 void QuizBackend::check(const QString input)
 {
     if (input == "")
@@ -177,8 +186,9 @@ void QuizBackend::nextQuestion()
     if (quiz_.next()) {
         emit questionChanged();
         emit numQuestionsRemainingChanged();
+        TtsSingleton::instance().say(question());
     } else {
-        setStateToCompleted();
+        emit completed();
     }
 }
 
