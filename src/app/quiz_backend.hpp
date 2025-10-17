@@ -11,7 +11,6 @@
 class QuizBackend : public QObject
 {
     Q_OBJECT
-    Q_PROPERTY(bool ttsReady READ ttsReady NOTIFY ttsReadyChanged FINAL)
     // clang-format off
     Q_PROPERTY(QString localeName
                READ localeName
@@ -38,7 +37,6 @@ public:
     QString state();
     QString localeName();
     int numQuestionsRemaining();
-    bool ttsReady();
 
     void setState(const QString &s);
 
@@ -51,7 +49,6 @@ signals:
     void questionChanged();
     void stateChanged();
     void showLocaleError();
-    void ttsReadyChanged();
     void completed();
 
     void error();

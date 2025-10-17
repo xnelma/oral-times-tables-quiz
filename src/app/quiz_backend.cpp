@@ -25,9 +25,13 @@ void QuizBackend::setupStateMachine()
     auto *synthesizing = new QState();
     auto *unavailable = new QState();
     auto *available = new QState();
+    auto *waiting = new QState(available);
+    auto *talking = new QState(available);
     auto *completed = new QState();
     auto *end = new QFinalState();
     // NOLINTEND
+
+    available->setInitialState(waiting);
 
     unavailable->addTransition(end);
     completed->addTransition(end);
@@ -36,7 +40,8 @@ void QuizBackend::setupStateMachine()
     loading->assignProperty(this, "state", "tts-loading");
     synthesizing->assignProperty(this, "state", "tts-synthesizing");
     unavailable->assignProperty(this, "state", "unavailable");
-    available->assignProperty(this, "state", "available");
+    waiting->assignProperty(this, "state", "available");
+    talking->assignProperty(this, "state", "talking");
     completed->assignProperty(this, "state", "completed");
 
     // transitions
@@ -59,6 +64,16 @@ void QuizBackend::setupStateMachine()
     synthesizing->addTransition(tts_speaking);
     synthesizing->addTransition(this, &QuizBackend::error, unavailable);
 
+    auto *tts_ready2 = new TtsStateTransition(TtsSingleton::instance().get(),
+                                              QTextToSpeech::Ready);
+    tts_ready2->setTargetState(waiting);
+    talking->addTransition(tts_ready2); // TODO maybe binding is a better idea.
+    // Additionally, this transition won't work for the first question, as it
+    // is in a different parent state.
+    auto *tts_speaking2 = new TtsStateTransition(TtsSingleton::instance().get(),
+                                                 QTextToSpeech::Speaking);
+    tts_speaking2->setTargetState(talking);
+    waiting->addTransition(tts_speaking2);
     available->addTransition(this, &QuizBackend::completed, completed);
 
     // connections for defining/calling slots on state change
@@ -139,13 +154,6 @@ QString QuizBackend::state()
     return state_;
 }
 
-bool QuizBackend::ttsReady()
-{
-    return TtsSingleton::instance().isReady();
-    // TODO binding will not work like this.
-    // I would need a state change connecting to the tts speaking state
-}
-
 void QuizBackend::check(const QString input)
 {
     if (input == "")
@@ -188,8 +196,7 @@ void QuizBackend::setupQuiz()
         emit setupStepDone();
     } catch (std::out_of_range &e) {
         qCritical("Quiz setup failed: %s", e.what());
-        emit error(); // TODO maybe a message?
-        // maybe a custom exception with an error type
+        emit error(); // TODO give information about error in UI
     }
 }
 
