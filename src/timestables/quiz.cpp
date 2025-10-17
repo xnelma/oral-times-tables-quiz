@@ -9,11 +9,6 @@ void TimesTables::Quiz::setup()
     generateQuestions();
 }
 
-bool TimesTables::Quiz::isAvailable()
-{
-    return !questions_.empty();
-}
-
 void TimesTables::Quiz::generateQuestions()
 {
     // TODO getting the data from a singleton just now is a bit sneaky.

@@ -3,7 +3,7 @@
 #include "locale_descriptor.hpp"
 #include "auto_locale.hpp"
 
-Tts::QuizTranslator::QuizTranslator() : isAvailable_(true)
+Tts::QuizTranslator::QuizTranslator()
 {
     locale_ = loadLocale();
 }
@@ -19,11 +19,6 @@ void Tts::QuizTranslator::translate(QString &question)
         loadTranslation();
 
     question = translator_.translate("QuizView", question.toLocal8Bit().data());
-}
-
-bool Tts::QuizTranslator::isAvailable()
-{
-    return isAvailable_;
 }
 
 QLocale Tts::QuizTranslator::loadLocale()

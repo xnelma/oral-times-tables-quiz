@@ -15,7 +15,6 @@ class Quiz
 {
 public:
     void setup();
-    bool isAvailable();
     Question question();
     bool next();
     bool answerIsCorrect(const int answer);

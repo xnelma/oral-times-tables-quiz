@@ -15,7 +15,6 @@ public:
 
     QLocale locale();
     void translate(QString &question);
-    bool isAvailable();
 
 private:
     QLocale loadLocale();
@@ -23,7 +22,6 @@ private:
 
     QLocale locale_;
     QTranslator translator_;
-    bool isAvailable_;
 };
 
 } // namespace Tts
