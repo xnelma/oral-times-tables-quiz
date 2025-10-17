@@ -9,10 +9,7 @@
 #include <QFinalState>
 
 QuizBackend::QuizBackend(QObject *parent)
-    : QObject(parent),
-      viewIsAvailable_(true),
-      questionBase_("%1 times %2"),
-      state_("unavailable")
+    : QObject(parent), questionBase_("%1 times %2"), state_("unavailable")
 {
     setupStateMachine();
 }
@@ -30,7 +27,6 @@ void QuizBackend::setupStateMachine()
     auto *available = new QState();
     auto *completed = new QState();
     auto *end = new QFinalState();
-
     // NOLINTEND
 
     unavailable->addTransition(end);
@@ -100,13 +96,6 @@ void QuizBackend::setupStateMachine()
     machine->start();
 }
 
-void QuizBackend::setUnavailable()
-{
-    viewIsAvailable_ = false;
-    state_ = "unavailable";
-    emit stateChanged();
-}
-
 void QuizBackend::setState(const QString &s)
 {
     if (state_ == s)
@@ -127,8 +116,8 @@ QString QuizBackend::question()
         TimesTables::Question q = quiz_.question();
         return questionBase_.arg(q.factor).arg(q.number);
     } catch (std::out_of_range &e) {
-        setUnavailable(); // TODO move to FSM
-        qCritical("Couldn't get the question: %s", e.what());
+        qCritical("Could not get the question: %s", e.what());
+        emit error(); // TODO not causing a state transition yet
     }
 
     return "";

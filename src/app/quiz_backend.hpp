@@ -69,13 +69,10 @@ private:
     QString question();
     void nextQuestion();
 
-    void setUnavailable();
-
     QString state_;
     Tts::QuizTranslator translator_;
     TimesTables::Quiz quiz_;
     QString questionBase_;
-    bool viewIsAvailable_;
 };
 
 #endif // OTTQ_20250829_1810_INCLUDE
