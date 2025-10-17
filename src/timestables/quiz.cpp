@@ -16,7 +16,10 @@ bool TimesTables::Quiz::isAvailable()
 
 void TimesTables::Quiz::generateQuestions()
 {
+    // TODO getting the data from a singleton just now is a bit sneaky.
     const auto tables = TimesTables::Settings::instance().timesTables();
+    if (tables.empty())
+        throw std::out_of_range("tables are empty");
     const auto range = TimesTables::Settings::instance().factorRange();
 
     auto factors = std::ranges::iota_view{ range->from, range->to + 1 };

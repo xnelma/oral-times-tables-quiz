@@ -55,8 +55,13 @@ signals:
     void completed();
 
     void error();
+    void setupStepDone();
     void setupDoneAndTtsReady();
     void setupDoneAndTtsError();
+
+private slots:
+    void setupQuiz();
+    void setupTranslation();
 
 private:
     void setupStateMachine();

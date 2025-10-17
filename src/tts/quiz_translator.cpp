@@ -43,5 +43,6 @@ QLocale Tts::QuizTranslator::loadLocale()
 
 void Tts::QuizTranslator::loadTranslation()
 {
-    isAvailable_ = translator_.load(qmFilePath.arg(locale_.name()));
+    if (!translator_.load(qmFilePath.arg(locale_.name())))
+        throw std::runtime_error("translation could not be loaded");
 }

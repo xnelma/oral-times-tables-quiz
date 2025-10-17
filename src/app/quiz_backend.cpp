@@ -22,12 +22,15 @@ void QuizBackend::setupStateMachine()
     // NOLINTBEGIN TODO
     auto *machine = new QStateMachine(this);
     auto *setup = new QState();
+    auto *setupQuiz = new QState(setup);
+    auto *setupTranslation = new QState(setup);
     auto *loading = new QState();
     auto *synthesizing = new QState();
     auto *unavailable = new QState();
     auto *available = new QState();
     auto *completed = new QState();
     auto *end = new QFinalState();
+
     // NOLINTEND
 
     unavailable->addTransition(end);
@@ -42,8 +45,11 @@ void QuizBackend::setupStateMachine()
 
     // transitions
     setup->addTransition(this, &QuizBackend::error, unavailable);
-    setup->addTransition(this, &QuizBackend::setupDoneAndTtsError, loading);
-    setup->addTransition(
+    setupQuiz->addTransition(
+        this, &QuizBackend::setupStepDone, setupTranslation);
+    setupTranslation->addTransition(
+        this, &QuizBackend::setupDoneAndTtsError, loading);
+    setupTranslation->addTransition(
         this, &QuizBackend::setupDoneAndTtsReady, synthesizing);
 
     auto *tts_ready = new TtsStateTransition(TtsSingleton::instance().get(),
@@ -60,25 +66,12 @@ void QuizBackend::setupStateMachine()
     available->addTransition(this, &QuizBackend::completed, completed);
 
     // connections for defining/calling slots on state change
-    QObject::connect(setup, &QState::entered, this, [this, machine]() {
-        quiz_.setup();
-        if (!quiz_.isAvailable()) {
-            emit error();
-            return; // TODO have a grouped state?
-        }
-        translator_.translate(questionBase_);
-        if (!translator_.isAvailable()) {
-            // TODO maybe I could instead catch an exception?
-            emit error();
-            return;
-        }
-        emit numQuestionsRemainingChanged();
-
-        if (TtsSingleton::instance().isReady())
-            emit setupDoneAndTtsReady();
-        else
-            emit setupDoneAndTtsError();
-    });
+    QObject::connect(
+        setupQuiz, &QState::entered, this, &QuizBackend::setupQuiz);
+    QObject::connect(setupTranslation,
+                     &QState::entered,
+                     this,
+                     &QuizBackend::setupTranslation);
     QObject::connect(synthesizing, &QState::entered, this, [this]() {
         Tts::Settings settings;
         double voiceRate = settings.loadVoiceRateSetting();
@@ -93,6 +86,7 @@ void QuizBackend::setupStateMachine()
         TtsSingleton::instance().say(question());
     });
 
+    setup->setInitialState(setupQuiz);
     machine->addState(setup);
     machine->addState(loading);
     machine->addState(synthesizing);
@@ -195,4 +189,32 @@ void QuizBackend::nextQuestion()
 void QuizBackend::askAgain()
 {
     TtsSingleton::instance().say(question());
+}
+
+void QuizBackend::setupQuiz()
+{
+    try {
+        quiz_.setup();
+        emit numQuestionsRemainingChanged();
+        emit setupStepDone();
+    } catch (std::out_of_range &e) {
+        qCritical("Quiz setup failed: %s", e.what());
+        emit error(); // TODO maybe a message?
+        // maybe a custom exception with an error type
+    }
+}
+
+void QuizBackend::setupTranslation()
+{
+    try {
+        translator_.translate(questionBase_);
+
+        if (TtsSingleton::instance().isReady())
+            emit setupDoneAndTtsReady();
+        else
+            emit setupDoneAndTtsError();
+    } catch (std::runtime_error &e) {
+        qCritical("Translation setup failed: %s", e.what());
+        emit error();
+    }
 }
