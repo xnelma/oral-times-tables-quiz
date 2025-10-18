@@ -118,7 +118,7 @@ void QuizBackend::setupTts()
     if (TtsSingleton::instance().get()->state() == QTextToSpeech::Error) {
         // couldn't set translation
         emit error();
-        emit showLocaleError(); // TODO move to state?
+        emit showLocaleError();
         return;
     }
 }
