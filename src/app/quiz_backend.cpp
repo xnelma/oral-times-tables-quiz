@@ -11,6 +11,11 @@
 QuizBackend::QuizBackend(QObject *parent)
     : QObject(parent), questionBase_("%1 times %2"), state_("unavailable")
 {
+    QObject::connect(TtsSingleton::instance().get().get(),
+                     &QTextToSpeech::stateChanged,
+                     this,
+                     &QuizBackend::ttsReadyChanged);
+
     setupStateMachine();
 }
 
@@ -23,13 +28,9 @@ void QuizBackend::setupStateMachine()
     auto *synthesizing = new QState();
     auto *unavailable = new QState();
     auto *available = new QState();
-    auto *waiting = new QState(available);
-    auto *talking = new QState(available);
     auto *completed = new QState();
     auto *end = new QFinalState();
     // NOLINTEND
-
-    available->setInitialState(waiting);
 
     unavailable->addTransition(end);
     completed->addTransition(end);
@@ -38,8 +39,7 @@ void QuizBackend::setupStateMachine()
     loading->assignProperty(this, "state", "tts-loading");
     synthesizing->assignProperty(this, "state", "tts-synthesizing");
     unavailable->assignProperty(this, "state", "unavailable");
-    waiting->assignProperty(this, "state", "available");
-    talking->assignProperty(this, "state", "talking");
+    available->assignProperty(this, "state", "available");
     completed->assignProperty(this, "state", "completed");
 
     // transitions
@@ -47,6 +47,8 @@ void QuizBackend::setupStateMachine()
     setup->addTransition(this, &QuizBackend::setupDoneAndTtsError, loading);
     setup->addTransition(
         this, &QuizBackend::setupDoneAndTtsReady, synthesizing);
+    // TODO is there a better way to account for the tts state for the
+    // transition?
 
     auto *tts_ready = new TtsStateTransition(TtsSingleton::instance().get(),
                                              QTextToSpeech::Ready);
@@ -57,18 +59,8 @@ void QuizBackend::setupStateMachine()
                                                 QTextToSpeech::Speaking);
     tts_speaking->setTargetState(available);
     synthesizing->addTransition(tts_speaking);
-    synthesizing->addTransition(this, &QuizBackend::error, unavailable);
 
-    auto *tts_ready2 = new TtsStateTransition(TtsSingleton::instance().get(),
-                                              QTextToSpeech::Ready);
-    tts_ready2->setTargetState(waiting);
-    talking->addTransition(tts_ready2); // TODO maybe binding is a better idea.
-    // Additionally, this transition won't work for the first question, as it
-    // is in a different parent state.
-    auto *tts_speaking2 = new TtsStateTransition(TtsSingleton::instance().get(),
-                                                 QTextToSpeech::Speaking);
-    tts_speaking2->setTargetState(talking);
-    waiting->addTransition(tts_speaking2);
+    synthesizing->addTransition(this, &QuizBackend::error, unavailable);
     available->addTransition(this, &QuizBackend::error, unavailable);
     available->addTransition(this, &QuizBackend::completed, completed);
 
@@ -220,4 +212,9 @@ int QuizBackend::numQuestionsRemaining()
     qCritical("number of questions remaining is larger than INT_MAX");
     // (shouldn't be possible)
     return INT_MAX;
+}
+
+bool QuizBackend::ttsReady()
+{
+    return TtsSingleton::instance().isReady();
 }

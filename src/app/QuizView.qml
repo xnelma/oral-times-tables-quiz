@@ -80,18 +80,7 @@ FocusScope {
                 }
 
                 btnReplay {
-                    enabled: true
                     visible: true
-                }
-            }
-        },
-        State {
-            extend: "available"
-            name: "talking"
-
-            PropertyChanges {
-                btnReplay {
-                    enabled: false
                 }
             }
         },
@@ -168,6 +157,7 @@ FocusScope {
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.top: parent.top
         anchors.topMargin: qRoot.parentHeight / 3
+        enabled: quizBackend.ttsReady
         text: qsTr("Replay")
 
         onClicked: {
