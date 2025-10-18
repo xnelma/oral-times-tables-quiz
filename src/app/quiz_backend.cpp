@@ -31,6 +31,7 @@ void QuizBackend::setupStateMachine()
     auto *end = new QFinalState();
     // NOLINTEND
 
+    setup->setInitialState(setupQuiz);
     available->setInitialState(waiting);
 
     unavailable->addTransition(end);
@@ -98,7 +99,6 @@ void QuizBackend::setupStateMachine()
         TtsSingleton::instance().say(question());
     });
 
-    setup->setInitialState(setupQuiz);
     machine->addState(setup);
     machine->addState(loading);
     machine->addState(synthesizing);
@@ -109,21 +109,35 @@ void QuizBackend::setupStateMachine()
 
     machine->setInitialState(setup);
 
-    machine->start();
+    machine->start(); // TODO if I end up using member variables instead of
+    // pointers, move start() out of the method.
 }
 
-void QuizBackend::setState(const QString &s)
+void QuizBackend::setupQuiz()
 {
-    if (state_ == s)
-        return;
-
-    state_ = s;
-    emit stateChanged();
+    try {
+        quiz_.setup();
+        emit numQuestionsRemainingChanged();
+        emit setupStepDone();
+    } catch (std::out_of_range &e) {
+        qCritical("Quiz setup failed: %s", e.what());
+        emit error(); // TODO give information about error in UI
+    }
 }
 
-QString QuizBackend::localeName()
+void QuizBackend::setupTranslation()
 {
-    return translator_.locale().name();
+    try {
+        translator_.translate(questionBase_);
+
+        if (TtsSingleton::instance().isReady())
+            emit setupDoneAndTtsReady();
+        else
+            emit setupDoneAndTtsError();
+    } catch (std::runtime_error &e) {
+        qCritical("Translation setup failed: %s", e.what());
+        emit error();
+    }
 }
 
 QString QuizBackend::question()
@@ -139,21 +153,7 @@ QString QuizBackend::question()
     return "";
 }
 
-int QuizBackend::numQuestionsRemaining()
-{
-    std::size_t num = quiz_.numQuestionsRemaining();
-    if (num <= INT_MAX)
-        return static_cast<int>(num);
-
-    qCritical("number of questions remaining is larger than INT_MAX");
-    // (shouldn't be possible)
-    return INT_MAX;
-}
-
-QString QuizBackend::state()
-{
-    return state_;
-}
+// behavior in state 'available':
 
 void QuizBackend::check(const QString input)
 {
@@ -189,29 +189,34 @@ void QuizBackend::askAgain()
     TtsSingleton::instance().say(question());
 }
 
-void QuizBackend::setupQuiz()
+// getters and setters for properties:
+
+QString QuizBackend::state()
 {
-    try {
-        quiz_.setup();
-        emit numQuestionsRemainingChanged();
-        emit setupStepDone();
-    } catch (std::out_of_range &e) {
-        qCritical("Quiz setup failed: %s", e.what());
-        emit error(); // TODO give information about error in UI
-    }
+    return state_;
 }
 
-void QuizBackend::setupTranslation()
+void QuizBackend::setState(const QString &s)
 {
-    try {
-        translator_.translate(questionBase_);
+    if (state_ == s)
+        return;
 
-        if (TtsSingleton::instance().isReady())
-            emit setupDoneAndTtsReady();
-        else
-            emit setupDoneAndTtsError();
-    } catch (std::runtime_error &e) {
-        qCritical("Translation setup failed: %s", e.what());
-        emit error();
-    }
+    state_ = s;
+    emit stateChanged();
+}
+
+QString QuizBackend::localeName()
+{
+    return translator_.locale().name();
+}
+
+int QuizBackend::numQuestionsRemaining()
+{
+    std::size_t num = quiz_.numQuestionsRemaining();
+    if (num <= INT_MAX)
+        return static_cast<int>(num);
+
+    qCritical("number of questions remaining is larger than INT_MAX");
+    // (shouldn't be possible)
+    return INT_MAX;
 }
