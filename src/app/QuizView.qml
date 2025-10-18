@@ -38,50 +38,26 @@ FocusScope {
             }
         },
         State {
+            extend: "unavailable"
             name: "tts-loading"
 
             PropertyChanges {
                 answerInput {
-                    enabled: false
-                    focus: false
                     placeholderText: qsTr("Text-to-Speech Loading")
-                    text: ""
                 }
 
                 progressBarTtsLoading {
                     visible: true
-                }
-
-                labelNumQuestionsRemaining {
-                    visible: false
-                }
-
-                btnReplay {
-                    visible: false
                 }
             }
         },
         State {
+            extend: "tts-loading"
             name: "tts-synthesizing"
 
             PropertyChanges {
                 answerInput {
-                    enabled: false
-                    focus: false
                     placeholderText: qsTr("Text-to-Speech Synthesizing")
-                    text: ""
-                }
-
-                progressBarTtsLoading {
-                    visible: true
-                }
-
-                labelNumQuestionsRemaining {
-                    visible: false
-                }
-
-                btnReplay {
-                    visible: false
                 }
             }
         },
@@ -120,26 +96,12 @@ FocusScope {
             }
         },
         State {
+            extend: "unavailable"
             name: "completed"
 
             PropertyChanges {
                 answerInput {
-                    enabled: false
-                    focus: false
                     placeholderText: qsTr("Completed")
-                    text: ""
-                }
-
-                progressBarTtsLoading {
-                    visible: false
-                }
-
-                labelNumQuestionsRemaining {
-                    visible: false
-                }
-
-                btnReplay {
-                    visible: false
                 }
             }
         }
