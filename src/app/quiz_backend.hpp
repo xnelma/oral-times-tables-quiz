@@ -7,12 +7,10 @@
 #include <qqml.h>
 #include <QLocale>
 #include <QString>
-#include <QTextToSpeech>
 
 class QuizBackend : public QObject
 {
     Q_OBJECT
-    Q_PROPERTY(bool ttsReady READ ttsReady NOTIFY ttsReadyChanged FINAL)
     // clang-format off
     Q_PROPERTY(QString localeName
                READ localeName
@@ -39,7 +37,6 @@ public:
     QString state();
     QString localeName();
     int numQuestionsRemaining();
-    bool ttsReady();
 
     void setState(const QString &s);
 
@@ -51,7 +48,6 @@ signals:
     void numQuestionsRemainingChanged();
     void questionChanged();
     void stateChanged();
-    void ttsReadyChanged();
     void showLocaleError();
     void completed();
 

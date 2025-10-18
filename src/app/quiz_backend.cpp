@@ -11,11 +11,6 @@
 QuizBackend::QuizBackend(QObject *parent)
     : QObject(parent), questionBase_("%1 times %2"), state_("unavailable")
 {
-    QObject::connect(TtsSingleton::instance().get().get(),
-                     &QTextToSpeech::stateChanged,
-                     this,
-                     &QuizBackend::ttsReadyChanged);
-
     setupStateMachine();
 }
 
@@ -88,7 +83,7 @@ void QuizBackend::setupStateMachine()
     // pointers, move start() out of the method.
 }
 
-void QuizBackend::setupQuiz() // TODO remove the grouped state again
+void QuizBackend::setupQuiz()
 {
     try {
         quiz_.setup();
@@ -179,7 +174,8 @@ void QuizBackend::nextQuestion()
 
 void QuizBackend::askAgain()
 {
-    TtsSingleton::instance().say(question());
+    if (TtsSingleton::instance().isReady())
+        TtsSingleton::instance().say(question());
 }
 
 // getters and setters for properties:
@@ -212,9 +208,4 @@ int QuizBackend::numQuestionsRemaining()
     qCritical("number of questions remaining is larger than INT_MAX");
     // (shouldn't be possible)
     return INT_MAX;
-}
-
-bool QuizBackend::ttsReady()
-{
-    return TtsSingleton::instance().isReady();
 }
