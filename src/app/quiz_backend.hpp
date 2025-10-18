@@ -62,6 +62,8 @@ private slots:
 
 private:
     void setupStateMachine();
+    void setupTts();
+    void synthesizeFirstQuestion();
     double voiceRate();
     QString question();
     void nextQuestion();

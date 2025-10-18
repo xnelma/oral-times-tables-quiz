@@ -86,17 +86,8 @@ void QuizBackend::setupStateMachine()
                      this,
                      &QuizBackend::setupTranslation);
     QObject::connect(synthesizing, &QState::entered, this, [this]() {
-        Tts::Settings settings;
-        double voiceRate = settings.loadVoiceRateSetting();
-        TtsSingleton::instance().setup(translator_.locale(), voiceRate);
-        if (TtsSingleton::instance().get()->state() == QTextToSpeech::Error) {
-            // couldn't set translation
-            emit error();
-            emit showLocaleError(); // TODO move to state?
-            return;
-        }
-
-        TtsSingleton::instance().say(question());
+        setupTts();
+        synthesizeFirstQuestion();
     });
 
     machine->addState(setup);
@@ -113,7 +104,7 @@ void QuizBackend::setupStateMachine()
     // pointers, move start() out of the method.
 }
 
-void QuizBackend::setupQuiz()
+void QuizBackend::setupQuiz() // TODO remove the grouped state again
 {
     try {
         quiz_.setup();
@@ -138,6 +129,24 @@ void QuizBackend::setupTranslation()
         qCritical("Translation setup failed: %s", e.what());
         emit error();
     }
+}
+
+void QuizBackend::setupTts()
+{
+    Tts::Settings settings;
+    double voiceRate = settings.loadVoiceRateSetting();
+    TtsSingleton::instance().setup(translator_.locale(), voiceRate);
+    if (TtsSingleton::instance().get()->state() == QTextToSpeech::Error) {
+        // couldn't set translation
+        emit error();
+        emit showLocaleError(); // TODO move to state?
+        return;
+    }
+}
+
+void QuizBackend::synthesizeFirstQuestion()
+{
+    TtsSingleton::instance().say(question());
 }
 
 QString QuizBackend::question()
