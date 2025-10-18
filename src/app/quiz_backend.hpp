@@ -56,14 +56,13 @@ signals:
     void setupDoneAndTtsReady();
     void setupDoneAndTtsError();
 
-private slots:
-    void setupQuiz();
-    void setupTranslation();
-
 private:
     void setupStateMachine();
+    void setupQuiz();
+    void setupTranslation();
     void setupTts();
     void synthesizeFirstQuestion();
+
     double voiceRate();
     QString question();
     void nextQuestion();

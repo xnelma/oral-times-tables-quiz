@@ -19,8 +19,6 @@ void QuizBackend::setupStateMachine()
     // NOLINTBEGIN TODO
     auto *machine = new QStateMachine(this);
     auto *setup = new QState();
-    auto *setupQuiz = new QState(setup);
-    auto *setupTranslation = new QState(setup);
     auto *loading = new QState();
     auto *synthesizing = new QState();
     auto *unavailable = new QState();
@@ -31,7 +29,6 @@ void QuizBackend::setupStateMachine()
     auto *end = new QFinalState();
     // NOLINTEND
 
-    setup->setInitialState(setupQuiz);
     available->setInitialState(waiting);
 
     unavailable->addTransition(end);
@@ -47,11 +44,8 @@ void QuizBackend::setupStateMachine()
 
     // transitions
     setup->addTransition(this, &QuizBackend::error, unavailable);
-    setupQuiz->addTransition(
-        this, &QuizBackend::setupStepDone, setupTranslation);
-    setupTranslation->addTransition(
-        this, &QuizBackend::setupDoneAndTtsError, loading);
-    setupTranslation->addTransition(
+    setup->addTransition(this, &QuizBackend::setupDoneAndTtsError, loading);
+    setup->addTransition(
         this, &QuizBackend::setupDoneAndTtsReady, synthesizing);
 
     auto *tts_ready = new TtsStateTransition(TtsSingleton::instance().get(),
@@ -79,12 +73,10 @@ void QuizBackend::setupStateMachine()
     available->addTransition(this, &QuizBackend::completed, completed);
 
     // connections for defining/calling slots on state change
-    QObject::connect(
-        setupQuiz, &QState::entered, this, &QuizBackend::setupQuiz);
-    QObject::connect(setupTranslation,
-                     &QState::entered,
-                     this,
-                     &QuizBackend::setupTranslation);
+    QObject::connect(setup, &QState::entered, this, [this]() {
+        setupQuiz();
+        setupTranslation();
+    });
     QObject::connect(synthesizing, &QState::entered, this, [this]() {
         setupTts();
         synthesizeFirstQuestion();
