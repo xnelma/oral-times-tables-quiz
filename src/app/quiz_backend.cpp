@@ -74,6 +74,7 @@ void QuizBackend::setupStateMachine()
                                                  QTextToSpeech::Speaking);
     tts_speaking2->setTargetState(talking);
     waiting->addTransition(tts_speaking2);
+    available->addTransition(this, &QuizBackend::error, unavailable);
     available->addTransition(this, &QuizBackend::completed, completed);
 
     // connections for defining/calling slots on state change
@@ -132,7 +133,7 @@ QString QuizBackend::question()
         return questionBase_.arg(q.factor).arg(q.number);
     } catch (std::out_of_range &e) {
         qCritical("Could not get the question: %s", e.what());
-        emit error(); // TODO not causing a state transition yet
+        emit error();
     }
 
     return "";
@@ -164,8 +165,8 @@ void QuizBackend::check(const QString input)
     try {
         correct = quiz_.answerIsCorrect(inputNum);
     } catch (std::out_of_range &e) {
-        // TODO show an error dialog
-        qCritical("Couldn't check input: %s", e.what());
+        qCritical("Could not check input: %s", e.what());
+        emit error();
     }
 
     if (valid && correct)
