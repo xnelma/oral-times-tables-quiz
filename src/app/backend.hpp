@@ -11,6 +11,8 @@ class Backend : public QObject
 
 public:
     explicit Backend(QObject *parent = nullptr);
+
+    Q_INVOKABLE void initializeTts();
 };
 
 #endif // OTTQ_20250811_1825_INCLUDE

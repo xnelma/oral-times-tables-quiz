@@ -71,7 +71,14 @@ ApplicationWindow {
         }
     }
 
+    Component.onCompleted: {
+        // Do heavier setup after the UI is ready so startup is faster.
+        backend.initializeTts();
+    }
+
     Backend {
+        id: backend
+
     }
 
     Dialog {

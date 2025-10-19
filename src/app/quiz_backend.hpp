@@ -40,6 +40,7 @@ public:
 
     void setState(const QString &s);
 
+    Q_INVOKABLE void runStateMachine();
     Q_INVOKABLE void check(const QString input);
     Q_INVOKABLE void askAgain();
 
@@ -57,7 +58,6 @@ signals:
     void setupDoneAndTtsError();
 
 private:
-    void setupStateMachine();
     void setupQuiz();
     void setupTranslation();
     void setupTts();

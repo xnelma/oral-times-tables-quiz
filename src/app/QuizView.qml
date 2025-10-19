@@ -96,6 +96,11 @@ FocusScope {
         }
     ]
 
+    Component.onCompleted: {
+        // Do heavier setup after the UI is ready so the navigation is faster.
+        quizBackend.runStateMachine();
+    }
+
     QuizBackend {
         id: quizBackend
 

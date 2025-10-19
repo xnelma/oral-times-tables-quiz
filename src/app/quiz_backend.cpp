@@ -11,10 +11,9 @@
 QuizBackend::QuizBackend(QObject *parent)
     : QObject(parent), questionBase_("%1 times %2"), state_("unavailable")
 {
-    setupStateMachine();
 }
 
-void QuizBackend::setupStateMachine()
+void QuizBackend::runStateMachine()
 {
     // NOLINTBEGIN TODO
     auto *machine = new QStateMachine(this);
