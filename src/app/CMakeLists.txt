@@ -36,6 +36,8 @@ qt_add_qml_module(OTTQ
         tts_state_transition.hpp
         tts_singleton.hpp
         tts_singleton.cpp
+        quiz_state_machine.hpp
+        quiz_state_machine.cpp
 )
 
 qt_add_translations(OTTQ

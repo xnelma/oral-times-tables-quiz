@@ -1,12 +1,14 @@
 #ifndef OTTQ_20250829_1810_INCLUDE
 #define OTTQ_20250829_1810_INCLUDE
 
+#include "quiz_state_machine.hpp"
 #include "tts/quiz_translator.hpp"
 #include "timestables/quiz.hpp"
 #include <QObject>
 #include <qqml.h>
 #include <QLocale>
 #include <QString>
+#include <memory>
 
 class QuizBackend : public QObject
 {
@@ -20,12 +22,8 @@ class QuizBackend : public QObject
                READ numQuestionsRemaining
                NOTIFY numQuestionsRemainingChanged
                FINAL)
-    Q_PROPERTY(QString state // TODO enum?
+    Q_PROPERTY(QString state
                READ state
-               WRITE setState
-               // TODO maybe instead of the one-line assignProperty
-               // set the states in connect s.t. I don't need to expose the
-               // WRITE function to QML?
                NOTIFY stateChanged
                FINAL)
     // clang-format on
@@ -38,8 +36,6 @@ public:
     QString localeName();
     int numQuestionsRemaining();
 
-    void setState(const QString &s);
-
     Q_INVOKABLE void runStateMachine();
     Q_INVOKABLE void check(const QString input);
     Q_INVOKABLE void askAgain();
@@ -50,25 +46,14 @@ signals:
     void questionChanged();
     void stateChanged();
     void showLocaleError();
-    void completed();
-
-    void error();
-    void setupStepDone();
-    void setupDoneAndTtsReady();
-    void setupDoneAndTtsError();
 
 private:
-    void setupQuiz();
-    void setupTranslation();
-    void setupTts();
-    void synthesizeFirstQuestion();
-
     double voiceRate();
     QString question();
     void nextQuestion();
 
-    QString state_;
-    Tts::QuizTranslator translator_;
+    std::unique_ptr<QuizStateMachine> machine_;
+    Tts::QuizTranslator translator_; // TODO lazy initialize, using unique_ptr?
     TimesTables::Quiz quiz_;
     QString questionBase_;
 };
