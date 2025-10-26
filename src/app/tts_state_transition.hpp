@@ -26,8 +26,6 @@ protected:
         if (!QSignalTransition::eventTest(e))
             return false;
 
-        QStateMachine::SignalEvent *se =
-            dynamic_cast<QStateMachine::SignalEvent *>(e);
         return tts_->state() == state_;
     }
 
