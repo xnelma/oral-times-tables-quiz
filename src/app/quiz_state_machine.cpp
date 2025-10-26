@@ -19,6 +19,7 @@ QuizStateMachine::QuizStateMachine(QObject *parent,
 void QuizStateMachine::setup()
 {
     addState(&setup_);
+    addState(&c_);
     addState(&loading_);
     addState(&synthesizing_);
     addState(&unavailable_);
@@ -29,6 +30,7 @@ void QuizStateMachine::setup()
     setInitialState(&setup_);
 
     setup_.assignProperty(this, "state", "unavailable");
+    c_.assignProperty(this, "state", "unavailable");
     loading_.assignProperty(this, "state", "tts-loading");
     synthesizing_.assignProperty(this, "state", "tts-synthesizing");
     unavailable_.assignProperty(this, "state", "unavailable");
@@ -41,10 +43,16 @@ void QuizStateMachine::setup()
 void QuizStateMachine::setupTransitions()
 {
     setup_.addTransition(this, &QuizStateMachine::error, &unavailable_);
-    setup_.addTransition(
-        this, &QuizStateMachine::setupDoneAndTtsError, &loading_);
-    setup_.addTransition(
-        this, &QuizStateMachine::setupDoneAndTtsReady, &synthesizing_);
+    setup_.addTransition(this, &QuizStateMachine::setupDone, &c_);
+    c_.addTransition(this, &QuizStateMachine::ttsUnavailable, &loading_);
+    c_.addTransition(this, &QuizStateMachine::ttsAvailable, &synthesizing_);
+
+    QObject::connect(&c_, &QState::entered, this, [this]() {
+        if (tts_->state() == QTextToSpeech::Ready)
+            emit ttsAvailable();
+        else
+            emit ttsUnavailable();
+    });
     // TODO is there a better way to account for the tts state for the
     // transition?
 
@@ -68,10 +76,7 @@ void QuizStateMachine::setSetupFunc(std::function<void()> func)
         try {
             func();
 
-            if (tts_->state() == QTextToSpeech::Ready)
-                emit setupDoneAndTtsReady();
-            else
-                emit setupDoneAndTtsError();
+            emit setupDone();
         } catch (const std::domain_error &e) {
             emit error();
         }

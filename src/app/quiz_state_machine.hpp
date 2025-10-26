@@ -37,8 +37,9 @@ signals:
     void stateChanged();
 
     void error();
-    void setupDoneAndTtsReady();
-    void setupDoneAndTtsError();
+    void setupDone();
+    void ttsUnavailable();
+    void ttsAvailable();
     void completed();
 
 private:
@@ -50,6 +51,7 @@ private:
     std::shared_ptr<const QTextToSpeech> tts_;
 
     QState setup_;
+    QState c_;
     QState loading_;
     QState synthesizing_;
     QState unavailable_;
