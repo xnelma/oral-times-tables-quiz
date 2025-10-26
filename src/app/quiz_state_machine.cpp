@@ -7,8 +7,8 @@ QuizStateMachine::QuizStateMachine(QObject *parent,
     : QStateMachine(parent),
       tts_(tts),
       state_("unavailable"),
-      tts_ready_(TtsStateTransition(tts, QTextToSpeech::Ready)),
-      tts_speaking_(TtsStateTransition(tts, QTextToSpeech::Speaking))
+      ttsReady_(TtsStateTransition(tts, QTextToSpeech::Ready)),
+      ttsSpeaking_(TtsStateTransition(tts, QTextToSpeech::Speaking))
 {
     if (tts == nullptr)
         throw std::domain_error("reference to tts not available in quiz SM");
@@ -56,11 +56,11 @@ void QuizStateMachine::setupTransitions()
     // TODO is there a better way to account for the tts state for the
     // transition?
 
-    tts_ready_.setTargetState(&synthesizing_);
-    loading_.addTransition(&tts_ready_);
+    ttsReady_.setTargetState(&synthesizing_);
+    loading_.addTransition(&ttsReady_);
 
-    tts_speaking_.setTargetState(&available_);
-    synthesizing_.addTransition(&tts_speaking_);
+    ttsSpeaking_.setTargetState(&available_);
+    synthesizing_.addTransition(&ttsSpeaking_);
 
     synthesizing_.addTransition(this, &QuizStateMachine::error, &unavailable_);
     available_.addTransition(this, &QuizStateMachine::error, &unavailable_);

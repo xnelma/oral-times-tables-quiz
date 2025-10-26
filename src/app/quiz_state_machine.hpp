@@ -58,8 +58,8 @@ private:
     QState available_;
     QState completed_;
     QFinalState end_;
-    TtsStateTransition tts_ready_;
-    TtsStateTransition tts_speaking_;
+    TtsStateTransition ttsReady_;
+    TtsStateTransition ttsSpeaking_;
 };
 
 #endif // OTTQ_20102025_1743_INCLUDE
