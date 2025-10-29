@@ -53,7 +53,7 @@ private:
     void nextQuestion();
 
     std::unique_ptr<QuizStateMachine> machine_;
-    Tts::QuizTranslator translator_; // TODO lazy initialize, using unique_ptr?
+    Tts::QuizTranslator translator_;
     TimesTables::Quiz quiz_;
     QString questionBase_;
 };
