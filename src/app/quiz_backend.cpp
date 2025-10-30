@@ -5,10 +5,7 @@
 #include "timestables/question.hpp"
 #include <QtLogging>
 
-QuizBackend::QuizBackend(QObject *parent)
-    : QObject(parent), questionBase_("%1 times %2")
-{
-}
+QuizBackend::QuizBackend(QObject *parent) : QObject(parent) { }
 
 void QuizBackend::runStateMachine()
 {
@@ -32,6 +29,9 @@ void QuizBackend::runStateMachine()
     };
     auto setupTranslation = [this]() {
         try {
+            // initialize here instead of in constructor, so the key is
+            // available for retranslating in case the locale changed.
+            questionBase_ = "%1 times %2";
             translator_.translate(questionBase_);
         } catch (const std::runtime_error &e) {
             qCritical("Translation setup failed: %s", e.what());
