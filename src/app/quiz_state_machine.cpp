@@ -6,7 +6,7 @@ QuizStateMachine::QuizStateMachine(QObject *parent,
                                    std::shared_ptr<const QTextToSpeech> tts)
     : QStateMachine(parent),
       tts_(tts),
-      state_("unavailable"),
+      state_("setting-up"),
       ttsReady_(TtsStateTransition(tts, QTextToSpeech::Ready)),
       ttsSpeaking_(TtsStateTransition(tts, QTextToSpeech::Speaking))
 {
@@ -29,8 +29,8 @@ void QuizStateMachine::setup()
 
     setInitialState(&setup_);
 
-    setup_.assignProperty(this, "state", "unavailable");
-    c_.assignProperty(this, "state", "unavailable");
+    setup_.assignProperty(this, "state", "setting-up");
+    c_.assignProperty(this, "state", "setting-up");
     loading_.assignProperty(this, "state", "tts-loading");
     synthesizing_.assignProperty(this, "state", "tts-synthesizing");
     unavailable_.assignProperty(this, "state", "unavailable");

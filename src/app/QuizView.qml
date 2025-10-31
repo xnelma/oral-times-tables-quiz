@@ -39,11 +39,11 @@ FocusScope {
         },
         State {
             extend: "unavailable"
-            name: "tts-loading"
+            name: "setting-up"
 
             PropertyChanges {
                 answerInput {
-                    placeholderText: qsTr("Text-to-Speech Loading")
+                    placeholderText: qsTr("Setting Up")
                 }
 
                 progressBarTtsLoading {
@@ -52,7 +52,17 @@ FocusScope {
             }
         },
         State {
-            extend: "tts-loading"
+            extend: "setting-up"
+            name: "tts-loading"
+
+            PropertyChanges {
+                answerInput {
+                    placeholderText: qsTr("Text-to-Speech Loading")
+                }
+            }
+        },
+        State {
+            extend: "setting-up"
             name: "tts-synthesizing"
 
             PropertyChanges {

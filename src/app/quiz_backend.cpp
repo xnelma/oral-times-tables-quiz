@@ -118,7 +118,9 @@ void QuizBackend::askAgain()
 
 QString QuizBackend::state()
 {
-    return machine_ ? machine_->state() : "unavailable";
+    return machine_ ? machine_->state() : "setting-up";
+    // 'setting-up' not 'unavailable' because an empty SM pointer indicates
+    // part of the setup: creating the SM instance.
 }
 
 QString QuizBackend::localeName()
