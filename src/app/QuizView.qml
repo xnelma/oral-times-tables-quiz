@@ -106,7 +106,7 @@ FocusScope {
         }
     ]
 
-    Component.onCompleted: {
+    StackView.onActivated: {
         // Do heavier setup after the UI is ready so the navigation is faster.
         quizBackend.runStateMachine();
     }
