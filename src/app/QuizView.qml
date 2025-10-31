@@ -79,6 +79,7 @@ FocusScope {
                     enabled: true
                     focus: true
                     placeholderText: qsTr("Result")
+                    text: ""
                 }
 
                 progressBarTtsLoading {
@@ -101,6 +102,7 @@ FocusScope {
             PropertyChanges {
                 answerInput {
                     placeholderText: qsTr("Completed")
+                    text: ""
                 }
             }
         }
