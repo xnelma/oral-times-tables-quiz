@@ -5,15 +5,22 @@
 #include "timestables/question.hpp"
 #include <QtLogging>
 
-QuizBackend::QuizBackend(QObject *parent) : QObject(parent) { }
+QuizBackend::QuizBackend(QObject *parent) : QObject(parent)
+{
+    setupStateMachine();
+}
 
-void QuizBackend::runStateMachine()
+void QuizBackend::setupStateMachine()
 {
     machine_ = std::make_unique<QuizStateMachine>(
         this, TtsSingleton::instance().get());
 
     connect(machine_.get(),
             &QuizStateMachine::stateChanged,
+            this,
+            &QuizBackend::stateChanged);
+    connect(machine_.get(),
+            &QStateMachine::stopped,
             this,
             &QuizBackend::stateChanged);
 
@@ -60,8 +67,23 @@ void QuizBackend::runStateMachine()
         setupTts();
         synthesizeFirstQuestion();
     });
+}
+
+void QuizBackend::startStateMachine()
+{
+    if (!machine_)
+        setupStateMachine();
+    // TODO RAII
 
     machine_->start();
+}
+
+void QuizBackend::stopStateMachine()
+{
+    if (!machine_)
+        return;
+
+    machine_->stop();
 }
 
 QString QuizBackend::question()

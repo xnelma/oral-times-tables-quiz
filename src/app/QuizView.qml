@@ -107,8 +107,10 @@ FocusScope {
     ]
 
     StackView.onActivated: {
-        // Do heavier setup after the UI is ready so the navigation is faster.
-        quizBackend.runStateMachine();
+        quizBackend.startStateMachine();
+    }
+    StackView.onDeactivated: {
+        quizBackend.stopStateMachine();
     }
 
     QuizBackend {

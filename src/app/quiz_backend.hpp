@@ -36,9 +36,10 @@ public:
     QString localeName();
     int numQuestionsRemaining();
 
-    Q_INVOKABLE void runStateMachine();
+    Q_INVOKABLE void startStateMachine();
     Q_INVOKABLE void check(const QString input);
     Q_INVOKABLE void askAgain();
+    Q_INVOKABLE void stopStateMachine();
 
 signals:
     void localeNameChanged();
@@ -48,6 +49,7 @@ signals:
     void showLocaleError();
 
 private:
+    void setupStateMachine();
     double voiceRate();
     QString question();
     void nextQuestion();
