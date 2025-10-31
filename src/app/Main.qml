@@ -6,6 +6,8 @@ import QtQuick.Layouts
 ApplicationWindow {
     id: root
 
+    property var quizViewInst
+
     title: qsTr("Oral Times Tables Quiz")
     visible: true
 
@@ -39,7 +41,9 @@ ApplicationWindow {
 
             onClicked: {
                 state = "back";
-                stack.push(quizView);
+                if (!root.quizViewInst.visible)
+                    root.quizViewInst.visible = true;
+                stack.push(root.quizViewInst);
             }
         }
     }
@@ -68,6 +72,25 @@ ApplicationWindow {
 
                 onClicked: menu.popup(leftMargin, 0)
             }
+        }
+    }
+
+    Component.onCompleted: {
+        // Keep state of quiz view for faster navigation.
+        var properties = {
+            parentHeight: stack.height,
+            parentWidth: stack.width,
+            visible: false
+        };
+        const incubator = quizView.incubateObject(root, properties);
+        if (incubator.status !== Component.Ready) {
+            incubator.onStatusChanged = function (status) {
+                if (status == Component.Ready) {
+                    quizViewInst = incubator.object;
+                }
+            };
+        } else {
+            quizViewInst = incubator.object;
         }
     }
 
