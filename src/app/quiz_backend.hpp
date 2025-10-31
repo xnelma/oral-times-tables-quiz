@@ -8,6 +8,7 @@
 #include <qqml.h>
 #include <QLocale>
 #include <QString>
+#include <QTextToSpeech>
 #include <memory>
 
 class QuizBackend : public QObject
@@ -55,6 +56,7 @@ private:
     void nextQuestion();
 
     std::unique_ptr<QuizStateMachine> machine_;
+    std::shared_ptr<QTextToSpeech> tts_;
     Tts::QuizTranslator translator_;
     TimesTables::Quiz quiz_;
     QString questionBase_;

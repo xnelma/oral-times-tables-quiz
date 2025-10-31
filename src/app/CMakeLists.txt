@@ -34,8 +34,6 @@ qt_add_qml_module(OTTQ
         factor_range.hpp
         factor_range.cpp
         tts_state_transition.hpp
-        tts_singleton.hpp
-        tts_singleton.cpp
         quiz_state_machine.hpp
         quiz_state_machine.cpp
 )

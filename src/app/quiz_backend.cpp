@@ -1,19 +1,19 @@
 #include "quiz_backend.hpp"
-#include "tts_singleton.hpp"
 #include "tts/tts_settings.hpp"
 #include "timestables/factor_range.hpp"
 #include "timestables/question.hpp"
 #include <QtLogging>
 
-QuizBackend::QuizBackend(QObject *parent) : QObject(parent)
+QuizBackend::QuizBackend(QObject *parent)
+    : QObject(parent),
+      tts_(std::make_shared<QTextToSpeech>(parent)) // TODO 'this'?
 {
     setupStateMachine();
 }
 
 void QuizBackend::setupStateMachine()
 {
-    machine_ = std::make_unique<QuizStateMachine>(
-        this, TtsSingleton::instance().get());
+    machine_ = std::make_unique<QuizStateMachine>(this, tts_);
 
     connect(machine_.get(),
             &QuizStateMachine::stateChanged,
@@ -52,16 +52,24 @@ void QuizBackend::setupStateMachine()
 
     auto setupTts = [this]() {
         Tts::Settings settings;
-        double voiceRate = settings.loadVoiceRateSetting();
-        TtsSingleton::instance().setup(translator_.locale(), voiceRate);
-        if (TtsSingleton::instance().get()->state() == QTextToSpeech::Error) {
+        auto locale = translator_.locale();
+        double rate = settings.loadVoiceRateSetting();
+        tts_->setLocale(QLocale(locale.language(), locale.territory()));
+        // FIXME QLocale::system() and
+        // QLocale(l_sys.language(), l_sys.territory()) compare to different
+        // objects, and trying to set the former as tts locale causes tts to
+        // get into error state.
+        // Before I created a new object in qml anyways, so I did not notice it.
+        tts_->setRate(rate);
+        if (tts_->state() == QTextToSpeech::Error) {
             // couldn't set translation
             emit showLocaleError();
             throw std::domain_error("could not set tts locale");
         }
     };
     auto synthesizeFirstQuestion = [this]() {
-        TtsSingleton::instance().say(question());
+        tts_->enqueue(question());
+        // 'enqueue' in case tts is not ready yet
     };
     machine_->setTtsInitFunc([this, setupTts, synthesizeFirstQuestion]() {
         setupTts();
@@ -124,7 +132,9 @@ void QuizBackend::nextQuestion()
     if (quiz_.next()) {
         emit questionChanged();
         emit numQuestionsRemainingChanged();
-        TtsSingleton::instance().say(question());
+        tts_->enqueue(question());
+        // TODO 'enqueue' is not actually the correct behavior: there should
+        // always be only one question to answer.
     } else {
         machine_->setCompleted();
     }
@@ -132,8 +142,10 @@ void QuizBackend::nextQuestion()
 
 void QuizBackend::askAgain()
 {
-    if (TtsSingleton::instance().isReady())
-        TtsSingleton::instance().say(question());
+    if (tts_->state() == QTextToSpeech::Ready)
+        tts_->enqueue(question());
+    // TODO if I wait for tts to be ready, is 'enqueue' actually the correct
+    // method?
 }
 
 // getters and setters for properties:
