@@ -1,6 +1,5 @@
 #include "factor_range.hpp"
 #include "timestables/factor_range.hpp"
-#include <QtLogging>
 
 FactorRange::FactorRange()
     : factorRange_(std::make_shared<TimesTables::FactorRange>())

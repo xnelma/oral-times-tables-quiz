@@ -5,7 +5,6 @@
 #include "factor_range.hpp"
 #include <QObject>
 #include <qqml.h>
-#include <memory>
 
 class SetupBackend : public QObject
 {
