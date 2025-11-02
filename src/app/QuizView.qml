@@ -179,7 +179,7 @@ FocusScope {
         text: qsTr("Replay")
 
         onClicked: {
-            quizBackend.askAgain();
+            quizBackend.sayQuestion();
             answerInput.focus = true;
         }
     }

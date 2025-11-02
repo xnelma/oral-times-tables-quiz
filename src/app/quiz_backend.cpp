@@ -132,7 +132,7 @@ void QuizBackend::nextQuestion()
         emit questionChanged();
         emit numQuestionsRemainingChanged();
 
-        askAgain();
+        sayQuestion();
     } else {
         // Maybe stopping here is a bit to abrupt and it would be nicer to have
         // the last question 'fade out'?
@@ -141,7 +141,7 @@ void QuizBackend::nextQuestion()
     }
 }
 
-void QuizBackend::askAgain()
+void QuizBackend::sayQuestion()
 {
     // Stop current question and start next right away instead of
     // enqueueing. This way the quiz can be faster.

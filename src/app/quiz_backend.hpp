@@ -39,7 +39,7 @@ public:
 
     Q_INVOKABLE void startStateMachine();
     Q_INVOKABLE void check(const QString input);
-    Q_INVOKABLE void askAgain();
+    Q_INVOKABLE void sayQuestion();
     Q_INVOKABLE void stopStateMachine();
 
 signals:
