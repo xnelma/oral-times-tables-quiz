@@ -5,8 +5,7 @@
 #include <QtLogging>
 
 QuizBackend::QuizBackend(QObject *parent)
-    : QObject(parent),
-      tts_(std::make_shared<QTextToSpeech>(parent)) // TODO 'this'?
+    : QObject(parent), tts_(std::make_shared<QTextToSpeech>(this))
 {
     setupStateMachine();
 }
