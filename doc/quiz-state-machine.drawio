@@ -1,6 +1,6 @@
 <mxfile host="Electron" agent="Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/28.2.5 Chrome/138.0.7204.251 Electron/37.6.1 Safari/537.36" version="28.2.5">
   <diagram name="Page-1" id="bJ9E8zp_l7lWI9YY8khQ">
-    <mxGraphModel dx="2478" dy="1029" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+    <mxGraphModel dx="1957" dy="700" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -111,7 +111,7 @@
         <mxCell id="RsX0wAnIv76XzmjARaVB-42" value="entry/ state = &quot;unavailable&quot;" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;spacingLeft=4;spacingRight=4;whiteSpace=wrap;overflow=hidden;rotatable=0;fontColor=#000000;" parent="RsX0wAnIv76XzmjARaVB-41" vertex="1">
           <mxGeometry y="30" width="170" height="30" as="geometry" />
         </mxCell>
-        <mxCell id="RsX0wAnIv76XzmjARaVB-43" value="error" style="edgeStyle=orthogonalEdgeStyle;html=1;align=left;verticalAlign=bottom;endArrow=open;endSize=8;strokeColor=#ff0000;rounded=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;curved=1;exitX=1;exitY=0;exitDx=0;exitDy=0;" parent="1" target="RsX0wAnIv76XzmjARaVB-41" edge="1" source="RsX0wAnIv76XzmjARaVB-25">
+        <mxCell id="RsX0wAnIv76XzmjARaVB-43" value="error" style="edgeStyle=orthogonalEdgeStyle;html=1;align=left;verticalAlign=bottom;endArrow=open;endSize=8;strokeColor=#ff0000;rounded=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;curved=1;exitX=1;exitY=0;exitDx=0;exitDy=0;" parent="1" source="RsX0wAnIv76XzmjARaVB-25" target="RsX0wAnIv76XzmjARaVB-41" edge="1">
           <mxGeometry x="-0.7718" relative="1" as="geometry">
             <mxPoint x="462" y="500" as="targetPoint" />
             <mxPoint x="264" y="520" as="sourcePoint" />
@@ -184,10 +184,19 @@
             <mxPoint x="295" y="670" as="sourcePoint" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="RsX0wAnIv76XzmjARaVB-58" value="" style="edgeStyle=orthogonalEdgeStyle;html=1;verticalAlign=bottom;endArrow=open;endSize=8;strokeColor=#ff0000;rounded=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;" parent="1" target="RsX0wAnIv76XzmjARaVB-39" edge="1" source="RsX0wAnIv76XzmjARaVB-36">
+        <mxCell id="RsX0wAnIv76XzmjARaVB-58" value="" style="edgeStyle=orthogonalEdgeStyle;html=1;verticalAlign=bottom;endArrow=open;endSize=8;strokeColor=#ff0000;rounded=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;" parent="1" source="RsX0wAnIv76XzmjARaVB-36" target="RsX0wAnIv76XzmjARaVB-39" edge="1">
           <mxGeometry relative="1" as="geometry">
             <mxPoint x="174.7" y="820" as="targetPoint" />
             <mxPoint x="175" y="780" as="sourcePoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="i6iny7qnrzrbF4c-FZRQ-1" value="tts.state() == Error" style="shape=note;whiteSpace=wrap;html=1;backgroundOutline=1;fontColor=#000000;darkOpacity=0.05;fillColor=#FFF9B2;strokeColor=none;fillStyle=solid;direction=west;gradientDirection=north;gradientColor=#FFF2A1;shadow=1;size=20;pointerEvents=1;align=left;spacingLeft=25;" vertex="1" parent="1">
+          <mxGeometry x="320" y="290" width="130" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="i6iny7qnrzrbF4c-FZRQ-2" style="rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0;exitY=0;exitDx=111;exitDy=10;exitPerimeter=0;endArrow=none;endFill=0;dashed=1;" edge="1" parent="1" source="i6iny7qnrzrbF4c-FZRQ-1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="297" y="319" as="targetPoint" />
+            <mxPoint x="459" y="360" as="sourcePoint" />
           </mxGeometry>
         </mxCell>
       </root>

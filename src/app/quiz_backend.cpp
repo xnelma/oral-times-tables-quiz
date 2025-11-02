@@ -66,10 +66,7 @@ void QuizBackend::setupStateMachine()
             throw std::domain_error("could not set tts locale");
         }
     };
-    auto synthesizeFirstQuestion = [this]() {
-        tts_->enqueue(question());
-        // 'enqueue' in case tts is not ready yet
-    };
+    auto synthesizeFirstQuestion = [this]() { sayQuestion(); };
     machine_->setTtsInitFunc([this, setupTts, synthesizeFirstQuestion]() {
         setupTts();
         synthesizeFirstQuestion();

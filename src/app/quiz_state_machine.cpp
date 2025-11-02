@@ -48,10 +48,10 @@ void QuizStateMachine::setupTransitions()
     c_.addTransition(this, &QuizStateMachine::ttsAvailable, &synthesizing_);
 
     QObject::connect(&c_, &QState::entered, this, [this]() {
-        if (tts_->state() == QTextToSpeech::Ready)
-            emit ttsAvailable();
-        else
+        if (tts_->state() == QTextToSpeech::Error)
             emit ttsUnavailable();
+        else
+            emit ttsAvailable();
     });
     // TODO is there a better way to account for the tts state for the
     // transition?
