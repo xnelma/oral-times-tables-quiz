@@ -6,7 +6,7 @@ import QtQuick.Layouts
 ApplicationWindow {
     id: root
 
-    property var quizViewInst
+    property QuizView quizViewInst
 
     title: qsTr("Oral Times Tables Quiz")
     visible: true
