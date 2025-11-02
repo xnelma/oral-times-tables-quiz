@@ -49,6 +49,10 @@ FocusScope {
                 progressBarTtsLoading {
                     visible: true
                 }
+
+                labelLocale {
+                    text: ""
+                }
             }
         },
         State {
@@ -214,6 +218,8 @@ FocusScope {
     }
 
     Label {
+        id: labelLocale
+
         anchors.bottom: parent.bottom
         anchors.bottomMargin: 2
         anchors.right: parent.right

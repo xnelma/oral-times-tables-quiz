@@ -39,6 +39,7 @@ void QuizBackend::setupStateMachine()
             // available for retranslating in case the locale changed.
             questionBase_ = "%1 times %2";
             translator_.translate(questionBase_);
+            emit localeNameChanged();
         } catch (const std::runtime_error &e) {
             qCritical("Translation setup failed: %s", e.what());
             throw std::domain_error(e.what());

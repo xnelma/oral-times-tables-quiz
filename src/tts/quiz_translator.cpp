@@ -3,10 +3,7 @@
 #include "locale_descriptor.hpp"
 #include "auto_locale.hpp"
 
-Tts::QuizTranslator::QuizTranslator()
-{
-    locale_ = loadLocale();
-}
+Tts::QuizTranslator::QuizTranslator() : locale_(loadLocale()) { }
 
 QLocale Tts::QuizTranslator::locale()
 {
@@ -15,6 +12,7 @@ QLocale Tts::QuizTranslator::locale()
 
 void Tts::QuizTranslator::translate(QString &question)
 {
+    locale_ = loadLocale(); // update locale
     if (translator_.language() != locale_.languageToCode(locale_.language()))
         loadTranslation();
 
