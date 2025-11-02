@@ -131,20 +131,23 @@ void QuizBackend::nextQuestion()
     if (quiz_.next()) {
         emit questionChanged();
         emit numQuestionsRemainingChanged();
-        tts_->enqueue(question());
-        // TODO 'enqueue' is not actually the correct behavior: there should
-        // always be only one question to answer.
+
+        // Stop current question and start next right away instead of
+        // enqueueing. This way the quiz can be faster.
+        tts_->stop();
+        tts_->say(question());
     } else {
+        // Maybe stopping here is a bit to abrupt and it would be nicer to have
+        // the last question 'fade out'?
+        tts_->stop();
         machine_->setCompleted();
     }
 }
 
 void QuizBackend::askAgain()
 {
-    if (tts_->state() == QTextToSpeech::Ready)
-        tts_->enqueue(question());
-    // TODO if I wait for tts to be ready, is 'enqueue' actually the correct
-    // method?
+    tts_->stop();
+    tts_->say(question());
 }
 
 // getters and setters for properties:
