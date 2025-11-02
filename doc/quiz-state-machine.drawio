@@ -13,10 +13,10 @@
           </mxGeometry>
         </mxCell>
         <mxCell id="RsX0wAnIv76XzmjARaVB-3" value="setup" style="swimlane;fontStyle=1;align=center;verticalAlign=middle;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;resizeParent=0;resizeLast=1;container=0;fontColor=#000000;collapsible=0;rounded=1;arcSize=30;strokeColor=#ff0000;fillColor=#ffffc0;swimlaneFillColor=#ffffc0;dropTarget=0;" parent="1" vertex="1">
-          <mxGeometry x="6.25" y="200" width="337.5" height="60" as="geometry" />
+          <mxGeometry x="11.129999999999999" y="200" width="326.75" height="60" as="geometry" />
         </mxCell>
-        <mxCell id="RsX0wAnIv76XzmjARaVB-4" value="entry/ state = &quot;unavailable&quot;; setupQuiz(); setupTanslation()" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=11;spacingRight=4;overflow=hidden;rotatable=0;fontColor=#000000;" parent="RsX0wAnIv76XzmjARaVB-3" vertex="1">
-          <mxGeometry y="30" width="337.5" height="30" as="geometry" />
+        <mxCell id="RsX0wAnIv76XzmjARaVB-4" value="entry/ state = &quot;setting-up&quot;; setupQuiz(); setupTanslation()" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=11;spacingRight=4;overflow=hidden;rotatable=0;fontColor=#000000;" parent="RsX0wAnIv76XzmjARaVB-3" vertex="1">
+          <mxGeometry y="30" width="326.75" height="30" as="geometry" />
         </mxCell>
         <mxCell id="RsX0wAnIv76XzmjARaVB-5" value="" style="edgeStyle=orthogonalEdgeStyle;html=1;verticalAlign=bottom;endArrow=open;endSize=8;strokeColor=#ff0000;rounded=0;" parent="1" source="RsX0wAnIv76XzmjARaVB-3" target="RsX0wAnIv76XzmjARaVB-8" edge="1">
           <mxGeometry relative="1" as="geometry">
@@ -127,7 +127,7 @@
             <mxPoint x="550" y="520" as="targetPoint" />
             <mxPoint x="310" y="510" as="sourcePoint" />
             <Array as="points">
-              <mxPoint x="344" y="240" />
+              <mxPoint x="338" y="240" />
               <mxPoint x="615" y="240" />
             </Array>
             <mxPoint as="offset" />
@@ -150,20 +150,20 @@
           </mxGeometry>
         </mxCell>
         <mxCell id="RsX0wAnIv76XzmjARaVB-49" value="translation unavailable" style="shape=note;whiteSpace=wrap;html=1;backgroundOutline=1;fontColor=#000000;darkOpacity=0.05;fillColor=#FFF9B2;strokeColor=none;fillStyle=solid;direction=west;gradientDirection=north;gradientColor=#FFF2A1;shadow=1;size=20;pointerEvents=1;align=left;spacingLeft=25;" parent="1" vertex="1">
-          <mxGeometry x="546" y="180" width="154" height="30" as="geometry" />
+          <mxGeometry x="541" y="178" width="154" height="30" as="geometry" />
         </mxCell>
         <mxCell id="RsX0wAnIv76XzmjARaVB-52" style="rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0;exitY=0;exitDx=113;exitDy=10;exitPerimeter=0;endArrow=none;endFill=0;dashed=1;" parent="1" source="RsX0wAnIv76XzmjARaVB-50" edge="1">
           <mxGeometry relative="1" as="geometry">
-            <mxPoint x="449" y="224" as="targetPoint" />
+            <mxPoint x="444" y="222" as="targetPoint" />
           </mxGeometry>
         </mxCell>
         <mxCell id="RsX0wAnIv76XzmjARaVB-50" value="questions empty" style="shape=note;whiteSpace=wrap;html=1;backgroundOutline=1;fontColor=#000000;darkOpacity=0.05;fillColor=#FFF9B2;strokeColor=none;fillStyle=solid;direction=west;gradientDirection=north;gradientColor=#FFF2A1;shadow=1;size=20;pointerEvents=1;align=left;spacingLeft=25;" parent="1" vertex="1">
-          <mxGeometry x="463" y="140" width="123" height="30" as="geometry" />
+          <mxGeometry x="458" y="138" width="123" height="30" as="geometry" />
         </mxCell>
         <mxCell id="RsX0wAnIv76XzmjARaVB-53" style="rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0;exitY=0;exitDx=144;exitDy=10;exitPerimeter=0;endArrow=none;endFill=0;dashed=1;" parent="1" source="RsX0wAnIv76XzmjARaVB-49" edge="1">
           <mxGeometry relative="1" as="geometry">
-            <mxPoint x="456" y="229" as="targetPoint" />
-            <mxPoint x="540" y="180" as="sourcePoint" />
+            <mxPoint x="451" y="227" as="targetPoint" />
+            <mxPoint x="535" y="178" as="sourcePoint" />
           </mxGeometry>
         </mxCell>
         <mxCell id="RsX0wAnIv76XzmjARaVB-54" value="tts locale not set" style="shape=note;whiteSpace=wrap;html=1;backgroundOutline=1;fontColor=#000000;darkOpacity=0.05;fillColor=#FFF9B2;strokeColor=none;fillStyle=solid;direction=west;gradientDirection=north;gradientColor=#FFF2A1;shadow=1;size=20;pointerEvents=1;align=left;spacingLeft=25;" parent="1" vertex="1">
