@@ -132,9 +132,8 @@ void QuizBackend::nextQuestion()
 
         sayQuestion();
     } else {
-        // Maybe stopping here is a bit to abrupt and it would be nicer to have
-        // the last question 'fade out'?
-        tts_->stop();
+        // Let last question fade out instead of stopping it.
+
         machine_->setCompleted();
     }
 }
