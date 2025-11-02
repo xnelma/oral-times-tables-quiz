@@ -104,6 +104,14 @@ void QuizStateMachine::setCompleted()
     emit completed();
 }
 
+void QuizStateMachine::stop()
+{
+    // When navigating back the SM is stopped. Reset the ui state to the initial
+    // state.
+    setState("setting-up");
+    QStateMachine::stop();
+}
+
 QString QuizStateMachine::state()
 {
     return state_;

@@ -33,6 +33,9 @@ public:
     void setToError();
     void setCompleted();
 
+public slots:
+    void stop();
+
 signals:
     void stateChanged();
 
