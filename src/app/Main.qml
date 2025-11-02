@@ -83,15 +83,15 @@ ApplicationWindow {
             visible: false
         };
         const incubator = quizView.incubateObject(root, properties);
-        if (incubator.status !== Component.Ready) {
-            incubator.onStatusChanged = function (status) {
-                if (status == Component.Ready) {
-                    quizViewInst = incubator.object;
-                }
-            };
-        } else {
+        if (incubator.status === Component.Ready) {
             quizViewInst = incubator.object;
+            return;
         }
+        incubator.onStatusChanged = function (status) {
+            if (status == Component.Ready) {
+                quizViewInst = incubator.object;
+            }
+        };
     }
 
     Dialog {
