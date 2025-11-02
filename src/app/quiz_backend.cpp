@@ -132,10 +132,7 @@ void QuizBackend::nextQuestion()
         emit questionChanged();
         emit numQuestionsRemainingChanged();
 
-        // Stop current question and start next right away instead of
-        // enqueueing. This way the quiz can be faster.
-        tts_->stop();
-        tts_->say(question());
+        askAgain();
     } else {
         // Maybe stopping here is a bit to abrupt and it would be nicer to have
         // the last question 'fade out'?
@@ -146,8 +143,15 @@ void QuizBackend::nextQuestion()
 
 void QuizBackend::askAgain()
 {
-    tts_->stop();
-    tts_->say(question());
+    // Stop current question and start next right away instead of
+    // enqueueing. This way the quiz can be faster.
+    if (tts_->state() == QTextToSpeech::Speaking) {
+        tts_->stop();
+        tts_->say(question());
+    } else {
+        // Enqueue in case tts is not ready (but not due to talking).
+        tts_->enqueue(question());
+    }
 }
 
 // getters and setters for properties:
