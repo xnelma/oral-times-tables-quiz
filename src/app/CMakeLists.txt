@@ -22,8 +22,6 @@ qt_add_qml_module(OTTQ
         QuizView.qml
         SettingsView.qml
     SOURCES
-        backend.hpp
-        backend.cpp
         quiz_backend.hpp
         quiz_backend.cpp
         settings_backend.hpp
