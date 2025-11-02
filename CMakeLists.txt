@@ -8,6 +8,8 @@ project(OralTimesTablesQuiz VERSION 0.1 LANGUAGES CXX)
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON) # Needed by clang-tidy
+
 find_package(Qt6
     REQUIRED COMPONENTS
         Quick
@@ -15,6 +17,7 @@ find_package(Qt6
         LinguistTools
         TextToSpeech
         Test
+        StateMachine
 )
 
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
@@ -25,9 +28,9 @@ qt_standard_project_setup(
     I18N_TRANSLATED_LANGUAGES de
 )
 
-add_subdirectory(src/OttqApp)
-add_subdirectory(src/TimesTables)
-add_subdirectory(src/TtsModule)
+add_subdirectory(src/app)
+add_subdirectory(src/timestables)
+add_subdirectory(src/tts)
 if(NOT ${CMAKE_SYSTEM_NAME} STREQUAL "Android")
     # don't cross compile the unit tests for now
     add_subdirectory(test)

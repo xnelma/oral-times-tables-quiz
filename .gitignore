@@ -58,3 +58,6 @@ build/
 
 # project-related but temporary files
 scratch/
+
+# draw.io
+*.drawio.bkp
