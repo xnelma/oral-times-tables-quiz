@@ -93,6 +93,19 @@ ApplicationWindow {
             }
         };
     }
+    onClosing: close => {
+        if (Qt.platform.os === "android" || Qt.platform.os === "ios") {
+            if (stack.depth > 1) {
+                close.accepted = false;
+                btnNav.state = "";
+                stack.pop();
+            } else {
+                close.accepted = true;
+            }
+        } else {
+            close.accepted = true;
+        }
+    }
 
     Dialog {
         id: dlgAbout
