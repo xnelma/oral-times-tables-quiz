@@ -142,7 +142,7 @@ FocusScope {
         opacity: 0.5
         text: {
             var num = quizBackend.numQuestionsRemaining;
-            return num <= 0 ? "" : num + " " + qsTr("left");
+            return num <= 0 ? qsTr("Last question") : num + " " + qsTr("left");
         }
     }
 
