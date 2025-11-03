@@ -60,6 +60,11 @@
     </message>
     <message>
         <location filename="../QuizView.qml" line="141"/>
+        <source>Last question</source>
+        <translation>Letzte Aufgabe</translation>
+    </message>
+    <message>
+        <location filename="../QuizView.qml" line="141"/>
         <source>left</source>
         <translation>übrig</translation>
     </message>
