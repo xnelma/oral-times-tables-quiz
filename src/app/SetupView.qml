@@ -3,10 +3,9 @@ import QtQuick
 import QtQuick.Controls.Basic
 
 Item {
-    SetupBackend {
-        id: setupBackend
+    id: suRoot
 
-    }
+    property quizConfiguration config
 
     Column {
         anchors.centerIn: parent
@@ -15,7 +14,7 @@ Item {
         SetupViewSectionTitle {
             anchors.horizontalCenter: parent.horizontalCenter
             subtitle: {
-                var numbers = setupBackend.timesTablesStr;
+                var numbers = suRoot.config.timesTablesStr;
                 return numbers === "" ? qsTr("Add a number") : numbers;
             }
             title: qsTr("Times Tables:")
@@ -59,7 +58,7 @@ Item {
                 width: timesTableNumber.width
 
                 onClicked: {
-                    setupBackend.addTimesTable(timesTableNumber.value);
+                    suRoot.config.addTimesTable(timesTableNumber.value);
                 }
             }
         }
@@ -81,15 +80,15 @@ Item {
             property int low: Math.round(first.value)
 
             anchors.horizontalCenter: parent.horizontalCenter
-            first.value: setupBackend.factorRange.min
+            first.value: suRoot.config.factorRange.min
             from: 1
-            second.value: setupBackend.factorRange.max
+            second.value: suRoot.config.factorRange.max
             snapMode: RangeSlider.SnapAlways
             stepSize: 1
             to: 100
 
-            first.onMoved: setupBackend.factorRange.min = low
-            second.onMoved: setupBackend.factorRange.max = high
+            first.onMoved: suRoot.config.factorRange.min = low
+            second.onMoved: suRoot.config.factorRange.max = high
         }
     }
 }

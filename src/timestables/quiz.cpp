@@ -1,23 +1,21 @@
 #include "quiz.hpp"
-#include "quiz_settings.hpp"
 #include <ranges>
 #include <random>
 
-void TimesTables::Quiz::setup()
+void TimesTables::Quiz::setup(const QList<int> tables, const FactorRange &range)
 {
     questions_.clear();
-    generateQuestions();
-}
 
-void TimesTables::Quiz::generateQuestions()
-{
-    // TODO getting the data from a singleton just now is a bit sneaky.
-    const auto tables = TimesTables::Settings::instance().timesTables();
     if (tables.empty())
         throw std::out_of_range("tables are empty");
-    const auto range = TimesTables::Settings::instance().factorRange();
 
-    auto factors = std::ranges::iota_view{ range->from, range->to + 1 };
+    generateQuestions(tables, range);
+}
+
+void TimesTables::Quiz::generateQuestions(const QList<int> tables,
+                                          const FactorRange &range)
+{
+    auto factors = std::ranges::iota_view{ range.from, range.to + 1 };
     for (const int number : tables)
         for (const int factor : factors)
             questions_.push_back({ number, factor });

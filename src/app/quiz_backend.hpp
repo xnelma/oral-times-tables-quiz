@@ -2,6 +2,7 @@
 #define OTTQ_20250829_1810_INCLUDE
 
 #include "quiz_state_machine.hpp"
+#include "quiz_config.hpp"
 #include "tts/quiz_translator.hpp"
 #include "timestables/quiz.hpp"
 #include <QObject>
@@ -37,7 +38,7 @@ public:
     QString localeName();
     int numQuestionsRemaining();
 
-    Q_INVOKABLE void startStateMachine();
+    Q_INVOKABLE void startStateMachine(const QuizConfiguration &config);
     Q_INVOKABLE void check(const QString input);
     Q_INVOKABLE void sayQuestion();
     Q_INVOKABLE void stopStateMachine();
@@ -60,6 +61,7 @@ private:
     Tts::QuizTranslator translator_;
     TimesTables::Quiz quiz_;
     QString questionBase_;
+    QuizConfiguration quizConfig_;
 };
 
 #endif // OTTQ_20250829_1810_INCLUDE
