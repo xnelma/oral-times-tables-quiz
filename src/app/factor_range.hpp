@@ -9,20 +9,20 @@
 struct FactorRange
 {
     Q_GADGET
-    Q_PROPERTY(int min READ min WRITE setMin FINAL)
-    Q_PROPERTY(int max READ max WRITE setMax FINAL)
+    Q_PROPERTY(int first READ first WRITE setFirst FINAL)
+    Q_PROPERTY(int second READ second WRITE setSecond FINAL)
     QML_ANONYMOUS
 
 public:
     FactorRange();
     FactorRange(std::shared_ptr<TimesTables::FactorRange> fr);
 
-    int min() const;
-    int max() const;
+    int first() const;
+    int second() const;
     std::shared_ptr<TimesTables::FactorRange> get() const;
 
-    void setMin(const int min) const;
-    void setMax(const int max) const;
+    void setFirst(const int first) const;
+    void setSecond(const int second) const;
 
     bool operator==(const FactorRange &fr);
 

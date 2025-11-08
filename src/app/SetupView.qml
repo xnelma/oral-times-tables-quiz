@@ -109,7 +109,11 @@ Item {
                 Layout.column: 1
                 Layout.row: 0
                 Layout.rowSpan: 2
-                subtitle: "[%1, %2]".arg(factorRange.low).arg(factorRange.high)
+                subtitle: {
+                    var first = factorRange.intFirst;
+                    var second = factorRange.intSecond;
+                    return "[%1, %2]".arg(first).arg(second);
+                }
                 title: qsTr("Factors:")
             }
 
@@ -145,19 +149,19 @@ Item {
         RangeSlider {
             id: factorRange
 
-            property int high: Math.round(second.value)
-            property int low: Math.round(first.value)
+            property int intFirst: Math.round(first.value)
+            property int intSecond: Math.round(second.value)
 
             anchors.horizontalCenter: parent.horizontalCenter
-            first.value: suRoot.config.factorRange.min
+            first.value: suRoot.config.factorRange.first
             from: 1
-            second.value: suRoot.config.factorRange.max
+            second.value: suRoot.config.factorRange.second
             snapMode: RangeSlider.SnapAlways
             stepSize: 1
             to: 100
 
-            first.onMoved: suRoot.config.factorRange.min = low
-            second.onMoved: suRoot.config.factorRange.max = high
+            first.onMoved: suRoot.config.factorRange.first = intFirst
+            second.onMoved: suRoot.config.factorRange.second = intSecond
         }
     }
 }

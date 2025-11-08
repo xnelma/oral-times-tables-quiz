@@ -5,12 +5,12 @@ namespace TimesTables {
 
 struct FactorRange
 {
-    FactorRange() : from(1), to(20) { }
+    FactorRange() : first(1), second(20) { }
     // NOLINTNEXTLINE(bugprone-easily-swappable-parameters)
-    FactorRange(const int min, const int max) : from(min), to(max) { }
+    FactorRange(const int f, const int s) : first(f), second(s) { }
 
-    int from;
-    int to;
+    int first;
+    int second;
 };
 
 } // namespace TimesTables
