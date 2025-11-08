@@ -82,6 +82,11 @@ Item {
                 Layout.row: 0
                 flat: true
                 text: "+"
+
+                onClicked: {
+                    factorRange.first.increase();
+                    factorRange.first.moved();
+                }
             }
 
             RoundButton {
@@ -90,6 +95,11 @@ Item {
                 Layout.row: 1
                 flat: true
                 text: "-"
+
+                onClicked: {
+                    factorRange.first.decrease();
+                    factorRange.first.moved();
+                }
             }
 
             SetupViewSectionTitle {
@@ -110,6 +120,11 @@ Item {
                 Layout.row: 0
                 flat: true
                 text: "+"
+
+                onClicked: {
+                    factorRange.second.increase();
+                    factorRange.second.moved();
+                }
             }
 
             RoundButton {
@@ -119,6 +134,11 @@ Item {
                 Layout.row: 1
                 flat: true
                 text: "-"
+
+                onClicked: {
+                    factorRange.second.decrease();
+                    factorRange.second.moved();
+                }
             }
         }
 
