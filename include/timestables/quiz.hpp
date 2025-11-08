@@ -14,7 +14,7 @@ typedef std::shared_ptr<FactorRange> FactorRangePtr;
 class Quiz
 {
 public:
-    void setup();
+    void setup(const QList<int> tables, const FactorRange &range);
     Question question();
     bool next();
     bool answerIsCorrect(const int answer);
@@ -22,7 +22,7 @@ public:
     std::size_t numQuestionsRemaining();
 
 private:
-    void generateQuestions();
+    void generateQuestions(const QList<int> tables, const FactorRange &range);
 
     std::vector<Question> questions_;
 };

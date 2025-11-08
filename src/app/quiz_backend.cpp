@@ -25,7 +25,10 @@ void QuizBackend::setupStateMachine()
 
     auto setupQuiz = [this]() {
         try {
-            quiz_.setup();
+            auto tables = quizConfig_.timesTables();
+            auto range = quizConfig_.factorRange();
+            quiz_.setup(tables,
+                        TimesTables::FactorRange(range.min(), range.max()));
             emit numQuestionsRemainingChanged();
         } catch (const std::out_of_range &e) {
             qCritical("Quiz setup failed: %s", e.what());
@@ -74,12 +77,13 @@ void QuizBackend::setupStateMachine()
     });
 }
 
-void QuizBackend::startStateMachine()
+void QuizBackend::startStateMachine(const QuizConfiguration &config)
 {
     if (!machine_)
         setupStateMachine();
     // TODO RAII
 
+    quizConfig_ = config;
     machine_->start();
 }
 

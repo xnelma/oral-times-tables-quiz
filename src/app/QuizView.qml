@@ -5,6 +5,7 @@ import QtQuick.Controls.Basic
 FocusScope {
     id: qRoot
 
+    property quizConfiguration config
     required property int parentHeight
     required property int parentWidth
 
@@ -113,7 +114,7 @@ FocusScope {
     ]
 
     StackView.onActivated: {
-        quizBackend.startStateMachine();
+        quizBackend.startStateMachine(qRoot.config);
     }
     StackView.onDeactivated: {
         quizBackend.stopStateMachine();

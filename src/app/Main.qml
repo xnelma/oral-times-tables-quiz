@@ -1,3 +1,4 @@
+pragma ComponentBehavior: Bound
 import OttqApp
 import QtQuick
 import QtQuick.Controls.Basic
@@ -7,6 +8,7 @@ ApplicationWindow {
     id: root
 
     property QuizView quizViewInst
+    property SetupView setupViewInst
 
     title: qsTr("Oral Times Tables Quiz")
     visible: true
@@ -43,7 +45,10 @@ ApplicationWindow {
                 state = "back";
                 if (!root.quizViewInst.visible)
                     root.quizViewInst.visible = true;
-                stack.push(root.quizViewInst);
+                var p = {
+                    "config": root.setupViewInst.config
+                };
+                stack.push(root.quizViewInst, p);
             }
         }
     }
@@ -146,6 +151,9 @@ ApplicationWindow {
         id: setupView
 
         SetupView {
+            Component.onCompleted: {
+                root.setupViewInst = this;
+            }
         }
     }
 

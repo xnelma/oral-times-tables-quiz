@@ -1,0 +1,40 @@
+#ifndef OTTQ_20251104_1759_INCLUDE
+#define OTTQ_20251104_1759_INCLUDE
+
+#include "factor_range.hpp"
+#include <QObject>
+#include <qqml.h>
+#include <QList>
+
+struct QuizConfiguration
+{
+    Q_GADGET
+    // clang-format off
+    Q_PROPERTY(QList<int> timesTables
+               READ timesTables
+               FINAL)
+    Q_PROPERTY(QString timesTablesStr
+               READ timesTablesStr
+               FINAL)
+    Q_PROPERTY(FactorRange factorRange
+               READ factorRange
+               WRITE setFactorRange
+               FINAL)
+    // clang-format on
+    QML_VALUE_TYPE(quizConfiguration)
+
+public:
+    QList<int> timesTables();
+    QString timesTablesStr();
+    FactorRange factorRange();
+
+    void setFactorRange(const FactorRange &fr);
+
+    Q_INVOKABLE void addTimesTable(const int number);
+
+private:
+    QList<int> timesTables_;
+    FactorRange factorRange_;
+};
+
+#endif // OTTQ_20251104_1759_INCLUDE
