@@ -1,6 +1,7 @@
 import OttqApp
 import QtQuick
 import QtQuick.Controls.Basic
+import QtQuick.Layouts
 
 Item {
     id: suRoot
@@ -65,12 +66,60 @@ Item {
 
         MenuSeparator {
             anchors.horizontalCenter: parent.horizontalCenter
+            width: parent.width
         }
 
-        SetupViewSectionTitle {
+        GridLayout {
             anchors.horizontalCenter: parent.horizontalCenter
-            subtitle: "[%1, %2]".arg(factorRange.low).arg(factorRange.high)
-            title: qsTr("Factors:")
+            columns: 3
+            rowSpacing: 2
+            rows: 2
+            width: parent.width
+
+            RoundButton {
+                Layout.column: 0
+                Layout.preferredHeight: factorRangeTitle.height / 2
+                Layout.row: 0
+                flat: true
+                text: "+"
+            }
+
+            RoundButton {
+                Layout.column: 0
+                Layout.preferredHeight: factorRangeTitle.height / 2
+                Layout.row: 1
+                flat: true
+                text: "-"
+            }
+
+            SetupViewSectionTitle {
+                id: factorRangeTitle
+
+                Layout.alignment: Qt.AlignHCenter | Qt.AlignTop
+                Layout.column: 1
+                Layout.row: 0
+                Layout.rowSpan: 2
+                subtitle: "[%1, %2]".arg(factorRange.low).arg(factorRange.high)
+                title: qsTr("Factors:")
+            }
+
+            RoundButton {
+                Layout.alignment: Qt.AlignRight
+                Layout.column: 2
+                Layout.preferredHeight: factorRangeTitle.height / 2
+                Layout.row: 0
+                flat: true
+                text: "+"
+            }
+
+            RoundButton {
+                Layout.alignment: Qt.AlignRight
+                Layout.column: 2
+                Layout.preferredHeight: factorRangeTitle.height / 2
+                Layout.row: 1
+                flat: true
+                text: "-"
+            }
         }
 
         RangeSlider {
