@@ -1,3 +1,4 @@
+pragma ComponentBehavior: Bound
 import OttqApp
 import QtQuick
 import QtQuick.Controls.Basic
@@ -76,30 +77,14 @@ Item {
             rows: 2
             width: parent.width
 
-            RoundButton {
-                Layout.column: 0
-                Layout.preferredHeight: factorRangeTitle.height / 2
-                Layout.row: 0
-                flat: true
-                text: "+"
-
-                onClicked: {
-                    factorRange.first.increase();
-                    factorRange.first.moved();
-                }
+            StepButton {
+                first: true
+                plus: true
             }
 
-            RoundButton {
-                Layout.column: 0
-                Layout.preferredHeight: factorRangeTitle.height / 2
-                Layout.row: 1
-                flat: true
-                text: "-"
-
-                onClicked: {
-                    factorRange.first.decrease();
-                    factorRange.first.moved();
-                }
+            StepButton {
+                first: true
+                plus: false
             }
 
             SetupViewSectionTitle {
@@ -117,32 +102,14 @@ Item {
                 title: qsTr("Factors:")
             }
 
-            RoundButton {
-                Layout.alignment: Qt.AlignRight
-                Layout.column: 2
-                Layout.preferredHeight: factorRangeTitle.height / 2
-                Layout.row: 0
-                flat: true
-                text: "+"
-
-                onClicked: {
-                    factorRange.second.increase();
-                    factorRange.second.moved();
-                }
+            StepButton {
+                first: false
+                plus: true
             }
 
-            RoundButton {
-                Layout.alignment: Qt.AlignRight
-                Layout.column: 2
-                Layout.preferredHeight: factorRangeTitle.height / 2
-                Layout.row: 1
-                flat: true
-                text: "-"
-
-                onClicked: {
-                    factorRange.second.decrease();
-                    factorRange.second.moved();
-                }
+            StepButton {
+                first: false
+                plus: false
             }
         }
 
@@ -162,6 +129,37 @@ Item {
 
             first.onMoved: suRoot.config.factorRange.first = intFirst
             second.onMoved: suRoot.config.factorRange.second = intSecond
+        }
+    }
+
+    component StepButton: RoundButton {
+        // An enum inside an inline component is not usable (Qt 6.10), so it
+        // would be defined at the top of the root component, far away from its
+        // usage when using qmlformat.
+        // Also, the lines become much longer.
+        required property bool first // first or second value of the range
+        required property bool plus // '+' or '-' button
+
+        Layout.column: first ? 0 : 2
+        Layout.preferredHeight: factorRangeTitle.height / 2
+        Layout.row: plus ? 0 : 1
+        flat: true
+        text: plus ? "+" : "-"
+
+        onClicked: {
+            if (first) {
+                if (plus)
+                    factorRange.first.increase();
+                else
+                    factorRange.first.decrease();
+                factorRange.first.moved();
+            } else {
+                if (plus)
+                    factorRange.second.increase();
+                else
+                    factorRange.second.decrease();
+                factorRange.second.moved();
+            }
         }
     }
 }
