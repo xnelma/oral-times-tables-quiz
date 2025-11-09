@@ -77,14 +77,12 @@ Item {
             rows: 2
             width: parent.width
 
-            StepButton {
-                first: true
-                plus: true
+            IncrementButton {
+                firstNumberOfRange: true
             }
 
-            StepButton {
-                first: true
-                plus: false
+            DecrementButton {
+                firstNumberOfRange: true
             }
 
             SetupViewSectionTitle {
@@ -102,14 +100,12 @@ Item {
                 title: qsTr("Factors:")
             }
 
-            StepButton {
-                first: false
-                plus: true
+            IncrementButton {
+                firstNumberOfRange: false
             }
 
-            StepButton {
-                first: false
-                plus: false
+            DecrementButton {
+                firstNumberOfRange: false
             }
         }
 
@@ -132,34 +128,43 @@ Item {
         }
     }
 
+    component DecrementButton: StepButton {
+        Layout.row: 1
+        text: "-"
+
+        onClicked: {
+            if (firstNumberOfRange) {
+                factorRange.first.decrease();
+                factorRange.first.moved();
+            } else {
+                factorRange.second.decrease();
+                factorRange.second.moved();
+            }
+        }
+    }
+    component IncrementButton: StepButton {
+        Layout.row: 0
+        text: "+"
+
+        onClicked: {
+            if (firstNumberOfRange) {
+                factorRange.first.increase();
+                factorRange.first.moved();
+            } else {
+                factorRange.second.increase();
+                factorRange.second.moved();
+            }
+        }
+    }
     component StepButton: RoundButton {
         // An enum inside an inline component is not usable (Qt 6.10), so it
         // would be defined at the top of the root component, far away from its
         // usage when using qmlformat.
         // Also, the lines become much longer.
-        required property bool first // first or second value of the range
-        required property bool plus // '+' or '-' button
+        required property bool firstNumberOfRange // first/second of RangeSlider
 
-        Layout.column: first ? 0 : 2
+        Layout.column: firstNumberOfRange ? 0 : 2
         Layout.preferredHeight: factorRangeTitle.height / 2
-        Layout.row: plus ? 0 : 1
         flat: true
-        text: plus ? "+" : "-"
-
-        onClicked: {
-            if (first) {
-                if (plus)
-                    factorRange.first.increase();
-                else
-                    factorRange.first.decrease();
-                factorRange.first.moved();
-            } else {
-                if (plus)
-                    factorRange.second.increase();
-                else
-                    factorRange.second.decrease();
-                factorRange.second.moved();
-            }
-        }
     }
 }
