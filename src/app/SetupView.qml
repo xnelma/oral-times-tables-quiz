@@ -13,7 +13,7 @@ Item {
         anchors.centerIn: parent
         spacing: 10
 
-        SetupViewSectionTitle {
+        SectionTitle {
             anchors.horizontalCenter: parent.horizontalCenter
             subtitle: {
                 var numbers = suRoot.config.timesTablesStr;
@@ -85,7 +85,7 @@ Item {
                 firstNumberOfRange: true
             }
 
-            SetupViewSectionTitle {
+            SectionTitle {
                 id: factorRangeTitle
 
                 Layout.alignment: Qt.AlignHCenter | Qt.AlignTop
@@ -154,6 +154,26 @@ Item {
                 factorRange.second.increase();
                 factorRange.second.moved();
             }
+        }
+    }
+    component SectionTitle: Column {
+        id: stRoot
+
+        required property string subtitle
+        required property string title
+
+        spacing: 2
+
+        Text {
+            anchors.horizontalCenter: parent.horizontalCenter
+            color: "#888"
+            text: stRoot.title
+        }
+
+        Text {
+            anchors.horizontalCenter: parent.horizontalCenter
+            font.bold: true
+            text: stRoot.subtitle
         }
     }
     component StepButton: RoundButton {
