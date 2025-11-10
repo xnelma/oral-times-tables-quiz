@@ -130,7 +130,12 @@
         <translation>Hinzufügen</translation>
     </message>
     <message>
-        <location filename="../SetupView.qml" line="71"/>
+        <location filename="../SetupView.qml" line="75"/>
+        <source>Remove</source>
+        <translation>Entfernen</translation>
+    </message>
+    <message>
+        <location filename="../SetupView.qml" line="126"/>
         <source>Factors:</source>
         <translation>Faktoren:</translation>
     </message>
