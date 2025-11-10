@@ -115,27 +115,32 @@
 <context>
     <name>SetupView</name>
     <message>
-        <location filename="../SetupView.qml" line="18"/>
+        <location filename="../SetupView.qml" line="26"/>
         <source>Add a number</source>
         <translation>Zahl hinzufügen</translation>
     </message>
     <message>
-        <location filename="../SetupView.qml" line="20"/>
+        <location filename="../SetupView.qml" line="36"/>
+        <source>Reset</source>
+        <translation>Leeren</translation>
+    </message>
+    <message>
+        <location filename="../SetupView.qml" line="28"/>
         <source>Times Tables:</source>
         <translation>Reihen:</translation>
     </message>
     <message>
-        <location filename="../SetupView.qml" line="57"/>
+        <location filename="../SetupView.qml" line="81"/>
         <source>Add</source>
         <translation>Hinzufügen</translation>
     </message>
     <message>
-        <location filename="../SetupView.qml" line="75"/>
+        <location filename="../SetupView.qml" line="90"/>
         <source>Remove</source>
         <translation>Entfernen</translation>
     </message>
     <message>
-        <location filename="../SetupView.qml" line="126"/>
+        <location filename="../SetupView.qml" line="141"/>
         <source>Factors:</source>
         <translation>Faktoren:</translation>
     </message>

@@ -13,13 +13,28 @@ Item {
         anchors.centerIn: parent
         spacing: 10
 
-        SectionTitle {
-            anchors.horizontalCenter: parent.horizontalCenter
-            subtitle: {
-                var numbers = suRoot.config.timesTablesStr;
-                return numbers === "" ? qsTr("Add a number") : numbers;
+        Item {
+            height: timesTablesTitle.height
+            width: parent.width
+
+            SectionTitle {
+                id: timesTablesTitle
+
+                anchors.horizontalCenter: parent.horizontalCenter
+                subtitle: {
+                    var numbers = suRoot.config.timesTablesStr;
+                    return numbers === "" ? qsTr("Add a number") : numbers;
+                }
+                title: qsTr("Times Tables:")
             }
-            title: qsTr("Times Tables:")
+
+            RoundButton {
+                anchors.right: parent.right
+                anchors.top: timesTablesTitle.top
+                flat: true
+                height: (timesTablesTitle.height - 2) / 2
+                text: qsTr("Reset")
+            }
         }
 
         Item {
