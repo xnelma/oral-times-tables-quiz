@@ -183,6 +183,7 @@ Item {
         // Also, the lines become much longer.
         required property bool firstNumberOfRange // first/second of RangeSlider
 
+        Layout.alignment: firstNumberOfRange ? Qt.AlignLeft : Qt.AlignRight
         Layout.column: firstNumberOfRange ? 0 : 2
         Layout.preferredHeight: factorRangeTitle.height / 2
         flat: true
