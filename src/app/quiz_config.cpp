@@ -52,3 +52,8 @@ bool QuizConfiguration::contains(const int number)
 {
     return timesTables_.contains(number);
 }
+
+void QuizConfiguration::resetTimesTables()
+{
+    timesTables_.clear();
+}

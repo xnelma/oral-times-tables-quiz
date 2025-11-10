@@ -34,6 +34,11 @@ Item {
                 flat: true
                 height: (timesTablesTitle.height - 2) / 2
                 text: qsTr("Reset")
+
+                onClicked: {
+                    suRoot.config.resetTimesTables();
+                    btnAddTimesTable.state = "";
+                }
             }
         }
 
