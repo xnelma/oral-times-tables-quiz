@@ -33,6 +33,13 @@ Item {
                 from: 1
                 to: 100
                 value: timesTableNumberDecimalStep.value
+
+                onValueChanged: {
+                    if (suRoot.config.contains(timesTableNumber.value))
+                        btnAddTimesTable.state = "remove";
+                    else
+                        btnAddTimesTable.state = "";
+                }
             }
 
             Slider {
@@ -59,8 +66,27 @@ Item {
                 text: qsTr("Add")
                 width: timesTableNumber.width
 
+                states: [
+                    State {
+                        name: "remove"
+
+                        PropertyChanges {
+                            btnAddTimesTable {
+                                text: qsTr("Remove")
+
+                                onClicked: {
+                                    var n = timesTableNumber.value;
+                                    if (suRoot.config.remove(n))
+                                        state = "";
+                                }
+                            }
+                        }
+                    }
+                ]
+
                 onClicked: {
-                    suRoot.config.addTimesTable(timesTableNumber.value);
+                    if (suRoot.config.addTimesTable(timesTableNumber.value))
+                        state = "remove";
                 }
             }
         }

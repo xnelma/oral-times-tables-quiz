@@ -29,10 +29,26 @@ void QuizConfiguration::setFactorRange(const FactorRange &fr)
     factorRange_ = fr;
 }
 
-void QuizConfiguration::addTimesTable(const int number)
+bool QuizConfiguration::addTimesTable(const int number)
 {
     if (timesTables_.contains(number))
-        return;
+        return false;
 
     timesTables_.push_back(number);
+    return true;
+}
+
+bool QuizConfiguration::remove(const int timesTableNumber)
+{
+    auto pos = timesTables_.indexOf(timesTableNumber);
+    if (pos < 0)
+        return false;
+
+    timesTables_.removeAt(pos);
+    return true;
+}
+
+bool QuizConfiguration::contains(const int number)
+{
+    return timesTables_.contains(number);
 }
