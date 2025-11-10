@@ -11,14 +11,14 @@ FactorRange::FactorRange(std::shared_ptr<TimesTables::FactorRange> fr)
 {
 }
 
-int FactorRange::min() const
+int FactorRange::first() const
 {
-    return factorRange_->from;
+    return factorRange_->first;
 }
 
-int FactorRange::max() const
+int FactorRange::second() const
 {
-    return factorRange_->to;
+    return factorRange_->second;
 }
 
 std::shared_ptr<TimesTables::FactorRange> FactorRange::get() const
@@ -26,21 +26,21 @@ std::shared_ptr<TimesTables::FactorRange> FactorRange::get() const
     return factorRange_;
 }
 
-void FactorRange::setMin(const int min) const
+void FactorRange::setFirst(const int first) const
 {
-    if (factorRange_->from == min)
+    if (factorRange_->first == first)
         return;
-    factorRange_->from = min;
+    factorRange_->first = first;
 }
 
-void FactorRange::setMax(const int max) const
+void FactorRange::setSecond(const int second) const
 {
-    if (factorRange_->to == max)
+    if (factorRange_->second == second)
         return;
-    factorRange_->to = max;
+    factorRange_->second = second;
 }
 
 bool FactorRange::operator==(const FactorRange &fr)
 {
-    return min() == fr.min() && max() == fr.max();
+    return first() == fr.first() && second() == fr.second();
 }

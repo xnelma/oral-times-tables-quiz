@@ -25,10 +25,10 @@ void QuizBackend::setupStateMachine()
 
     auto setupQuiz = [this]() {
         try {
-            auto tables = quizConfig_.timesTables();
-            auto range = quizConfig_.factorRange();
-            quiz_.setup(tables,
-                        TimesTables::FactorRange(range.min(), range.max()));
+            auto t = quizConfig_.timesTables();
+            auto r = quizConfig_.factorRange();
+            quiz_.setup(t, TimesTables::FactorRange(r.first(), r.second()));
+
             emit numQuestionsRemainingChanged();
         } catch (const std::out_of_range &e) {
             qCritical("Quiz setup failed: %s", e.what());

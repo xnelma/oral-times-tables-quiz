@@ -1,6 +1,8 @@
+pragma ComponentBehavior: Bound
 import OttqApp
 import QtQuick
 import QtQuick.Controls.Basic
+import QtQuick.Layouts
 
 Item {
     id: suRoot
@@ -11,7 +13,7 @@ Item {
         anchors.centerIn: parent
         spacing: 10
 
-        SetupViewSectionTitle {
+        SectionTitle {
             anchors.horizontalCenter: parent.horizontalCenter
             subtitle: {
                 var numbers = suRoot.config.timesTablesStr;
@@ -65,30 +67,125 @@ Item {
 
         MenuSeparator {
             anchors.horizontalCenter: parent.horizontalCenter
+            width: parent.width
         }
 
-        SetupViewSectionTitle {
+        GridLayout {
             anchors.horizontalCenter: parent.horizontalCenter
-            subtitle: "[%1, %2]".arg(factorRange.low).arg(factorRange.high)
-            title: qsTr("Factors:")
+            columns: 3
+            rowSpacing: 2
+            rows: 2
+            width: parent.width
+
+            IncrementButton {
+                firstNumberOfRange: true
+            }
+
+            DecrementButton {
+                firstNumberOfRange: true
+            }
+
+            SectionTitle {
+                id: factorRangeTitle
+
+                Layout.alignment: Qt.AlignHCenter | Qt.AlignTop
+                Layout.column: 1
+                Layout.row: 0
+                Layout.rowSpan: 2
+                subtitle: {
+                    var first = factorRange.intFirst;
+                    var second = factorRange.intSecond;
+                    return "[%1, %2]".arg(first).arg(second);
+                }
+                title: qsTr("Factors:")
+            }
+
+            IncrementButton {
+                firstNumberOfRange: false
+            }
+
+            DecrementButton {
+                firstNumberOfRange: false
+            }
         }
 
         RangeSlider {
             id: factorRange
 
-            property int high: Math.round(second.value)
-            property int low: Math.round(first.value)
+            property int intFirst: Math.round(first.value)
+            property int intSecond: Math.round(second.value)
 
             anchors.horizontalCenter: parent.horizontalCenter
-            first.value: suRoot.config.factorRange.min
+            first.value: suRoot.config.factorRange.first
             from: 1
-            second.value: suRoot.config.factorRange.max
+            second.value: suRoot.config.factorRange.second
             snapMode: RangeSlider.SnapAlways
             stepSize: 1
             to: 100
 
-            first.onMoved: suRoot.config.factorRange.min = low
-            second.onMoved: suRoot.config.factorRange.max = high
+            first.onMoved: suRoot.config.factorRange.first = intFirst
+            second.onMoved: suRoot.config.factorRange.second = intSecond
         }
+    }
+
+    component DecrementButton: StepButton {
+        Layout.row: 1
+        text: "-"
+
+        onClicked: {
+            if (firstNumberOfRange) {
+                factorRange.first.decrease();
+                factorRange.first.moved();
+            } else {
+                factorRange.second.decrease();
+                factorRange.second.moved();
+            }
+        }
+    }
+    component IncrementButton: StepButton {
+        Layout.row: 0
+        text: "+"
+
+        onClicked: {
+            if (firstNumberOfRange) {
+                factorRange.first.increase();
+                factorRange.first.moved();
+            } else {
+                factorRange.second.increase();
+                factorRange.second.moved();
+            }
+        }
+    }
+    component SectionTitle: Column {
+        id: stRoot
+
+        required property string subtitle
+        required property string title
+
+        spacing: 2
+
+        Text {
+            anchors.horizontalCenter: parent.horizontalCenter
+            color: "#888"
+            text: stRoot.title
+        }
+
+        Text {
+            anchors.horizontalCenter: parent.horizontalCenter
+            font.bold: true
+            text: stRoot.subtitle
+        }
+    }
+    component StepButton: RoundButton {
+        // An enum inside an inline component is not usable (Qt 6.10), so it
+        // would be defined at the top of the root component, far away from its
+        // usage when using qmlformat.
+        // Also, the lines become much longer.
+        required property bool firstNumberOfRange // first/second of RangeSlider
+
+        Layout.alignment: firstNumberOfRange ? Qt.AlignLeft : Qt.AlignRight
+        Layout.column: firstNumberOfRange ? 0 : 2
+        Layout.preferredHeight: factorRangeTitle.height / 2
+        flat: true
     }
 }
