@@ -27,19 +27,6 @@ Item {
                 }
                 title: qsTr("Times Tables:")
             }
-
-            RoundButton {
-                anchors.right: parent.right
-                anchors.top: timesTablesTitle.top
-                flat: true
-                height: (timesTablesTitle.height - 2) / 2
-                text: qsTr("Reset")
-
-                onClicked: {
-                    suRoot.config.resetTimesTables();
-                    btnAddTimesTable.state = "";
-                }
-            }
         }
 
         Item {
