@@ -115,29 +115,39 @@
 <context>
     <name>SetupView</name>
     <message>
-        <location filename="../SetupView.qml" line="18"/>
+        <location filename="../SetupView.qml" line="26"/>
         <source>Add a number</source>
         <translation>Zahl hinzufügen</translation>
     </message>
     <message>
-        <location filename="../SetupView.qml" line="20"/>
+        <location filename="../SetupView.qml" line="28"/>
         <source>Times Tables:</source>
         <translation>Reihen:</translation>
     </message>
     <message>
-        <location filename="../SetupView.qml" line="57"/>
+        <location filename="../SetupView.qml" line="85"/>
         <source>Add</source>
         <translation>Hinzufügen</translation>
     </message>
     <message>
-        <location filename="../SetupView.qml" line="75"/>
+        <location filename="../SetupView.qml" line="94"/>
         <source>Remove</source>
         <translation>Entfernen</translation>
     </message>
     <message>
-        <location filename="../SetupView.qml" line="126"/>
+        <location filename="../SetupView.qml" line="145"/>
         <source>Factors:</source>
         <translation>Faktoren:</translation>
+    </message>
+    <message>
+        <location filename="../SetupView.qml" line="182"/>
+        <source>Resetting Times Tables</source>
+        <translation>Reihen zurücksetzen</translation>
+    </message>
+    <message>
+        <location filename="../SetupView.qml" line="192"/>
+        <source>The list of times tables will be cleared. Are you sure?</source>
+        <translation>Die Liste von Reihen wird geleert. Bist du dir sicher?</translation>
     </message>
 </context>
 </TS>

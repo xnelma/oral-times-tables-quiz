@@ -27,6 +27,18 @@ Item {
                 }
                 title: qsTr("Times Tables:")
             }
+
+            MouseArea {
+                anchors.left: timesTablesTitle.left
+                anchors.top: timesTablesTitle.top
+                height: timesTablesTitle.height
+                width: timesTablesTitle.width
+
+                onPressAndHold: {
+                    if (suRoot.config.timesTables.length > 0)
+                        dlgResetTimesTables.open();
+                }
+            }
         }
 
         Item {
@@ -158,6 +170,28 @@ Item {
 
             first.onMoved: suRoot.config.factorRange.first = intFirst
             second.onMoved: suRoot.config.factorRange.second = intSecond
+        }
+    }
+
+    Dialog {
+        id: dlgResetTimesTables
+
+        anchors.centerIn: parent
+        modal: true
+        standardButtons: Dialog.Ok | Dialog.Cancel
+        title: qsTr("Resetting Times Tables")
+        width: parent.width - 2 * 10
+
+        onAccepted: {
+            suRoot.config.resetTimesTables();
+            btnAddTimesTable.state = "";
+        }
+
+        Label {
+            elide: Text.ElideRight
+            text: qsTr("The list of times tables will be cleared. Are you sure?")
+            width: parent.width
+            wrapMode: Text.WordWrap
         }
     }
 
