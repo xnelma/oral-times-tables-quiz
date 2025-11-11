@@ -177,10 +177,10 @@ Item {
         id: dlgResetTimesTables
 
         anchors.centerIn: parent
+        margins: 10
         modal: true
         standardButtons: Dialog.Ok | Dialog.Cancel
         title: qsTr("Resetting Times Tables")
-        width: parent.width - 2 * 10
 
         onAccepted: {
             suRoot.config.resetTimesTables();

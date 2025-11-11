@@ -191,10 +191,10 @@ FocusScope {
         id: dlgLocaleError
 
         anchors.centerIn: parent
+        margins: 10
         modal: true
         standardButtons: Dialog.Ok
         title: qsTr("Language Error")
-        width: parent.width - 2 * 10
 
         Label {
             elide: Text.ElideRight
