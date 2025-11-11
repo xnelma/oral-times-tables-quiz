@@ -5,8 +5,6 @@ import QtQuick.Controls.Basic
 Item {
     id: sRoot
 
-    required property int parentWidth
-
     SettingsBackend {
         id: settingsBackend
 
@@ -27,15 +25,11 @@ Item {
 
             Label {
                 anchors.verticalCenter: parent.verticalCenter
-                elide: Text.ElideRight
-                maximumLineCount: 2
                 opacity: switchTtsLocale.checked ? 1 : 0.5
                 text: {
                     var l = settingsBackend.autoLanguage;
                     return "%1\n(%2)".arg(l.language).arg(l.territory);
                 }
-                width: sRoot.parentWidth - switchTtsLocale.width - 3 * 10
-                wrapMode: Text.WordWrap
             }
 
             Switch {
@@ -52,7 +46,6 @@ Item {
             currentIndex: settingsBackend.languageIndex
             enabled: !switchTtsLocale.checked
             model: settingsBackend.languages
-            width: parent.width - 2 * parent.padding
 
             onActivated: settingsBackend.languageIndex = currentIndex
         }
