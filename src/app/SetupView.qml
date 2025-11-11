@@ -13,13 +13,32 @@ Item {
         anchors.centerIn: parent
         spacing: 10
 
-        SectionTitle {
-            anchors.horizontalCenter: parent.horizontalCenter
-            subtitle: {
-                var numbers = suRoot.config.timesTablesStr;
-                return numbers === "" ? qsTr("Add a number") : numbers;
+        Item {
+            height: timesTablesTitle.height
+            width: parent.width
+
+            SectionTitle {
+                id: timesTablesTitle
+
+                anchors.horizontalCenter: parent.horizontalCenter
+                subtitle: {
+                    var numbers = suRoot.config.timesTablesStr;
+                    return numbers === "" ? qsTr("Add a number") : numbers;
+                }
+                title: qsTr("Times Tables:")
             }
-            title: qsTr("Times Tables:")
+
+            MouseArea {
+                anchors.left: timesTablesTitle.left
+                anchors.top: timesTablesTitle.top
+                height: timesTablesTitle.height
+                width: timesTablesTitle.width
+
+                onPressAndHold: {
+                    if (suRoot.config.timesTables.length > 0)
+                        dlgResetTimesTables.open();
+                }
+            }
         }
 
         Item {
@@ -33,6 +52,13 @@ Item {
                 from: 1
                 to: 100
                 value: timesTableNumberDecimalStep.value
+
+                onValueChanged: {
+                    if (suRoot.config.contains(timesTableNumber.value))
+                        btnAddTimesTable.state = "remove";
+                    else
+                        btnAddTimesTable.state = "";
+                }
             }
 
             Slider {
@@ -59,8 +85,27 @@ Item {
                 text: qsTr("Add")
                 width: timesTableNumber.width
 
+                states: [
+                    State {
+                        name: "remove"
+
+                        PropertyChanges {
+                            btnAddTimesTable {
+                                text: qsTr("Remove")
+
+                                onClicked: {
+                                    var n = timesTableNumber.value;
+                                    if (suRoot.config.remove(n))
+                                        state = "";
+                                }
+                            }
+                        }
+                    }
+                ]
+
                 onClicked: {
-                    suRoot.config.addTimesTable(timesTableNumber.value);
+                    if (suRoot.config.addTimesTable(timesTableNumber.value))
+                        state = "remove";
                 }
             }
         }
@@ -125,6 +170,28 @@ Item {
 
             first.onMoved: suRoot.config.factorRange.first = intFirst
             second.onMoved: suRoot.config.factorRange.second = intSecond
+        }
+    }
+
+    Dialog {
+        id: dlgResetTimesTables
+
+        anchors.centerIn: parent
+        margins: 10
+        modal: true
+        standardButtons: Dialog.Ok | Dialog.Cancel
+        title: qsTr("Resetting Times Tables")
+
+        onAccepted: {
+            suRoot.config.resetTimesTables();
+            btnAddTimesTable.state = "";
+        }
+
+        Label {
+            elide: Text.ElideRight
+            text: qsTr("The list of times tables will be cleared. Are you sure?")
+            width: parent.width
+            wrapMode: Text.WordWrap
         }
     }
 

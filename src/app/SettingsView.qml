@@ -1,11 +1,10 @@
 import OttqApp
 import QtQuick
 import QtQuick.Controls.Basic
+import QtQuick.Layouts
 
 Item {
     id: sRoot
-
-    required property int parentWidth
 
     SettingsBackend {
         id: settingsBackend
@@ -22,39 +21,45 @@ Item {
             text: qsTr("Text-to-Speech Settings")
         }
 
-        Row {
-            spacing: 10
+        GridLayout {
+            columnSpacing: 10
+            columns: 2
+            rowSpacing: 10
+            rows: 2
 
             Label {
-                anchors.verticalCenter: parent.verticalCenter
-                elide: Text.ElideRight
-                maximumLineCount: 2
+                Layout.alignment: Qt.AlignVCenter
+                Layout.column: 0
+                Layout.row: 0
                 opacity: switchTtsLocale.checked ? 1 : 0.5
                 text: {
                     var l = settingsBackend.autoLanguage;
                     return "%1\n(%2)".arg(l.language).arg(l.territory);
                 }
-                width: sRoot.parentWidth - switchTtsLocale.width - 3 * 10
-                wrapMode: Text.WordWrap
             }
 
             Switch {
                 id: switchTtsLocale
 
-                anchors.verticalCenter: parent.verticalCenter
+                Layout.alignment: Qt.AlignVCenter | Qt.AlignRight
+                Layout.column: 1
+                Layout.row: 0
                 checked: settingsBackend.useAutoTtsLanguage
 
                 onToggled: settingsBackend.useAutoTtsLanguage = checked
             }
-        }
 
-        ComboBox {
-            currentIndex: settingsBackend.languageIndex
-            enabled: !switchTtsLocale.checked
-            model: settingsBackend.languages
-            width: parent.width - 2 * parent.padding
+            ComboBox {
+                Layout.column: 0
+                Layout.columnSpan: 2
+                Layout.fillWidth: true
+                Layout.row: 1
+                currentIndex: settingsBackend.languageIndex
+                enabled: !switchTtsLocale.checked
+                model: settingsBackend.languages
 
-            onActivated: settingsBackend.languageIndex = currentIndex
+                onActivated: settingsBackend.languageIndex = currentIndex
+            }
         }
 
         Label {

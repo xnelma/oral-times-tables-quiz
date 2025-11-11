@@ -30,7 +30,10 @@ public:
 
     void setFactorRange(const FactorRange &fr);
 
-    Q_INVOKABLE void addTimesTable(const int number);
+    Q_INVOKABLE bool addTimesTable(const int number);
+    Q_INVOKABLE bool remove(const int timesTableNumber);
+    Q_INVOKABLE bool contains(const int number);
+    Q_INVOKABLE void resetTimesTables();
 
 private:
     QList<int> timesTables_;

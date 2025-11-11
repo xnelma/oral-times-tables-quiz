@@ -83,8 +83,6 @@ ApplicationWindow {
     Component.onCompleted: {
         // Keep state of quiz view for faster navigation.
         var properties = {
-            parentHeight: stack.height,
-            parentWidth: stack.width,
             visible: false
         };
         const incubator = quizView.incubateObject(root, properties);
@@ -161,8 +159,6 @@ ApplicationWindow {
         id: quizView
 
         QuizView {
-            parentHeight: height
-            parentWidth: width
         }
     }
 
@@ -170,8 +166,6 @@ ApplicationWindow {
         id: settingsView
 
         SettingsView {
-            parentWidth: width
-            width: Math.min(parent.width, 250)
         }
     }
 }

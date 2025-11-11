@@ -6,12 +6,8 @@ FocusScope {
     id: qRoot
 
     property quizConfiguration config
-    required property int parentHeight
-    required property int parentWidth
 
-    height: parentHeight
     state: quizBackend.state
-    width: parentWidth
 
     states: [
         State {
@@ -180,7 +176,7 @@ FocusScope {
 
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.top: parent.top
-        anchors.topMargin: qRoot.parentHeight / 3
+        anchors.topMargin: qRoot.height / 3
         text: qsTr("Replay")
 
         onClicked: {
@@ -195,10 +191,10 @@ FocusScope {
         id: dlgLocaleError
 
         anchors.centerIn: parent
+        margins: 10
         modal: true
         standardButtons: Dialog.Ok
         title: qsTr("Language Error")
-        width: parent.width - 2 * 10
 
         Label {
             elide: Text.ElideRight
