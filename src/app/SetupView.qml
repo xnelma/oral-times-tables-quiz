@@ -21,6 +21,7 @@ Item {
                 id: timesTablesTitle
 
                 anchors.horizontalCenter: parent.horizontalCenter
+                maxWidth: parent.width
                 subtitle: {
                     var numbers = suRoot.config.timesTablesStr;
                     return numbers === "" ? qsTr("Add a number") : numbers;
@@ -226,6 +227,7 @@ Item {
     component SectionTitle: Column {
         id: stRoot
 
+        property int maxWidth
         required property string subtitle
         required property string title
 
@@ -239,8 +241,15 @@ Item {
 
         Text {
             anchors.horizontalCenter: parent.horizontalCenter
+            elide: Text.ElideMiddle
             font.bold: true
+            horizontalAlignment: Text.AlignHCenter
             text: stRoot.subtitle
+
+            Component.onCompleted: {
+                if (stRoot.maxWidth !== 0)
+                    width = stRoot.maxWidth;
+            }
         }
     }
     component StepButton: RoundButton {
