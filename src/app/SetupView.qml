@@ -213,6 +213,9 @@ Item {
         modal: true
         standardButtons: Dialog.Ok
         title: qsTr("Times Tables")
+        // This dialog needs the width to be set explicitly, to fix a binding
+        // loop for the dynamically set text of the label.
+        width: Math.min(parent.width - leftMargin - rightMargin, 300)
 
         Label {
             text: suRoot.config.timesTablesStr
