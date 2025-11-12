@@ -121,8 +121,8 @@
     </message>
     <message>
         <location filename="../SetupView.qml" line="28"/>
-        <source>Times Tables:</source>
-        <translation>Reihen:</translation>
+        <source>Times Tables</source>
+        <translation>Reihen</translation>
     </message>
     <message>
         <location filename="../SetupView.qml" line="85"/>

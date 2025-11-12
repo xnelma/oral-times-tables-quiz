@@ -26,7 +26,7 @@ Item {
                     var numbers = suRoot.config.timesTablesStr;
                     return numbers === "" ? qsTr("Add a number") : numbers;
                 }
-                title: qsTr("Times Tables:")
+                title: qsTr("Times Tables")
             }
 
             MouseArea {
@@ -35,6 +35,10 @@ Item {
                 height: timesTablesTitle.height
                 width: timesTablesTitle.width
 
+                onClicked: {
+                    if (timesTablesTitle.elided)
+                        dlgShowFullTimesTablesList.open();
+                }
                 onPressAndHold: {
                     if (suRoot.config.timesTables.length > 0)
                         dlgResetTimesTables.open();
@@ -95,6 +99,11 @@ Item {
                                 text: qsTr("Remove")
 
                                 onClicked: {
+                                    // reset elided in case the text is now
+                                    // short enough to not be elided.
+                                    // elided will then be set again in the
+                                    // title component when the text is changed.
+                                    timesTablesTitle.resetElided();
                                     var n = timesTableNumber.value;
                                     if (suRoot.config.remove(n))
                                         state = "";
@@ -196,6 +205,22 @@ Item {
         }
     }
 
+    Dialog {
+        id: dlgShowFullTimesTablesList
+
+        anchors.centerIn: parent
+        margins: 10
+        modal: true
+        standardButtons: Dialog.Ok
+        title: qsTr("Times Tables")
+
+        Label {
+            text: suRoot.config.timesTablesStr
+            width: parent.width
+            wrapMode: Text.WordWrap
+        }
+    }
+
     component DecrementButton: StepButton {
         Layout.row: 1
         text: "-"
@@ -227,9 +252,15 @@ Item {
     component SectionTitle: Column {
         id: stRoot
 
+        property bool elided: false
         property int maxWidth
         required property string subtitle
         required property string title
+
+        function resetElided() {
+            if (elided)
+                elided = false;
+        }
 
         spacing: 2
 
@@ -249,6 +280,19 @@ Item {
             Component.onCompleted: {
                 if (stRoot.maxWidth !== 0)
                     width = stRoot.maxWidth;
+            }
+
+            // set elided
+            onLineLaidOut: line => {
+                // Only assign the property when changed to not emit signals
+                // too often.
+                // Also, avoid using a zero width comparison in case maxWidth
+                // is not used.
+                if (!stRoot.elided && stRoot.maxWidth !== 0) {
+                    var tmp = line.implicitWidth > stRoot.maxWidth;
+                    if (tmp)
+                        stRoot.elided = tmp;
+                }
             }
         }
     }
