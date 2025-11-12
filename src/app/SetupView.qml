@@ -26,7 +26,7 @@ Item {
                     var numbers = suRoot.config.timesTablesStr;
                     return numbers === "" ? qsTr("Add a number") : numbers;
                 }
-                title: qsTr("Times Tables")
+                title: qsTr("Times Tables") + ":"
             }
 
             MouseArea {
