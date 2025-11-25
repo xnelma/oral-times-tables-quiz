@@ -4,7 +4,10 @@
 
 QLocale Tts::autoLocale()
 {
-    QLocale sysLocale = QLocale::system();
+    // Use default constructor to allow setting a different 'system' locale,
+    // for example for unit testing.
+    QLocale sysLocale;
+
     std::optional<QLocale> fallbackLocale;
 
     QDirIterator it(qmDirPath, { "*.qm" }, QDir::Files);
