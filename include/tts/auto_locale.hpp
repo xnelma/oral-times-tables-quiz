@@ -7,7 +7,13 @@
 
 namespace Tts {
 
-QLocale autoLocale();
+// Search Qt Resources by default, but also allow setting the search directory.
+// This is useful for unit testing, where Qt Resources might not be loaded.
+// FIXME The parameter here does not make much sense. It should be a (static?)
+// member of a class.
+QLocale autoLocale(const QString qmSearchDir = ":");
+
+QString resourcePath();
 
 static void resolveFallbackLocale(QLocale system, QLocale resource,
                                   QLocale &fallback);
@@ -15,6 +21,9 @@ static void resolveFallbackLocale(QLocale system, QLocale resource,
 // Path to generated translation resources.
 const QString qmDirPath = ":/qt/qml/OttqApp/i18n/";
 const QString qmFilePath = qmDirPath + "qml_%1.qm";
+// TODO if I do not use a fixed path but find it dynamically, I need to set
+// the path to get the .qm file from in tts/quiz_translator.cpp dynamically,
+// too. This would also be needed for unit testing.
 
 // Regex for getting the locale name from a translation resource file name.
 // File names could for example be qml_xx.qm or qml_xx_XX.qm, and more

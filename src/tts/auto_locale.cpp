@@ -2,7 +2,7 @@
 #include <QFile>
 #include <QDirIterator>
 
-QLocale Tts::autoLocale()
+QLocale Tts::autoLocale(const QString qmSearchDir)
 {
     // Use default constructor to allow setting a different 'system' locale,
     // for example for unit testing.
@@ -10,7 +10,8 @@ QLocale Tts::autoLocale()
 
     std::optional<QLocale> fallbackLocale;
 
-    QDirIterator it(qmDirPath, { "*.qm" }, QDir::Files);
+    QDirIterator it(
+        qmSearchDir, { "*.qm" }, QDir::Files, QDirIterator::Subdirectories);
     while (it.hasNext()) {
         QLocale resourceLocale = QLocale(
             QFile(it.next()).fileName().replace(qmLocaleNameRegex, "\\1\\2"));
@@ -49,4 +50,7 @@ static void Tts::resolveFallbackLocale(const QLocale system,
                 || !fallbackIsInEnglish))) { // else take first "en" in list.
         fallback = resource;
     }
+
+    // FIXME The expected behavior for a resource without territory is that the
+    // device territory is used!
 }
