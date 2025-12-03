@@ -17,10 +17,10 @@ public:
     void translate(QString &question);
 
 private:
-    QLocale loadLocale();
+    LocaleDescriptor loadLocale();
     void loadTranslation();
 
-    QLocale locale_;
+    LocaleDescriptor localeDescriptor_;
     QTranslator translator_;
 };
 

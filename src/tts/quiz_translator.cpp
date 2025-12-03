@@ -6,42 +6,51 @@
 
 // TODO maybe this doesn't need to be a class?
 
-Tts::QuizTranslator::QuizTranslator() : locale_(loadLocale()) { }
+Tts::QuizTranslator::QuizTranslator() : localeDescriptor_(loadLocale()) { }
 
 QLocale Tts::QuizTranslator::locale()
 {
-    return locale_;
-    // TODO maybe I can save locale_ as a LocaleDescriptor and only create a
-    // QLocale here.
+    return QLocale(localeDescriptor_.language, localeDescriptor_.territory);
 }
 
+// TODO maybe this can also partially be a namespace function?
 void Tts::QuizTranslator::translate(QString &question)
 {
-    locale_ = loadLocale(); // update locale
-    if (translator_.language() != locale_.languageToCode(locale_.language()))
+    // Update locale.
+    // The class outlives QuizView, so a change in the settings needs to be
+    // handled here.
+    // TODO This might change in the future.
+    localeDescriptor_ = loadLocale();
+    // Update translation, if the locale changed.
+    auto l = QLocale(localeDescriptor_.language, localeDescriptor_.territory);
+    QString languageCode = l.languageToCode(localeDescriptor_.language);
+    if (translator_.language() != languageCode)
         loadTranslation();
 
     question = translator_.translate("QuizView", question.toLocal8Bit().data());
 }
 
-QLocale Tts::QuizTranslator::loadLocale()
+// TODO this can be a namespace function?
+auto Tts::QuizTranslator::loadLocale() -> LocaleDescriptor
 {
     bool useAutoLocale = loadAutoLocaleSetting();
     if (useAutoLocale)
-        return autoLocale();
+        // TODO maybe autoLocale() also doesn't need to return a QLocale?
+        return LocaleDescriptor(autoLocale());
 
     LocaleDescriptor ld = loadLocaleSetting();
-    if (ld.language <= QLocale::C)
-        return autoLocale();
+    if (ld.language <= QLocale::C) {
+        return LocaleDescriptor(autoLocale());
+    }
     // If the territory is QLocale::AnyTerritory, that's the same as the
     // default argument for QLocale, so it doesn't need to be checked.
 
-    return QLocale(ld.language, ld.territory);
+    return ld;
 }
 
 void Tts::QuizTranslator::loadTranslation()
 {
-    QString resourcePath = Translator::resources()[LocaleDescriptor(locale_)];
+    QString resourcePath = Translator::resources()[localeDescriptor_];
     if (!translator_.load(resourcePath))
         // why do I need to convert to locale descriptor here?
         throw std::runtime_error("translation could not be loaded");
