@@ -21,6 +21,12 @@ struct LocaleDescriptor
     {
         return language == ld.language && territory == ld.territory;
     }
+    bool operator<(const LocaleDescriptor &ld) const
+    {
+        return language < ld.language
+            || (language == ld.language && territory < ld.territory);
+    }
+    // TODO unit test?
 
     QLocale::Language language;
     QLocale::Territory territory;

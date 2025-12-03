@@ -4,6 +4,7 @@ add_library(Tts STATIC
     quiz_translator.cpp
     auto_locale.cpp
     tts_rate_settings.cpp
+    translator_resources.cpp
 )
 
 target_link_libraries(Tts PRIVATE

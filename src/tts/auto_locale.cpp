@@ -1,4 +1,5 @@
 #include "auto_locale.hpp"
+#include "translator_resources.hpp"
 #include <QFile>
 #include <QDirIterator>
 
@@ -10,11 +11,9 @@ QLocale Tts::autoLocale(const QString qmSearchDir)
 
     std::optional<QLocale> fallbackLocale;
 
-    QDirIterator it(
-        qmSearchDir, { "*.qm" }, QDir::Files, QDirIterator::Subdirectories);
-    while (it.hasNext()) {
-        QLocale resourceLocale = QLocale(
-            QFile(it.next()).fileName().replace(qmLocaleNameRegex, "\\1\\2"));
+    for (auto resource : Tts::Translator::resources().keys()) {
+        QLocale resourceLocale(resource.language, resource.territory);
+        // TODO could I instead directly use the LocaleDescriptor?
 
         if (resourceLocale.name() == sysLocale.name())
             return sysLocale;
