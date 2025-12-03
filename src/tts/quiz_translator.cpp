@@ -2,12 +2,17 @@
 #include "tts_settings.hpp"
 #include "locale_descriptor.hpp"
 #include "auto_locale.hpp"
+#include "translator_resources.hpp"
+
+// TODO maybe this doesn't need to be a class?
 
 Tts::QuizTranslator::QuizTranslator() : locale_(loadLocale()) { }
 
 QLocale Tts::QuizTranslator::locale()
 {
     return locale_;
+    // TODO maybe I can save locale_ as a LocaleDescriptor and only create a
+    // QLocale here.
 }
 
 void Tts::QuizTranslator::translate(QString &question)
@@ -36,6 +41,10 @@ QLocale Tts::QuizTranslator::loadLocale()
 
 void Tts::QuizTranslator::loadTranslation()
 {
-    if (!translator_.load(qmFilePath.arg(locale_.name())))
+    QString resourcePath = Translator::resources()[LocaleDescriptor(locale_)];
+    if (!translator_.load(resourcePath))
+        // why do I need to convert to locale descriptor here?
         throw std::runtime_error("translation could not be loaded");
+
+    // TODO would it be possible to have separate qm files for tts?
 }
