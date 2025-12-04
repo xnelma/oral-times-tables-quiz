@@ -18,10 +18,10 @@ struct std::hash<Tts::LocaleDescriptor>
 
 namespace Tts {
 
+typedef std::unordered_map<Tts::LocaleDescriptor, QString> ResourceMap;
+
 // TODO or maybe a class, maybe even inheriting QTranslator?
 namespace Translator {
-
-typedef std::unordered_map<Tts::LocaleDescriptor, QString> ResourceMap;
 
 extern ResourceMap resources();
 
