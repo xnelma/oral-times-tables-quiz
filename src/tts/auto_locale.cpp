@@ -11,8 +11,9 @@ QLocale Tts::autoLocale(const QString qmSearchDir)
 
     std::optional<QLocale> fallbackLocale;
 
-    for (auto resource : Tts::Translator::resources().keys()) {
-        QLocale resourceLocale(resource.language, resource.territory);
+    for (auto resource : Tts::Translator::resources()) {
+        LocaleDescriptor ld = resource.first;
+        QLocale resourceLocale(ld.language, ld.territory);
         // TODO could I instead directly use the LocaleDescriptor?
 
         if (resourceLocale.name() == sysLocale.name())

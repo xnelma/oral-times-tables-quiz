@@ -18,7 +18,7 @@ auto Tts::Translator::resources() -> ResourceMap
 
         auto descriptor = LocaleDescriptor::fromFileName(file.fileName());
 
-        resources.insert(descriptor, dir);
+        resources.insert({ descriptor, dir });
     }
 
     return resources;

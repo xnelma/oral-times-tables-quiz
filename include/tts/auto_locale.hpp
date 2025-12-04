@@ -1,7 +1,6 @@
 #ifndef OTTQ_20250829_1806_INCLUDE
 #define OTTQ_20250829_1806_INCLUDE
 
-#include "locale_descriptor.hpp"
 #include <QLocale>
 #include <QRegularExpression>
 
