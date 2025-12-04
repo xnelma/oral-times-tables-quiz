@@ -8,6 +8,10 @@ namespace Tts {
 
 struct LocaleDescriptor
 {
+    LocaleDescriptor() : language(QLocale::C), territory(QLocale::AnyTerritory)
+    {
+    }
+
     LocaleDescriptor(const QLocale::Language l, const QLocale::Territory t)
         : language(l), territory(t)
     {
