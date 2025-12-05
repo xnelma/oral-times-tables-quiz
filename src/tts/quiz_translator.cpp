@@ -35,12 +35,11 @@ auto Tts::QuizTranslator::loadLocale() -> LocaleDescriptor
 {
     bool useAutoLocale = loadAutoLocaleSetting();
     if (useAutoLocale)
-        // TODO maybe autoLocale() also doesn't need to return a QLocale?
-        return LocaleDescriptor(autoLocale());
+        return autoLocale();
 
     LocaleDescriptor ld = loadLocaleSetting();
     if (ld.language <= QLocale::C) {
-        return LocaleDescriptor(autoLocale());
+        return autoLocale();
     }
     // If the territory is QLocale::AnyTerritory, that's the same as the
     // default argument for QLocale, so it doesn't need to be checked.
@@ -52,7 +51,6 @@ void Tts::QuizTranslator::loadTranslation()
 {
     QString resourcePath = Translator::resources()[localeDescriptor_];
     if (!translator_.load(resourcePath))
-        // why do I need to convert to locale descriptor here?
         throw std::runtime_error("translation could not be loaded");
 
     // TODO would it be possible to have separate qm files for tts?

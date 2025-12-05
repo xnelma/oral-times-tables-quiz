@@ -1,6 +1,7 @@
 #ifndef OTTQ_20250829_1806_INCLUDE
 #define OTTQ_20250829_1806_INCLUDE
 
+#include "locale_descriptor.hpp"
 #include <QLocale>
 #include <QRegularExpression>
 
@@ -10,12 +11,13 @@ namespace Tts {
 // This is useful for unit testing, where Qt Resources might not be loaded.
 // FIXME The parameter here does not make much sense. It should be a (static?)
 // member of a class.
-QLocale autoLocale(const QString qmSearchDir = ":");
+LocaleDescriptor autoLocale(const QString qmSearchDir = ":");
 
 QString resourcePath();
 
-static void resolveFallbackLocale(QLocale system, QLocale resource,
-                                  QLocale &fallback);
+static void resolveFallbackLocale(const Tts::LocaleDescriptor system,
+                                  const Tts::LocaleDescriptor resource,
+                                  Tts::LocaleDescriptor &fallback);
 
 // Path to generated translation resources.
 const QString qmDirPath = ":/qt/qml/OttqApp/i18n/";

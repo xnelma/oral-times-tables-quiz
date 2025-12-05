@@ -1,6 +1,7 @@
 #ifndef OTTQ_20250915_1552_INCLUDE
 #define OTTQ_20250915_1552_INCLUDE
 
+#include <tts/locale_descriptor.hpp>
 #include <QObject>
 #include <qqml.h>
 #include <QString>
@@ -15,10 +16,11 @@ struct LanguageName
 
 public:
     LanguageName() : language_(""), territory_("") { }
-    LanguageName(const QLocale locale)
-        : language_(locale.nativeLanguageName()),
-          territory_(locale.nativeTerritoryName())
+    LanguageName(const Tts::LocaleDescriptor &ld)
     {
+        QLocale l(ld.language, ld.territory);
+        language_ = l.nativeLanguageName();
+        territory_ = l.nativeTerritoryName();
     }
 
     QString language() { return language_; }

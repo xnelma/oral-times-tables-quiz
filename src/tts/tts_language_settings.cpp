@@ -105,7 +105,7 @@ auto Tts::LanguageSettings::indexDescriptor() -> LocaleDescriptor
     static auto resources = Tts::Translator::resources();
 
     if (index_ < 0 || index_ >= resources.size())
-        return LocaleDescriptor(autoLocale());
+        return autoLocale();
     // When in auto mode, the list can still get shown in the UI, so the index
     // and the corresponding LocaleDescriptor are still needed.
 

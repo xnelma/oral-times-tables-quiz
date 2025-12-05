@@ -3,50 +3,49 @@
 #include <QFile>
 #include <QDirIterator>
 
-QLocale Tts::autoLocale(const QString qmSearchDir)
+auto Tts::autoLocale(const QString qmSearchDir) -> LocaleDescriptor
 {
-    // Use default constructor to allow setting a different 'system' locale,
+    // Init with default constructor for QLocale instead of QLocale::system()
+    // to allow setting a different 'system' locale by setting a default locale,
     // for example for unit testing.
-    QLocale sysLocale;
+    LocaleDescriptor system = LocaleDescriptor(QLocale());
 
-    std::optional<QLocale> fallbackLocale;
+    std::optional<LocaleDescriptor> fallback;
 
-    for (auto resource : Tts::Translator::resources()) {
-        LocaleDescriptor ld = resource.first;
-        QLocale resourceLocale(ld.language, ld.territory);
-        // TODO could I instead directly use the LocaleDescriptor?
+    for (Tts::ResourcePair r : Tts::Translator::resources()) {
+        LocaleDescriptor resource = r.first;
 
-        if (resourceLocale.name() == sysLocale.name())
-            return sysLocale;
+        if (resource == system)
+            return system;
 
-        if (!fallbackLocale.has_value())
-            fallbackLocale = resourceLocale;
+        if (!fallback.has_value())
+            fallback = resource;
 
-        resolveFallbackLocale(sysLocale, resourceLocale, *fallbackLocale);
+        resolveFallbackLocale(system, resource, *fallback);
     }
 
-    return fallbackLocale.value_or(QLocale::c());
+    return fallback.value_or(LocaleDescriptor());
     // default_value shouldn't ever happen because unless no translation
     // resource is provided, the fallback was set to at least the locale of the
     // first translation resource in the list.
 }
 
-static void Tts::resolveFallbackLocale(const QLocale system,
-                                       const QLocale resource,
-                                       QLocale &fallback)
+static void Tts::resolveFallbackLocale(const Tts::LocaleDescriptor system,
+                                       const Tts::LocaleDescriptor resource,
+                                       Tts::LocaleDescriptor &fallback)
 {
-    bool fallbackIsInSystemLanguage = fallback.language() == system.language();
-    bool fallbackIsInEnglish = fallback.language() == QLocale::English;
+    bool fallbackIsInSystemLanguage = fallback.language == system.language;
+    bool fallbackIsInEnglish = fallback.language == QLocale::English;
 
-    bool reIsInSystemLanguage = resource.language() == system.language();
-    bool reIsInEnglish = resource.language() == QLocale::English;
-    bool reIsInSystemTerritory = resource.territory() == system.territory();
+    bool resourceIsInSysLang = resource.language == system.language;
+    bool resourceIsInEnglish = resource.language == QLocale::English;
+    bool resourceIsInSysTerrit = resource.territory == system.territory;
 
     if (fallbackIsInSystemLanguage)
         return;
-    if (reIsInSystemLanguage // Best would be system language, other territory.
-        || (reIsInEnglish // Otherwise use English:
-            && (reIsInSystemTerritory // prefer the one item "en_SYS" in list,
+    if (resourceIsInSysLang // Best would be system language, other territory.
+        || (resourceIsInEnglish // Otherwise use English:
+            && (resourceIsInSysTerrit // prefer the one item "en_SYS" in list,
                 || !fallbackIsInEnglish))) { // else take first "en" in list.
         fallback = resource;
     }
