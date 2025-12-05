@@ -26,12 +26,10 @@ public:
 
 private:
     void loadMode();
-    void loadLocaleDescriptors();
     void loadIndex();
     LocaleDescriptor indexDescriptor();
 
     bool isInAutoMode_;
-    std::vector<LocaleDescriptor> localeDescriptors_;
     QStringList languages_;
     int index_;
 };

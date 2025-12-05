@@ -1,12 +1,13 @@
 #include "tts_language_settings.hpp"
 #include "auto_locale.hpp"
+#include "translator_resources.hpp"
 #include <QDir>
 #include <algorithm>
+#include <iterator>
 
 Tts::LanguageSettings::LanguageSettings() : isInAutoMode_(true), index_(0)
 {
     loadMode();
-    loadLocaleDescriptors();
     loadIndex();
 }
 
@@ -15,52 +16,30 @@ void Tts::LanguageSettings::loadMode()
     isInAutoMode_ = loadAutoLocaleSetting();
 }
 
-void Tts::LanguageSettings::loadLocaleDescriptors()
-{
-    if (localeDescriptors_.size() > 0) // Cannot change without an app update.
-        return;
-
-    auto qmFiles = QDir(qmDirPath).entryList({ "*.qm" });
-    auto extractLocale = [](const QString &fileName) -> LocaleDescriptor {
-        QString localeName = fileName;
-        localeName.replace(qmLocaleNameRegex, "\\1\\2");
-
-        QLocale mlocale = QLocale(localeName);
-        // Create a locale object to do the parsing, instead of passing on
-        // invalid locale names to be used for QLocale objects later on.
-
-        return LocaleDescriptor(mlocale);
-    };
-
-    // C++20
-    std::ranges::transform(
-        qmFiles,
-        std::back_inserter(localeDescriptors_), // push_back, so in O(1)
-        extractLocale);
-}
-
 void Tts::LanguageSettings::loadIndex()
 {
-    auto setIndex = [this](std::vector<LocaleDescriptor>::iterator index) {
+    static const auto resources = Tts::Translator::resources();
+
+    auto setIndex = [this](Tts::ResourceMap::const_iterator index) {
         // Because I don't expect large translation resource lists, the type
         // of index_ doesn't need to be long:
         // NOLINTNEXTLINE(*-narrowing-conversions)
-        index_ = std::distance(localeDescriptors_.begin(), index);
+        index_ = std::distance(resources.begin(), index);
     };
 
     LocaleDescriptor savedKey = loadLocaleSetting();
-    auto it = std::ranges::find(localeDescriptors_, savedKey);
-    if (it != localeDescriptors_.end()) {
+    auto it = resources.find(savedKey);
+    if (it != resources.end()) {
         setIndex(it);
         return;
     }
 
     // Alternatively set to a locale for a different territory.
-    auto sameLanguage = [savedKey](const LocaleDescriptor &lk) -> bool {
-        return lk.language == savedKey.language;
+    auto sameLanguage = [savedKey](const Tts::ResourcePair &r) -> bool {
+        return r.first.language == savedKey.language;
     };
-    it = std::ranges::find_if(localeDescriptors_, sameLanguage);
-    if (it != localeDescriptors_.end()) {
+    it = std::ranges::find_if(resources, sameLanguage);
+    if (it != resources.end()) {
         setIndex(it);
     } else {
         // If no alternative was found, use the first language in the list.
@@ -75,20 +54,17 @@ void Tts::LanguageSettings::loadIndex()
 
 QStringList Tts::LanguageSettings::availableLanguages()
 {
-
     // The translation resource list cannot change without an app update.
     if (languages_.size() > 0)
         return languages_;
 
-    if (localeDescriptors_.size() == 0)
-        loadLocaleDescriptors();
-
     // C++20
     std::ranges::transform(
-        localeDescriptors_,
+        Tts::Translator::resources(),
         std::back_inserter(languages_),
-        [](const LocaleDescriptor &key) -> QString {
-            return QLocale(key.language, key.territory).nativeLanguageName();
+        [](const Tts::ResourcePair &key) -> QString {
+            LocaleDescriptor ld = key.first;
+            return QLocale(ld.language, ld.territory).nativeLanguageName();
         });
 
     return languages_;
@@ -101,7 +77,9 @@ int Tts::LanguageSettings::index()
 
 bool Tts::LanguageSettings::isInAutoMode()
 {
-    return isInAutoMode_ || index_ < 0 || index_ >= localeDescriptors_.size();
+    static const auto resourcesSize = Tts::Translator::resources().size();
+
+    return isInAutoMode_ || index_ < 0 || index_ >= resourcesSize;
 }
 
 void Tts::LanguageSettings::setIndex(const int i)
@@ -124,10 +102,15 @@ void Tts::LanguageSettings::setToManualMode()
 
 auto Tts::LanguageSettings::indexDescriptor() -> LocaleDescriptor
 {
-    if (index_ < 0 || index_ >= localeDescriptors_.size())
+    static auto resources = Tts::Translator::resources();
+
+    if (index_ < 0 || index_ >= resources.size())
         return LocaleDescriptor(autoLocale());
     // When in auto mode, the list can still get shown in the UI, so the index
     // and the corresponding LocaleDescriptor are still needed.
 
-    return localeDescriptors_[index_];
+    Tts::ResourceMap::iterator it = resources.begin();
+    std::advance(it, index_);
+
+    return it->first;
 }
