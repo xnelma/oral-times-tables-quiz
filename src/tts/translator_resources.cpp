@@ -2,7 +2,7 @@
 #include <QFile>
 #include <QDirIterator>
 
-auto Tts::Translator::resources() -> ResourceMap
+Tts::ResourceMap &Tts::Translator::resources()
 {
     static ResourceMap resources;
 

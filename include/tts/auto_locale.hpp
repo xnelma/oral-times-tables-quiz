@@ -2,39 +2,73 @@
 #define OTTQ_20250829_1806_INCLUDE
 
 #include "locale_descriptor.hpp"
+#include "translator_resources.hpp"
 #include <QLocale>
 #include <QRegularExpression>
+#include <QFile>
+#include <QDirIterator>
 
 namespace Tts {
-
-// Search Qt Resources by default, but also allow setting the search directory.
-// This is useful for unit testing, where Qt Resources might not be loaded.
-// FIXME The parameter here does not make much sense. It should be a (static?)
-// member of a class.
-LocaleDescriptor autoLocale(const QString qmSearchDir = ":");
-
-QString resourcePath();
 
 static void resolveFallbackLocale(const Tts::LocaleDescriptor system,
                                   const Tts::LocaleDescriptor resource,
                                   Tts::LocaleDescriptor &fallback);
 
-// Path to generated translation resources.
-const QString qmDirPath = ":/qt/qml/OttqApp/i18n/";
-const QString qmFilePath = qmDirPath + "qml_%1.qm";
-// TODO if I do not use a fixed path but find it dynamically, I need to set
-// the path to get the .qm file from in tts/quiz_translator.cpp dynamically,
-// too. This would also be needed for unit testing.
+template <typename T>
+concept ExtendsTranslator = std::is_base_of_v<Tts::Translator, T>; // C++20
 
-// Regex for getting the locale name from a translation resource file name.
-// File names could for example be qml_xx.qm or qml_xx_XX.qm, and more
-// generally [prefix]xx.qm or [prefix]xx_XX.qm or with a third letter for
-// language or region and allowing '-' as delimiter.
-// This is an oversimplified assumption and requires that only language and
-// maybe territory are specified when registering the translation resources.
-// But it allows for changing the resource prefix of translation files.
-const auto qmLocaleNameRegex =
-    QRegularExpression("^.*([a-z]{2,3})([_-][A-Z]{2,3}){,1}.qm$");
+template <ExtendsTranslator T = Tts::Translator>
+inline auto autoLocale(const QString qmSearchDir = ":") -> LocaleDescriptor
+{
+    // Init with default constructor for QLocale instead of QLocale::system()
+    // to allow setting a different 'system' locale by setting a default locale,
+    // for example for unit testing.
+    Tts::LocaleDescriptor system = Tts::LocaleDescriptor(QLocale());
+
+    std::optional<Tts::LocaleDescriptor> fallback;
+
+    static const Tts::ResourceMap resources = T::resources();
+    for (Tts::ResourcePair r : resources) {
+        Tts::LocaleDescriptor resource = r.first;
+
+        if (resource == system)
+            return system;
+
+        if (!fallback.has_value())
+            fallback = resource;
+
+        resolveFallbackLocale(system, resource, *fallback);
+    }
+
+    return fallback.value_or(Tts::LocaleDescriptor());
+    // default_value shouldn't ever happen because unless no translation
+    // resource is provided, the fallback was set to at least the locale of the
+    // first translation resource in the list.
+}
+
+static void resolveFallbackLocale(const Tts::LocaleDescriptor system,
+                                  const Tts::LocaleDescriptor resource,
+                                  Tts::LocaleDescriptor &fallback)
+{
+    bool fallbackIsInSystemLanguage = fallback.language == system.language;
+    bool fallbackIsInEnglish = fallback.language == QLocale::English;
+
+    bool resourceIsInSysLang = resource.language == system.language;
+    bool resourceIsInEnglish = resource.language == QLocale::English;
+    bool resourceIsInSysTerrit = resource.territory == system.territory;
+
+    if (fallbackIsInSystemLanguage)
+        return;
+    if (resourceIsInSysLang // Best would be system language, other territory.
+        || (resourceIsInEnglish // Otherwise use English:
+            && (resourceIsInSysTerrit // prefer the one item "en_SYS" in list,
+                || !fallbackIsInEnglish))) { // else take first "en" in list.
+        fallback = resource;
+    }
+
+    // FIXME The expected behavior for a resource without territory is that the
+    // device territory is used!
+}
 
 } // namespace Tts
 

@@ -21,12 +21,15 @@ namespace Tts {
 typedef std::unordered_map<Tts::LocaleDescriptor, QString> ResourceMap;
 typedef std::pair<Tts::LocaleDescriptor, QString> ResourcePair;
 
-// TODO or maybe a class, maybe even inheriting QTranslator?
-namespace Translator {
+// Use a struct instead of a namespace to be able to use it as type in
+// templates. Then it can be replaced for testing.
+struct Translator
+{
+    static ResourceMap &resources();
 
-extern ResourceMap resources();
-
-} // namespace Translator
+private:
+    Translator() { }
+};
 
 } // namespace Tts
 
