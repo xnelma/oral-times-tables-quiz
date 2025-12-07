@@ -13,10 +13,7 @@ Tts::ResourceMap &Tts::Translator::resources()
     QDirIterator it(":", { "*.qm" }, QDir::Files, QDirIterator::Subdirectories);
     while (it.hasNext()) {
         QString dir = it.next();
-        auto file = QFile(dir);
-        // TODO maybe split the directory string instead of parsing over QFile?
-
-        auto descriptor = LocaleDescriptor::fromFileName(file.fileName());
+        auto descriptor = LocaleDescriptor::fromResourcePath(dir);
 
         resources.insert({ descriptor, dir });
     }

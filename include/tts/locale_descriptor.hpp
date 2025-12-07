@@ -39,6 +39,17 @@ struct LocaleDescriptor
         return LocaleDescriptor(l);
     }
 
+    static Tts::LocaleDescriptor fromResourcePath(const QString &qmPath)
+    {
+        if (qmPath.isEmpty() || qmPath.endsWith("/"))
+            return LocaleDescriptor();
+
+        // TODO if I don't use QFile for parsing, should I handle other
+        // separators than "/"?
+        QString fileName = *(--qmPath.split("/").end());
+        return fromFileName(fileName);
+    }
+
     bool operator==(const LocaleDescriptor &ld) const
     {
         return language == ld.language && territory == ld.territory;
