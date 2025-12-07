@@ -18,7 +18,7 @@ template <typename T>
 concept ExtendsTranslator = std::is_base_of_v<Tts::Translator, T>; // C++20
 
 template <ExtendsTranslator T = Tts::Translator>
-inline auto autoLocale(const QString qmSearchDir = ":") -> LocaleDescriptor
+inline auto autoLocale() -> LocaleDescriptor
 {
     // Init with default constructor for QLocale instead of QLocale::system()
     // to allow setting a different 'system' locale by setting a default locale,
