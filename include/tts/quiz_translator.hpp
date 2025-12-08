@@ -20,6 +20,7 @@ public:
 private:
     LocaleDescriptor loadLocale();
 
+    bool load();
     // hide load(.), because a manually loaded translation would be overriden.
     bool load(const QString &filename, const QString &directory = QString(),
               const QString &searchDelimiters = QString(),

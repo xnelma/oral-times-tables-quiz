@@ -16,28 +16,19 @@ QString Tts::QuizTranslator::translate(const char *context,
                                        const char *sourceText,
                                        const char *disambiguation, int n)
 {
-    // Update locale.
-    // The class outlives QuizView, so a change in the settings needs to be
-    // handled here.
-    // TODO This might change in the future.
-    Tts::LocaleDescriptor ld = loadLocale();
-    // Update translation, if the locale changed.
-    auto l = QLocale(ld.language, ld.territory);
-    QString updatedLanguageCode = l.languageToCode(ld.language);
-    if (QTranslator::language() != updatedLanguageCode) {
-        QString resourcePath = Translator::resources()[ld];
-        if (!QTranslator::load(resourcePath))
-            throw std::runtime_error("translation could not be loaded");
-
-        // TODO would it be possible to have separate qm files for tts?
-    }
+    // Update translation.
+    // The class outlives QuizView being on top of the stack, so the locale
+    // can be updated in the settings and would need to be applied when
+    // returning to the view.
+    if (!load())
+        throw std::runtime_error("translation could not be loaded");
 
     return QTranslator::translate(context, sourceText, disambiguation, n);
 }
 
 // TODO this can be a namespace function?
-// or maybe it can be moved to load(.)?
-// name it setLocale otherwise?
+// name it getLocaleDescriptor otherwise?
+// or should this be a method in Settings?
 auto Tts::QuizTranslator::loadLocale() -> LocaleDescriptor
 {
     bool useAutoLocale = loadAutoLocaleSetting();
@@ -52,6 +43,22 @@ auto Tts::QuizTranslator::loadLocale() -> LocaleDescriptor
     // default argument for QLocale, so it doesn't need to be checked.
 
     return ld;
+}
+
+bool Tts::QuizTranslator::load()
+{
+    // Get updated locale.
+    Tts::LocaleDescriptor ld = loadLocale();
+    auto l = QLocale(ld.language, ld.territory);
+    QString updatedLanguageCode = l.languageToCode(ld.language);
+    // Update translation, if the locale changed.
+    if (QTranslator::language() == updatedLanguageCode)
+        return true;
+
+    QString resourcePath = Translator::resources()[ld];
+    return QTranslator::load(resourcePath);
+
+    // TODO would it be possible to have separate qm files for tts?
 }
 
 bool Tts::QuizTranslator::load(const QString &filename,
