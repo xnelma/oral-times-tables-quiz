@@ -68,4 +68,11 @@ private:
     QString questionBase_;
 };
 
+namespace QuizConstants {
+
+static const char *const translationContext = "QuizView";
+static const char *const questionBase = "%1 times %2";
+
+} // namespace QuizConstants
+
 #endif // OTTQ_20250829_1810_INCLUDE

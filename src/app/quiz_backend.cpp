@@ -7,7 +7,8 @@
 QuizBackend::QuizBackend(QObject *parent)
     : QObject(parent),
       tts_(std::make_shared<QTextToSpeech>(this)),
-      translator_(this)
+      translator_(this),
+      questionBase_(QuizConstants::questionBase)
 {
     setupStateMachine();
 }
@@ -40,11 +41,8 @@ void QuizBackend::setupStateMachine()
     };
     auto setupTranslation = [this]() {
         try {
-            // initialize here instead of in constructor, so the key is
-            // available for retranslating in case the locale changed.
-            questionBase_ = "%1 times %2";
             questionBase_ = translator_.translate(
-                "QuizView", questionBase_.toLocal8Bit().data());
+                QuizConstants::translationContext, QuizConstants::questionBase);
             emit localeNameChanged();
         } catch (const std::runtime_error &e) {
             qCritical("Translation setup failed: %s", e.what());
