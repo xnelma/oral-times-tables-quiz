@@ -1,6 +1,6 @@
 #include "tts_language_settings.hpp"
 #include "auto_locale.hpp"
-#include "quiz_translator.hpp"
+#include "self_updating_translator.hpp"
 #include <QDir>
 #include <algorithm>
 #include <iterator>
@@ -18,7 +18,7 @@ void Tts::LanguageSettings::loadMode()
 
 void Tts::LanguageSettings::loadIndex()
 {
-    static const auto resources = Tts::QuizTranslator::resources();
+    static const auto resources = Tts::SelfUpdatingTranslator::resources();
 
     auto setIndex = [this](Tts::ResourceMap::const_iterator index) {
         // Because I don't expect large translation resource lists, the type
@@ -60,7 +60,7 @@ QStringList Tts::LanguageSettings::availableLanguages()
 
     // C++20
     std::ranges::transform(
-        Tts::QuizTranslator::resources(),
+        Tts::SelfUpdatingTranslator::resources(),
         std::back_inserter(languages_),
         [](const Tts::ResourcePair &key) -> QString {
             LocaleDescriptor ld = key.first;
@@ -77,7 +77,8 @@ int Tts::LanguageSettings::index()
 
 bool Tts::LanguageSettings::isInAutoMode()
 {
-    static const auto resourcesSize = Tts::QuizTranslator::resources().size();
+    static const auto resourcesSize =
+        Tts::SelfUpdatingTranslator::resources().size();
 
     return isInAutoMode_ || index_ < 0 || index_ >= resourcesSize;
 }
@@ -102,7 +103,7 @@ void Tts::LanguageSettings::setToManualMode()
 
 auto Tts::LanguageSettings::indexDescriptor() -> LocaleDescriptor
 {
-    static auto resources = Tts::QuizTranslator::resources();
+    static auto resources = Tts::SelfUpdatingTranslator::resources();
 
     if (index_ < 0 || index_ >= resources.size())
         return autoLocale();

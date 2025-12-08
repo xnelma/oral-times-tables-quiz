@@ -1,7 +1,7 @@
 add_library(Tts STATIC
     tts_settings.cpp
     tts_language_settings.cpp
-    quiz_translator.cpp
+    self_updating_translator.cpp
     tts_rate_settings.cpp
 )
 

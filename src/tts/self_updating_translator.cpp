@@ -1,26 +1,27 @@
-#include "quiz_translator.hpp"
+#include "self_updating_translator.hpp"
 #include "tts_settings.hpp"
 #include "locale_descriptor.hpp"
 #include "auto_locale.hpp"
 #include <QFile>
 #include <QDirIterator>
 
-Tts::QuizTranslator::QuizTranslator(QObject *parent) : QTranslator(parent) { }
+Tts::SelfUpdatingTranslator::SelfUpdatingTranslator(QObject *parent)
+    : QTranslator(parent)
+{
+}
 
-QLocale Tts::QuizTranslator::locale()
+QLocale Tts::SelfUpdatingTranslator::locale()
 {
     auto ld = Tts::LocaleDescriptor::fromResourcePath(QTranslator::filePath());
     return QLocale(ld.language, ld.territory);
 }
 
-QString Tts::QuizTranslator::translate(const char *context,
-                                       const char *sourceText,
-                                       const char *disambiguation, int n)
+QString Tts::SelfUpdatingTranslator::translate(const char *context,
+                                               const char *sourceText,
+                                               const char *disambiguation,
+                                               int n)
 {
     // Update translation.
-    // The class outlives QuizView being on top of the stack, so the locale
-    // can be updated in the settings and would need to be applied when
-    // returning to the view.
     if (!load())
         throw std::runtime_error("translation could not be loaded");
 
@@ -30,7 +31,7 @@ QString Tts::QuizTranslator::translate(const char *context,
 // TODO this can be a namespace function?
 // name it getLocaleDescriptor otherwise?
 // or should this be a method in Settings?
-auto Tts::QuizTranslator::loadLocale() -> LocaleDescriptor
+auto Tts::SelfUpdatingTranslator::loadLocale() -> LocaleDescriptor
 {
     bool useAutoLocale = loadAutoLocaleSetting();
     if (useAutoLocale)
@@ -46,7 +47,7 @@ auto Tts::QuizTranslator::loadLocale() -> LocaleDescriptor
     return ld;
 }
 
-bool Tts::QuizTranslator::load()
+bool Tts::SelfUpdatingTranslator::load()
 {
     // Get updated locale.
     Tts::LocaleDescriptor ld = loadLocale();
@@ -56,34 +57,36 @@ bool Tts::QuizTranslator::load()
     if (QTranslator::language() == updatedLanguageCode)
         return true;
 
-    QString resourcePath = QuizTranslator::resources()[ld];
+    QString resourcePath = SelfUpdatingTranslator::resources()[ld];
     return QTranslator::load(resourcePath);
 
     // TODO would it be possible to have separate qm files for tts?
 }
 
-bool Tts::QuizTranslator::load(const QString &filename,
-                               const QString &directory,
-                               const QString &searchDelimiters,
-                               const QString &suffix)
+bool Tts::SelfUpdatingTranslator::load(const QString &filename,
+                                       const QString &directory,
+                                       const QString &searchDelimiters,
+                                       const QString &suffix)
 {
     return QTranslator::load(filename, directory, searchDelimiters, suffix);
 }
 
-bool Tts::QuizTranslator::load(const QLocale &locale, const QString &filename,
-                               const QString &prefix, const QString &directory,
-                               const QString &suffix)
+bool Tts::SelfUpdatingTranslator::load(const QLocale &locale,
+                                       const QString &filename,
+                                       const QString &prefix,
+                                       const QString &directory,
+                                       const QString &suffix)
 {
     return QTranslator::load(locale, filename, prefix, directory, suffix);
 }
 
-bool Tts::QuizTranslator::load(const uchar *data, int len,
-                               const QString &directory)
+bool Tts::SelfUpdatingTranslator::load(const uchar *data, int len,
+                                       const QString &directory)
 {
     return QTranslator::load(data, len, directory);
 }
 
-Tts::ResourceMap &Tts::QuizTranslator::resources()
+Tts::ResourceMap &Tts::SelfUpdatingTranslator::resources()
 {
     static ResourceMap resources;
 

@@ -25,10 +25,10 @@ namespace Tts {
 typedef std::unordered_map<Tts::LocaleDescriptor, QString> ResourceMap;
 typedef std::pair<Tts::LocaleDescriptor, QString> ResourcePair;
 
-class QuizTranslator : public QTranslator, Settings
+class SelfUpdatingTranslator : public QTranslator, Settings
 {
 public:
-    explicit QuizTranslator(QObject *parent = nullptr);
+    explicit SelfUpdatingTranslator(QObject *parent = nullptr);
 
     QLocale locale();
     QString translate(const char *contex, const char *sourceText,

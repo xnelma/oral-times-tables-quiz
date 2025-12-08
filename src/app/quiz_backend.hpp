@@ -3,7 +3,7 @@
 
 #include "quiz_state_machine.hpp"
 #include "quiz_config.hpp"
-#include "tts/quiz_translator.hpp"
+#include "tts/self_updating_translator.hpp"
 #include "timestables/quiz.hpp"
 #include <QObject>
 #include <qqml.h>
@@ -58,10 +58,14 @@ private:
 
     std::unique_ptr<QuizStateMachine> machine_;
     std::shared_ptr<QTextToSpeech> tts_;
-    Tts::QuizTranslator translator_;
     TimesTables::Quiz quiz_;
-    QString questionBase_;
     QuizConfiguration quizConfig_;
+
+    // The class outlives QuizView being on top of the stack, so the locale
+    // can be updated in the settings and would need to be applied when
+    // returning to the view. This would be handled inside the translator.
+    Tts::SelfUpdatingTranslator translator_;
+    QString questionBase_;
 };
 
 #endif // OTTQ_20250829_1810_INCLUDE
