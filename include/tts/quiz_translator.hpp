@@ -2,11 +2,28 @@
 #define OTTQ_20250829_1807_INCLUDE
 
 #include "tts_settings.hpp"
+#include "locale_descriptor.hpp"
 #include <QLocale>
 #include <QString>
 #include <QTranslator>
+#include <unordered_map>
+
+template <>
+struct std::hash<Tts::LocaleDescriptor>
+{
+    std::size_t operator()(const Tts::LocaleDescriptor &ld) const
+    {
+        return std::hash<int>()(ld.language)
+            ^ std::hash<int>()(ld.territory << 1);
+    }
+};
+
+// TODO should even for subdirectories the top namespace be OTTQ?
 
 namespace Tts {
+
+typedef std::unordered_map<Tts::LocaleDescriptor, QString> ResourceMap;
+typedef std::pair<Tts::LocaleDescriptor, QString> ResourcePair;
 
 class QuizTranslator : public QTranslator, Settings
 {
@@ -16,6 +33,8 @@ public:
     QLocale locale();
     QString translate(const char *contex, const char *sourceText,
                       const char *disambiguation = nullptr, int n = -1);
+
+    static ResourceMap &resources();
 
 private:
     LocaleDescriptor loadLocale();

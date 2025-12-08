@@ -2,7 +2,7 @@
 #define OTTQ_20250829_1806_INCLUDE
 
 #include "locale_descriptor.hpp"
-#include "translator_resources.hpp"
+#include "quiz_translator.hpp"
 #include <QLocale>
 #include <QRegularExpression>
 #include <QFile>
@@ -15,9 +15,9 @@ static void resolveFallbackLocale(const Tts::LocaleDescriptor system,
                                   Tts::LocaleDescriptor &fallback);
 
 template <typename T>
-concept ExtendsTranslator = std::is_base_of_v<Tts::Translator, T>; // C++20
+concept ExtendsTranslator = std::is_base_of_v<Tts::QuizTranslator, T>; // C++20
 
-template <ExtendsTranslator T = Tts::Translator>
+template <ExtendsTranslator T = Tts::QuizTranslator>
 inline auto autoLocale() -> LocaleDescriptor
 {
     // Init with default constructor for QLocale instead of QLocale::system()
