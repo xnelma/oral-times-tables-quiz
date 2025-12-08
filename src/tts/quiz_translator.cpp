@@ -4,33 +4,40 @@
 #include "auto_locale.hpp"
 #include "translator_resources.hpp"
 
-// TODO maybe this doesn't need to be a class?
-
-Tts::QuizTranslator::QuizTranslator() : localeDescriptor_(loadLocale()) { }
+Tts::QuizTranslator::QuizTranslator(QObject *parent) : QTranslator(parent) { }
 
 QLocale Tts::QuizTranslator::locale()
 {
-    return QLocale(localeDescriptor_.language, localeDescriptor_.territory);
+    auto ld = Tts::LocaleDescriptor::fromResourcePath(QTranslator::filePath());
+    return QLocale(ld.language, ld.territory);
 }
 
-// TODO maybe this can also partially be a namespace function?
-void Tts::QuizTranslator::translate(QString &question)
+QString Tts::QuizTranslator::translate(const char *context,
+                                       const char *sourceText,
+                                       const char *disambiguation, int n)
 {
     // Update locale.
     // The class outlives QuizView, so a change in the settings needs to be
     // handled here.
     // TODO This might change in the future.
-    localeDescriptor_ = loadLocale();
+    Tts::LocaleDescriptor ld = loadLocale();
     // Update translation, if the locale changed.
-    auto l = QLocale(localeDescriptor_.language, localeDescriptor_.territory);
-    QString languageCode = l.languageToCode(localeDescriptor_.language);
-    if (translator_.language() != languageCode)
-        loadTranslation();
+    auto l = QLocale(ld.language, ld.territory);
+    QString updatedLanguageCode = l.languageToCode(ld.language);
+    if (QTranslator::language() != updatedLanguageCode) {
+        QString resourcePath = Translator::resources()[ld];
+        if (!QTranslator::load(resourcePath))
+            throw std::runtime_error("translation could not be loaded");
 
-    question = translator_.translate("QuizView", question.toLocal8Bit().data());
+        // TODO would it be possible to have separate qm files for tts?
+    }
+
+    return QTranslator::translate(context, sourceText, disambiguation, n);
 }
 
 // TODO this can be a namespace function?
+// or maybe it can be moved to load(.)?
+// name it setLocale otherwise?
 auto Tts::QuizTranslator::loadLocale() -> LocaleDescriptor
 {
     bool useAutoLocale = loadAutoLocaleSetting();
@@ -47,11 +54,23 @@ auto Tts::QuizTranslator::loadLocale() -> LocaleDescriptor
     return ld;
 }
 
-void Tts::QuizTranslator::loadTranslation()
+bool Tts::QuizTranslator::load(const QString &filename,
+                               const QString &directory,
+                               const QString &searchDelimiters,
+                               const QString &suffix)
 {
-    QString resourcePath = Translator::resources()[localeDescriptor_];
-    if (!translator_.load(resourcePath))
-        throw std::runtime_error("translation could not be loaded");
+    return QTranslator::load(filename, directory, searchDelimiters, suffix);
+}
 
-    // TODO would it be possible to have separate qm files for tts?
+bool Tts::QuizTranslator::load(const QLocale &locale, const QString &filename,
+                               const QString &prefix, const QString &directory,
+                               const QString &suffix)
+{
+    return QTranslator::load(locale, filename, prefix, directory, suffix);
+}
+
+bool Tts::QuizTranslator::load(const uchar *data, int len,
+                               const QString &directory)
+{
+    return QTranslator::load(data, len, directory);
 }

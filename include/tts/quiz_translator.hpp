@@ -8,20 +8,27 @@
 
 namespace Tts {
 
-class QuizTranslator : public Settings
+class QuizTranslator : public QTranslator, Settings
 {
 public:
-    QuizTranslator();
+    explicit QuizTranslator(QObject *parent = nullptr);
 
     QLocale locale();
-    void translate(QString &question);
+    QString translate(const char *contex, const char *sourceText,
+                      const char *disambiguation = nullptr, int n = -1);
 
 private:
     LocaleDescriptor loadLocale();
-    void loadTranslation();
 
-    LocaleDescriptor localeDescriptor_;
-    QTranslator translator_;
+    // hide load(.), because a manually loaded translation would be overriden.
+    bool load(const QString &filename, const QString &directory = QString(),
+              const QString &searchDelimiters = QString(),
+              const QString &suffix = QString());
+    bool load(const QLocale &locale, const QString &filename,
+              const QString &prefix = QString(),
+              const QString &directory = QString(),
+              const QString &suffix = QString());
+    bool load(const uchar *data, int len, const QString &directory = QString());
 };
 
 } // namespace Tts
