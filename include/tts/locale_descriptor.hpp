@@ -3,6 +3,7 @@
 
 #include <QLocale>
 #include <QRegularExpression>
+#include <ostream>
 
 namespace Tts {
 
@@ -59,7 +60,16 @@ struct LocaleDescriptor
         return language < ld.language
             || (language == ld.language && territory < ld.territory);
     }
-    // TODO unit test?
+    // TODO unit test for operator<?
+    friend std::ostream &operator<<(std::ostream &os,
+                                    const LocaleDescriptor &ld)
+    {
+        auto languageStr = QLocale::languageToString(ld.language);
+        auto territoryStr = QLocale::territoryToString(ld.territory);
+
+        return os << "(" << languageStr.toUtf8().data() << ", "
+                  << territoryStr.toUtf8().data() << ")";
+    }
 
     QLocale::Language language;
     QLocale::Territory territory;
