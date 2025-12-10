@@ -15,18 +15,20 @@ target_link_libraries(GTest::GTest INTERFACE
 
 enable_testing()
 
-add_executable(PlaceholderTest
-    placeholder_test.cpp
+add_executable(AutoLocaleTest
+    auto_locale_test.cpp
 )
 
-target_link_libraries(PlaceholderTest PRIVATE
+target_link_libraries(AutoLocaleTest PRIVATE
+    Qt6::Quick
     TimesTables
     GTest::gtest_main
 )
 
-target_include_directories(PlaceholderTest PRIVATE
-    "${PROJECT_SOURCE_DIR}/include/timestables"
+target_include_directories(AutoLocaleTest PRIVATE
+    "${PROJECT_SOURCE_DIR}/include/tts"
+    "${PROJECT_SOURCE_DIR}/test"
 )
 
 include(GoogleTest)
-add_test(NAME PlaceholderTest COMMAND PlaceholderTest)
+add_test(NAME AutoLocaleTest COMMAND AutoLocaleTest)
