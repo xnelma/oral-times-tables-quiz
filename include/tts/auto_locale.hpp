@@ -28,10 +28,12 @@ inline auto autoLocale() -> LocaleDescriptor
 
     std::optional<Tts::LocaleDescriptor> fallback;
 
-    static const Tts::ResourceMap resources = T::resources();
-    for (Tts::ResourcePair r : resources) {
+    // T::resources() is not saved in a static local variable on purpose: it
+    // can change for unit tests.
+    // It can already be static in T::resources() to avoid rebuilding the list
+    // on every call.
+    for (Tts::ResourcePair r : T::resources()) {
         Tts::LocaleDescriptor resource = r.first;
-
         if (resource == system)
             return system;
 
