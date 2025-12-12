@@ -49,15 +49,12 @@ auto Tts::SelfUpdatingTranslator::loadLocale() -> LocaleDescriptor
 
 bool Tts::SelfUpdatingTranslator::load()
 {
-    // Get updated locale.
-    Tts::LocaleDescriptor ld = loadLocale();
-    auto l = QLocale(ld.language, ld.territory);
-    QString updatedLanguageCode = l.languageToCode(ld.language);
     // Update translation, if the locale changed.
-    if (language() == updatedLanguageCode)
+    Tts::LocaleDescriptor updatedLocale = loadLocale();
+    if (language() == QLocale::languageToCode(updatedLocale.language))
         return true;
 
-    QString resourcePath = resources()[ld];
+    QString resourcePath = resources()[updatedLocale];
     return load(resourcePath);
 
     // TODO would it be possible to have separate qm files for tts?
