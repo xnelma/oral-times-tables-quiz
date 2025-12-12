@@ -4,6 +4,7 @@
 #include <QLocale>
 #include <QRegularExpression>
 #include <ostream>
+#include <exception>
 
 namespace Tts {
 
@@ -36,8 +37,20 @@ struct LocaleDescriptor
         static const auto qmLocaleNameRegex =
             QRegularExpression("^.*([a-z]{2,3})([_-][A-Z]{2,3}){,1}.qm$");
 
-        auto l = QLocale(qmFileName.replace(qmLocaleNameRegex, "\\1\\2"));
-        return LocaleDescriptor(l);
+        QRegularExpressionMatch match = qmLocaleNameRegex.match(qmFileName);
+        if (!match.hasMatch())
+            throw std::invalid_argument(
+                "Invalid file name format. The expected format is xx.qm or"
+                "xx_XX.qm/xx-XX.qm with a third x/X also being valid.");
+
+        QLocale::Language language = QLocale::codeToLanguage(match.captured(1));
+        QLocale::Territory territory = QLocale::AnyTerritory;
+        if (match.lastCapturedIndex() >= 2) {
+            // (This group starts with the delimiter; remove the first char.)
+            territory = QLocale::codeToTerritory(match.captured(2).removeAt(0));
+        }
+
+        return LocaleDescriptor(language, territory);
     }
 
     static Tts::LocaleDescriptor fromResourcePath(const QString &qmPath)

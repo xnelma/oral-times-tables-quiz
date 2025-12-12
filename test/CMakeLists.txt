@@ -14,21 +14,6 @@ target_link_libraries(GTest::GTest INTERFACE
 )
 
 enable_testing()
-
-add_executable(AutoLocaleTest
-    auto_locale_test.cpp
-)
-
-target_link_libraries(AutoLocaleTest PRIVATE
-    Qt6::Quick
-    TimesTables
-    GTest::gtest_main
-)
-
-target_include_directories(AutoLocaleTest PRIVATE
-    "${PROJECT_SOURCE_DIR}/include/tts"
-    "${PROJECT_SOURCE_DIR}/test"
-)
-
 include(GoogleTest)
-add_test(NAME AutoLocaleTest COMMAND AutoLocaleTest)
+
+add_subdirectory(tts)
