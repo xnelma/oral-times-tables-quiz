@@ -2,6 +2,7 @@
 #include "test_translator.hpp"
 #include <QLocale>
 #include <gtest/gtest.h>
+#include <exception>
 
 TEST(AutoLocaleTest, FindsUniqueResource)
 {
@@ -37,11 +38,22 @@ TEST(AutoLocaleTest, FindsUniqueResource)
     EXPECT_EQ(result, expected);
 }
 
-TEST(AutoLocaleTest, RunsWithEmptyResources)
+TEST(AutoLocaleTest, ThrowsForEmptyResources)
 {
     TestTranslator::resources().clear();
-    Tts::LocaleDescriptor expected; // c-Locale
-    Tts::LocaleDescriptor result = Tts::autoLocale<TestTranslator>();
+    EXPECT_THROW(Tts::autoLocale<TestTranslator>(), std::invalid_argument);
+}
 
+TEST(AutoLocaleTest, UsesSystemLocaleForSameLanguageMissingTerritory)
+{
+    TestTranslator::resources().clear();
+
+    QLocale::setDefault(QLocale(QLocale::English, QLocale::Germany));
+    TestTranslator::resources().insert(
+        { Tts::LocaleDescriptor(QLocale::English, QLocale::UnitedStates), "" });
+
+    auto expected = Tts::LocaleDescriptor(QLocale::English, QLocale::Germany);
+
+    Tts::LocaleDescriptor result = Tts::autoLocale<TestTranslator>();
     EXPECT_EQ(result, expected);
 }

@@ -7,12 +7,9 @@
 #include <QRegularExpression>
 #include <QFile>
 #include <QDirIterator>
+#include <exception>
 
 namespace Tts {
-
-static void resolveFallbackLocale(const Tts::LocaleDescriptor system,
-                                  const Tts::LocaleDescriptor resource,
-                                  Tts::LocaleDescriptor &fallback);
 
 template <typename T>
 concept ExtendsTranslator = std::is_base_of_v<Tts::SelfUpdatingTranslator, T>;
@@ -32,45 +29,34 @@ inline auto autoLocale() -> LocaleDescriptor
     // can change for unit tests.
     // It can already be static in T::resources() to avoid rebuilding the list
     // on every call.
-    for (Tts::ResourcePair r : T::resources()) {
+    const Tts::ResourceMap resources = T::resources();
+
+    // An empty translation resource list should not be possible. If the
+    // translations are id-based, there is not even a default english
+    // translation available, so allowing the c-locale as fallback would not
+    // make sense.
+    if (resources.size() == 0)
+        throw std::invalid_argument("No translation resource files found.");
+
+    for (Tts::ResourcePair r : resources) {
         Tts::LocaleDescriptor resource = r.first;
+
         if (resource == system)
             return system;
 
-        if (!fallback.has_value())
-            fallback = resource;
-
-        resolveFallbackLocale(system, resource, *fallback);
+        // The preferred fallback would be finding a translation resource with
+        // a matching language. Of those translation resources, take the first.
+        if (!fallback.has_value() && resource.language == system.language)
+            fallback = system;
     }
 
-    return fallback.value_or(Tts::LocaleDescriptor());
-    // default_value shouldn't ever happen because unless no translation
-    // resource is provided, the fallback was set to at least the locale of the
-    // first translation resource in the list.
-}
+    // If there is no translation available for the system language, use the
+    // first translation resource as 'automatic' tts locale.
+    // It can still be changed manually anyways.
+    if (!fallback.has_value())
+        fallback = resources.begin()->first;
 
-static void resolveFallbackLocale(const Tts::LocaleDescriptor system,
-                                  const Tts::LocaleDescriptor resource,
-                                  Tts::LocaleDescriptor &fallback)
-{
-    bool fallbackIsInSystemLanguage = fallback.language == system.language;
-    bool fallbackIsInEnglish = fallback.language == QLocale::English;
-
-    bool resourceIsInSysLang = resource.language == system.language;
-    bool resourceIsInEnglish = resource.language == QLocale::English;
-    bool resourceIsInSysTerrit = resource.territory == system.territory;
-
-    if (fallbackIsInSystemLanguage)
-        return;
-    if (resourceIsInSysLang // Best would be system language, other territory.
-        || (resourceIsInEnglish // Otherwise use English:
-            && (resourceIsInSysTerrit // prefer the one item "en_SYS" in list,
-                || !fallbackIsInEnglish))) { // else take first "en" in list.
-        fallback = resource;
-    }
-
-    // FIXME The expected behavior for a resource without territory is that the
-    // device territory is used!
+    return *fallback;
 }
 
 } // namespace Tts
