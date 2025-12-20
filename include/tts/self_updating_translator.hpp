@@ -30,6 +30,7 @@ class SelfUpdatingTranslator : public QTranslator, Settings
 public:
     explicit SelfUpdatingTranslator(QObject *parent = nullptr);
 
+    Tts::LocaleDescriptor localeDescriptor();
     QLocale locale();
     QString translate(const char *contex, const char *sourceText,
                       const char *disambiguation = nullptr, int n = -1);

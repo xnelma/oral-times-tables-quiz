@@ -10,9 +10,14 @@ Tts::SelfUpdatingTranslator::SelfUpdatingTranslator(QObject *parent)
 {
 }
 
+auto Tts::SelfUpdatingTranslator::localeDescriptor() -> LocaleDescriptor
+{
+    return Tts::LocaleDescriptor::fromResourcePath(QTranslator::filePath());
+}
+
 QLocale Tts::SelfUpdatingTranslator::locale()
 {
-    auto ld = Tts::LocaleDescriptor::fromResourcePath(QTranslator::filePath());
+    auto ld = localeDescriptor();
     return QLocale(ld.language, ld.territory);
 }
 
@@ -51,7 +56,7 @@ bool Tts::SelfUpdatingTranslator::load()
 {
     // Update translation, if the locale changed.
     Tts::LocaleDescriptor updatedLocale = loadLocale();
-    if (language() == QLocale::languageToCode(updatedLocale.language))
+    if (localeDescriptor() == updatedLocale)
         return true;
 
     QString resourcePath = resources()[updatedLocale];
