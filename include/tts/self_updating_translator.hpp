@@ -25,7 +25,7 @@ namespace Tts {
 typedef std::unordered_map<Tts::LocaleDescriptor, QString> ResourceMap;
 typedef std::pair<Tts::LocaleDescriptor, QString> ResourcePair;
 
-class SelfUpdatingTranslator : public QTranslator, Settings
+class SelfUpdatingTranslator : public QTranslator, private Settings
 {
 public:
     explicit SelfUpdatingTranslator(QObject *parent = nullptr);
