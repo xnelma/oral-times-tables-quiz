@@ -5,42 +5,9 @@
 #include <algorithm>
 #include <iterator>
 
-Tts::LanguageSettings::LanguageSettings() : isInAutoMode_(true), index_(0)
+Tts::LanguageSettings::LanguageSettings()
+    : isInAutoMode_(loadAutoLocaleSetting()), index_(-1)
 {
-    loadMode();
-    loadIndex();
-}
-
-void Tts::LanguageSettings::loadMode()
-{
-    isInAutoMode_ = loadAutoLocaleSetting();
-}
-
-void Tts::LanguageSettings::loadIndex()
-{
-    // Should not be static because of unit testing.
-    const ResourceMap resources = SelfUpdatingTranslator::resources();
-    const ResourceMap::const_iterator itBegin = resources.begin();
-
-    LocaleDescriptor savedKey = loadLocaleSetting();
-    auto itKey = resources.find(savedKey);
-    if (itKey != resources.end()) {
-        setIndex(std::distance(itBegin, itKey));
-        return;
-    }
-
-    // Alternatively set to a locale for a different territory.
-    auto sameLanguage = [savedKey](const ResourcePair &r) -> bool {
-        return r.first.language == savedKey.language;
-    };
-    itKey = std::ranges::find_if(resources, sameLanguage);
-    if (itKey != resources.end()) {
-        setIndex(std::distance(itBegin, itKey));
-        return;
-    }
-
-    // If no alternative was found, use the first language in the list.
-    setIndex(0);
 }
 
 QStringList Tts::LanguageSettings::availableLanguages()
@@ -63,6 +30,32 @@ QStringList Tts::LanguageSettings::availableLanguages()
 
 long Tts::LanguageSettings::index()
 {
+    if (index_ > -1)
+        return index_;
+
+    // Should not be static because of unit testing.
+    const ResourceMap resources = SelfUpdatingTranslator::resources();
+    const ResourceMap::const_iterator itBegin = resources.begin();
+
+    LocaleDescriptor savedKey = loadLocaleSetting();
+    auto itKey = resources.find(savedKey);
+    if (itKey != resources.end()) {
+        setIndex(std::distance(itBegin, itKey));
+        return index_;
+    }
+
+    // Alternatively set to a locale for a different territory.
+    auto sameLanguage = [savedKey](const ResourcePair &r) -> bool {
+        return r.first.language == savedKey.language;
+    };
+    itKey = std::ranges::find_if(resources, sameLanguage);
+    if (itKey != resources.end()) {
+        setIndex(std::distance(itBegin, itKey));
+        return index_;
+    }
+
+    // If no alternative was found, use the first language in the list.
+    setIndex(0);
     return index_;
 }
 

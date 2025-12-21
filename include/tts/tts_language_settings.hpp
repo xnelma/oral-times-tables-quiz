@@ -25,8 +25,6 @@ public:
     void setToManualMode();
 
 private:
-    void loadMode();
-    void loadIndex();
     LocaleDescriptor indexDescriptor();
 
     bool isInAutoMode_;
