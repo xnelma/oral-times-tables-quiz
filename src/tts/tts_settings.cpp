@@ -1,44 +1,39 @@
 #include "tts_settings.hpp"
+#include <QLocale>
 
-Tts::Settings::Settings()
-    : languageKey_("TtsLocale/language"),
-      territoryKey_("TtsLocale/territory"),
-      autoLocaleKey_("TtsLocale/useAutoLocale"),
-      voiceRateKey_("Tts/voiceRate")
-{
-}
+Tts::Settings::Settings() { }
 
 auto Tts::Settings::loadLocaleSetting() -> LocaleDescriptor
 {
-    auto l = settings_.value(languageKey_, 0 /*QLocale::AnyLanguage*/)
+    auto l = settings_.value(SettingsKeys::language, QLocale::AnyLanguage)
                  .value<QLocale::Language>();
-    auto t = settings_.value(territoryKey_, 0 /*QLocale::AnyTerritory*/)
+    auto t = settings_.value(SettingsKeys::territory, QLocale::AnyTerritory)
                  .value<QLocale::Territory>();
     return LocaleDescriptor(l, t);
 }
 
 bool Tts::Settings::loadAutoLocaleSetting()
 {
-    return settings_.value(autoLocaleKey_, true).toBool();
+    return settings_.value(SettingsKeys::autoLocale, true).toBool();
 }
 
 double Tts::Settings::loadVoiceRateSetting()
 {
-    return settings_.value(voiceRateKey_, 0).toDouble();
+    return settings_.value(SettingsKeys::voiceRate, 0).toDouble();
 }
 
 void Tts::Settings::saveLocaleSetting(const LocaleDescriptor &ld)
 {
-    settings_.setValue(languageKey_, ld.language);
-    settings_.setValue(territoryKey_, ld.territory);
+    settings_.setValue(SettingsKeys::language, ld.language);
+    settings_.setValue(SettingsKeys::territory, ld.territory);
 }
 
 void Tts::Settings::saveAutoLocaleSetting(const bool useAutoLocale)
 {
-    settings_.setValue(autoLocaleKey_, useAutoLocale);
+    settings_.setValue(SettingsKeys::autoLocale, useAutoLocale);
 }
 
 void Tts::Settings::saveVoiceRateSetting(const double rate)
 {
-    settings_.setValue(voiceRateKey_, rate);
+    settings_.setValue(SettingsKeys::voiceRate, rate);
 }

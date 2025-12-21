@@ -21,13 +21,19 @@ public:
     void saveVoiceRateSetting(const double rate);
 
 private:
-    const QString languageKey_;
-    const QString territoryKey_;
-    const QString autoLocaleKey_;
-    const QString voiceRateKey_;
-
     QSettings settings_;
 };
+
+namespace SettingsKeys {
+
+static const QString prefix = "Tts";
+static const QString localePrefix = prefix + "Locale";
+static const QString language = localePrefix + "/language";
+static const QString territory = localePrefix + "/territory";
+static const QString autoLocale = localePrefix + "/useAutoLocale";
+static const QString voiceRate = prefix + "/voiceRate";
+
+} // namespace SettingsKeys
 
 } // namespace Tts
 
