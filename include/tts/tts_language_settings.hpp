@@ -17,10 +17,10 @@ public:
     LanguageSettings();
 
     QStringList availableLanguages();
-    int index();
+    long index();
     bool isInAutoMode();
 
-    void setIndex(const int i);
+    void setIndex(const long i);
     void setToAutoMode();
     void setToManualMode();
 
@@ -31,7 +31,7 @@ private:
 
     bool isInAutoMode_;
     QStringList languages_;
-    int index_;
+    long index_;
 };
 
 } // namespace Tts

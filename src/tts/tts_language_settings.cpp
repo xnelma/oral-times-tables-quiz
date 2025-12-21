@@ -22,17 +22,10 @@ void Tts::LanguageSettings::loadIndex()
     const ResourceMap resources = SelfUpdatingTranslator::resources();
     const ResourceMap::const_iterator itBegin = resources.begin();
 
-    auto setIndex = [this, itBegin](const ResourceMap::const_iterator &itKey) {
-        // Because I don't expect large translation resource lists, the type
-        // of index_ doesn't need to be long:
-        // NOLINTNEXTLINE(*-narrowing-conversions)
-        index_ = std::distance(itBegin, itKey);
-    };
-
     LocaleDescriptor savedKey = loadLocaleSetting();
     auto itKey = resources.find(savedKey);
     if (itKey != resources.end()) {
-        setIndex(itKey);
+        setIndex(std::distance(itBegin, itKey));
         return;
     }
 
@@ -42,16 +35,12 @@ void Tts::LanguageSettings::loadIndex()
     };
     itKey = std::ranges::find_if(resources, sameLanguage);
     if (itKey != resources.end()) {
-        setIndex(itKey);
-    } else {
-        // If no alternative was found, use the first language in the list.
-        index_ = 0;
+        setIndex(std::distance(itBegin, itKey));
+        return;
     }
 
-    saveLocaleSetting(indexDescriptor());
-    // Save already on setup, so if the SettingsView gets left without
-    // switching back to Auto and without selecting anything else, the
-    // language highlighted in the list is actually used.
+    // If no alternative was found, use the first language in the list.
+    setIndex(0);
 }
 
 QStringList Tts::LanguageSettings::availableLanguages()
@@ -72,7 +61,7 @@ QStringList Tts::LanguageSettings::availableLanguages()
     return languages_;
 }
 
-int Tts::LanguageSettings::index()
+long Tts::LanguageSettings::index()
 {
     return index_;
 }
@@ -84,7 +73,7 @@ bool Tts::LanguageSettings::isInAutoMode()
     return isInAutoMode_ || index_ < 0 || index_ >= resourcesSize;
 }
 
-void Tts::LanguageSettings::setIndex(const int i)
+void Tts::LanguageSettings::setIndex(const long i)
 {
     index_ = i;
     saveLocaleSetting(indexDescriptor());
