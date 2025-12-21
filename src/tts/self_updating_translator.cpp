@@ -38,11 +38,11 @@ QString Tts::SelfUpdatingTranslator::translate(const char *context,
 // or should this be a method in Settings?
 auto Tts::SelfUpdatingTranslator::loadLocale() -> LocaleDescriptor
 {
-    bool useAutoLocale = loadAutoLocaleSetting();
+    bool useAutoLocale = settings_.loadAutoLocaleSetting();
     if (useAutoLocale)
         return autoLocale();
 
-    LocaleDescriptor ld = loadLocaleSetting();
+    LocaleDescriptor ld = settings_.loadLocaleSetting();
     if (ld.language <= QLocale::C) {
         return autoLocale();
     }
