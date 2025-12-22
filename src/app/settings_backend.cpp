@@ -22,7 +22,8 @@ int SettingsBackend::languageIndex()
 
 bool SettingsBackend::useAutoTtsLanguage()
 {
-    return languageSettings_.isInAutoMode();
+    // TODO set to auto mode for invalid index
+    return settings_.loadAutoLocaleSetting();
 }
 
 auto SettingsBackend::autoLanguage() -> LanguageName
@@ -38,18 +39,19 @@ double SettingsBackend::voiceRate()
 
 void SettingsBackend::setLanguageIndex(const int index)
 {
-    languageSettings_.setIndex(index);
+    if (languageIndex() == index)
+        return;
 
+    settings_.saveLocaleSetting(Tts::TranslationResources::locale(index));
     emit languageIndexChanged();
 }
 
 void SettingsBackend::setUseAutoTtsLanguage(const bool useAutoTtsLanguage)
 {
-    if (useAutoTtsLanguage)
-        languageSettings_.setToAutoMode();
-    else
-        languageSettings_.setToManualMode();
+    if (SettingsBackend::useAutoTtsLanguage() == useAutoTtsLanguage)
+        return;
 
+    settings_.saveAutoLocaleSetting(useAutoTtsLanguage);
     emit useAutoTtsLanguageChanged();
 }
 

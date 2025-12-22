@@ -1,6 +1,5 @@
 add_library(Tts STATIC
     tts_settings.cpp
-    tts_language_settings.cpp
     self_updating_translator.cpp
     tts_rate_settings.cpp
     locale_descriptor.cpp
