@@ -4,6 +4,7 @@ add_library(Tts STATIC
     self_updating_translator.cpp
     tts_rate_settings.cpp
     locale_descriptor.cpp
+    translation_resources.cpp
 )
 
 target_link_libraries(Tts PRIVATE

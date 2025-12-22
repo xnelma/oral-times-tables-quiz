@@ -2,6 +2,7 @@
 #include "tts_settings.hpp"
 #include "locale_descriptor.hpp"
 #include "auto_locale.hpp"
+#include "translation_resources.hpp"
 #include <QFile>
 #include <QDirIterator>
 
@@ -59,7 +60,7 @@ bool Tts::SelfUpdatingTranslator::load()
     if (localeDescriptor() == updatedLocale)
         return true;
 
-    QString resourcePath = resources()[updatedLocale];
+    QString resourcePath = TranslationResources::get()[updatedLocale];
     return load(resourcePath);
 
     // TODO would it be possible to have separate qm files for tts?
@@ -86,23 +87,4 @@ bool Tts::SelfUpdatingTranslator::load(const uchar *data, int len,
                                        const QString &directory)
 {
     return QTranslator::load(data, len, directory);
-}
-
-Tts::ResourceMap &Tts::SelfUpdatingTranslator::resources()
-{
-    static ResourceMap resources;
-
-    if (resources.size() > 0)
-        return resources;
-
-    // ":" is the base path for Qt Resource files.
-    QDirIterator it(":", { "*.qm" }, QDir::Files, QDirIterator::Subdirectories);
-    while (it.hasNext()) {
-        QString dir = it.next();
-        auto descriptor = LocaleDescriptor::fromResourcePath(dir);
-
-        resources.insert({ descriptor, dir });
-    }
-
-    return resources;
 }

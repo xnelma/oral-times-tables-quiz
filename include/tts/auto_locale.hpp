@@ -2,7 +2,7 @@
 #define OTTQ_20250829_1806_INCLUDE
 
 #include "locale_descriptor.hpp"
-#include "self_updating_translator.hpp"
+#include "translation_resources.hpp"
 #include <QLocale>
 #include <QRegularExpression>
 #include <QFile>
@@ -12,10 +12,10 @@
 namespace Tts {
 
 template <typename T>
-concept ExtendsTranslator = std::is_base_of_v<Tts::SelfUpdatingTranslator, T>;
+concept ExtendsResources = std::is_base_of_v<Tts::TranslationResources, T>;
 // C++20
 
-template <ExtendsTranslator T = Tts::SelfUpdatingTranslator>
+template <ExtendsResources TR = Tts::TranslationResources>
 inline auto autoLocale() -> LocaleDescriptor
 {
     // Init with default constructor for QLocale instead of QLocale::system()
@@ -29,7 +29,7 @@ inline auto autoLocale() -> LocaleDescriptor
     // can change for unit tests.
     // It can already be static in T::resources() to avoid rebuilding the list
     // on every call.
-    const Tts::ResourceMap resources = T::resources();
+    const Tts::ResourceMap resources = TR::get();
 
     // An empty translation resource list should not be possible. If the
     // translations are id-based, there is not even a default english
