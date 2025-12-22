@@ -34,7 +34,7 @@ auto SettingsBackend::autoLanguage() -> LanguageName
 
 double SettingsBackend::voiceRate()
 {
-    return voiceRateSettings_.load();
+    return settings_.loadVoiceRateSetting();
 }
 
 void SettingsBackend::setLanguageIndex(const int index)
@@ -57,5 +57,9 @@ void SettingsBackend::setUseAutoTtsLanguage(const bool useAutoTtsLanguage)
 
 void SettingsBackend::setVoiceRate(const double rate)
 {
-    voiceRateSettings_.save(rate);
+    if (SettingsBackend::voiceRate() == rate)
+        return;
+
+    settings_.saveVoiceRateSetting(rate);
+    emit voiceRateChanged();
 }

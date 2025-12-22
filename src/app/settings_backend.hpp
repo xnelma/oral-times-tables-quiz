@@ -1,7 +1,6 @@
 #ifndef OTTQ_20250829_1811_INCLUDE
 #define OTTQ_20250829_1811_INCLUDE
 
-#include "tts/tts_rate_settings.hpp"
 #include "tts/tts_settings.hpp"
 #include "language_name.hpp"
 #include <QObject>
@@ -59,7 +58,6 @@ signals:
     void voiceRateChanged();
 
 private:
-    Tts::VoiceRateSettings voiceRateSettings_;
     Tts::Settings settings_;
 };
 
