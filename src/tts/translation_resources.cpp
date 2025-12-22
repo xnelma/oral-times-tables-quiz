@@ -4,6 +4,7 @@
 #include <QDirIterator>
 #include <algorithm>
 #include <iterator>
+#include <stdexcept>
 
 Tts::ResourceMap &Tts::TranslationResources::get()
 {
@@ -70,12 +71,11 @@ auto Tts::TranslationResources::locale(const long &index) -> LocaleDescriptor
 {
     auto resources = TranslationResources::get();
 
-    if (index < 0 || index >= resources.size())
-        return autoLocale();
-    // When in auto mode, the list can still get shown in the UI, so the index
-    // and the corresponding LocaleDescriptor are still needed.
-
-    // TODO throw expection for invalid index
+    if (index < 0)
+        throw std::invalid_argument("Index is smaller than 0.");
+    if (index >= resources.size())
+        throw std::invalid_argument("Index is larger than or equal to the"
+                                    "resources size.");
 
     ResourceMap::iterator it = resources.begin();
     std::advance(it, index);

@@ -1,6 +1,8 @@
 #include "settings_backend.hpp"
 #include "tts/auto_locale.hpp"
 #include "tts/translation_resources.hpp"
+#include <QtLogging>
+#include <stdexcept>
 
 SettingsBackend::SettingsBackend(QObject *parent) : QObject(parent) { }
 
@@ -44,8 +46,13 @@ void SettingsBackend::setLanguageIndex(const int index)
     if (languageIndex() == index)
         return;
 
-    settings_.saveLocaleSetting(Tts::TranslationResources::locale(index));
-    emit languageIndexChanged();
+    try {
+        Tts::LocaleDescriptor ld = Tts::TranslationResources::locale(index);
+        settings_.saveLocaleSetting(ld);
+        emit languageIndexChanged();
+    } catch (const std::invalid_argument &e) {
+        qInfo() << "Could not set index:" << e.what();
+    }
 }
 
 void SettingsBackend::setUseAutoTtsLanguage(const bool useAutoTtsLanguage)
