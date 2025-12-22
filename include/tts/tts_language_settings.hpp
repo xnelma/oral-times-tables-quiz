@@ -23,8 +23,6 @@ public:
     void setToManualMode();
 
 private:
-    LocaleDescriptor indexDescriptor();
-
     bool isInAutoMode_;
     QStringList languages_;
     long index_;

@@ -1,4 +1,5 @@
 #include "translation_resources.hpp"
+#include "auto_locale.hpp"
 #include <QFile>
 #include <QDirIterator>
 #include <algorithm>
@@ -73,4 +74,21 @@ long Tts::TranslationResources::index(const Tts::LocaleDescriptor &key)
 
     // If no alternative was found, use the first language in the list.
     return 0;
+}
+
+auto Tts::TranslationResources::locale(const long &index) -> LocaleDescriptor
+{
+    auto resources = TranslationResources::get();
+
+    if (index < 0 || index >= resources.size())
+        return autoLocale();
+    // When in auto mode, the list can still get shown in the UI, so the index
+    // and the corresponding LocaleDescriptor are still needed.
+
+    // TODO throw expection for invalid index
+
+    ResourceMap::iterator it = resources.begin();
+    std::advance(it, index);
+
+    return it->first;
 }

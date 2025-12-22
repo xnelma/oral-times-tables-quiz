@@ -29,6 +29,7 @@ struct TranslationResources
     static ResourceMap &get();
     static QStringList getLanguageNames();
     static long index(const Tts::LocaleDescriptor &key);
+    static Tts::LocaleDescriptor locale(const long &index);
 
 private:
     TranslationResources() { }
