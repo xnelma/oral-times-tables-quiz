@@ -41,3 +41,36 @@ QStringList Tts::TranslationResources::getLanguageNames()
 
     return languageNames;
 }
+
+long Tts::TranslationResources::index(const Tts::LocaleDescriptor &key)
+{
+    // Should not be static because of unit testing.
+    const ResourceMap resources = TranslationResources::get();
+    const ResourceMap::const_iterator itBegin = resources.begin();
+
+    auto itKey = resources.find(key);
+    if (itKey != resources.end()) {
+        return std::distance(itBegin, itKey);
+    }
+
+    // TODO return -1 in case the key is not found.
+    // The settings are set with the keys from the ResourceMap, so the key
+    // should always have a match in the ResourceMap.
+    // The translation resources could change with an app update and cause
+    // a saved locale to become invalid. Since it is then invalid, the settings
+    // should also not be secretely changed, and highlighting an item in the
+    // list without saving to settings would lead to a different locale being
+    // used in the quiz.
+
+    // Alternatively set to a locale for a different territory.
+    auto sameLanguage = [key](const ResourcePair &r) -> bool {
+        return r.first.language == key.language;
+    };
+    itKey = std::ranges::find_if(resources, sameLanguage);
+    if (itKey != resources.end()) {
+        return std::distance(itBegin, itKey);
+    }
+
+    // If no alternative was found, use the first language in the list.
+    return 0;
+}

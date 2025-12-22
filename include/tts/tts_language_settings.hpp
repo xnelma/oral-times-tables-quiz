@@ -16,7 +16,6 @@ class LanguageSettings : Settings
 public:
     LanguageSettings();
 
-    long index();
     bool isInAutoMode();
 
     void setIndex(const long i);

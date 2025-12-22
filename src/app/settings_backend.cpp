@@ -11,10 +11,13 @@ QStringList SettingsBackend::languages()
 
 int SettingsBackend::languageIndex()
 {
+    Tts::LocaleDescriptor localeKey = settings_.loadLocaleSetting();
     // Because I don't expect large translation resource lists, the type
     // of index_ doesn't need to be long:
     // NOLINTNEXTLINE(*-narrowing-conversions)
-    return languageSettings_.index();
+    int index = Tts::TranslationResources::index(localeKey);
+    // TODO handle index < 0
+    return index;
 }
 
 bool SettingsBackend::useAutoTtsLanguage()

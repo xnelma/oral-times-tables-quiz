@@ -3,6 +3,7 @@
 
 #include "tts/tts_language_settings.hpp"
 #include "tts/tts_rate_settings.hpp"
+#include "tts/tts_settings.hpp"
 #include "language_name.hpp"
 #include <QObject>
 #include <qqml.h>
@@ -61,6 +62,7 @@ signals:
 private:
     Tts::LanguageSettings languageSettings_;
     Tts::VoiceRateSettings voiceRateSettings_;
+    Tts::Settings settings_;
 };
 
 #endif // OTTQ_20250829_1811_INCLUDE
