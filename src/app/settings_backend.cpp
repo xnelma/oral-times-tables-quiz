@@ -16,13 +16,15 @@ int SettingsBackend::languageIndex()
     // of index_ doesn't need to be long:
     // NOLINTNEXTLINE(*-narrowing-conversions)
     int index = Tts::TranslationResources::index(localeKey);
-    // TODO handle index < 0
+    if (index < 0) {
+        setUseAutoTtsLanguage(true);
+        return 0;
+    }
     return index;
 }
 
 bool SettingsBackend::useAutoTtsLanguage()
 {
-    // TODO set to auto mode for invalid index
     return settings_.loadAutoLocaleSetting();
 }
 
