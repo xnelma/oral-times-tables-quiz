@@ -1,15 +1,19 @@
 #include "settings_backend.hpp"
 #include "tts/auto_locale.hpp"
+#include "tts/translation_resources.hpp"
 
 SettingsBackend::SettingsBackend(QObject *parent) : QObject(parent) { }
 
 QStringList SettingsBackend::languages()
 {
-    return languageSettings_.availableLanguages();
+    return Tts::TranslationResources::getLanguageNames();
 }
 
 int SettingsBackend::languageIndex()
 {
+    // Because I don't expect large translation resource lists, the type
+    // of index_ doesn't need to be long:
+    // NOLINTNEXTLINE(*-narrowing-conversions)
     return languageSettings_.index();
 }
 

@@ -2,30 +2,10 @@
 #include "auto_locale.hpp"
 #include "translation_resources.hpp"
 #include <QDir>
-#include <algorithm>
-#include <iterator>
 
 Tts::LanguageSettings::LanguageSettings()
     : isInAutoMode_(loadAutoLocaleSetting()), index_(-1)
 {
-}
-
-QStringList Tts::LanguageSettings::availableLanguages()
-{
-    // The translation resource list cannot change without an app update.
-    if (languages_.size() > 0)
-        return languages_;
-
-    // C++20
-    std::ranges::transform(
-        TranslationResources::get(),
-        std::back_inserter(languages_),
-        [](const ResourcePair &key) -> QString {
-            LocaleDescriptor ld = key.first;
-            return QLocale(ld.language, ld.territory).nativeLanguageName();
-        });
-
-    return languages_;
 }
 
 long Tts::LanguageSettings::index()

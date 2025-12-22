@@ -2,6 +2,7 @@
 #define OTTQ_20251202_1917_INCLUDE
 
 #include "locale_descriptor.hpp"
+#include <QStringList>
 #include <unordered_map>
 
 template <>
@@ -26,6 +27,7 @@ typedef std::pair<Tts::LocaleDescriptor, QString> ResourcePair;
 struct TranslationResources
 {
     static ResourceMap &get();
+    static QStringList getLanguageNames();
 
 private:
     TranslationResources() { }

@@ -16,7 +16,6 @@ class LanguageSettings : Settings
 public:
     LanguageSettings();
 
-    QStringList availableLanguages();
     long index();
     bool isInAutoMode();
 
