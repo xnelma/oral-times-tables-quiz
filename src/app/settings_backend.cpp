@@ -32,8 +32,9 @@ bool SettingsBackend::useAutoTtsLanguage()
 
 auto SettingsBackend::autoLanguage() -> LanguageName
 {
-    LanguageName l(Tts::autoLocale());
-    return l;
+    Tts::AutoLocale l;
+    LanguageName languageName(l);
+    return languageName;
 }
 
 double SettingsBackend::voiceRate()
