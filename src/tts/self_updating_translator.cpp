@@ -6,8 +6,9 @@
 #include <QFile>
 #include <QDirIterator>
 
-Tts::SelfUpdatingTranslator::SelfUpdatingTranslator(QObject *parent)
-    : QTranslator(parent)
+Tts::SelfUpdatingTranslator::SelfUpdatingTranslator(
+    QObject *parent, std::shared_ptr<Tts::AbstractSettings> settings)
+    : QTranslator(parent), settings_(settings)
 {
 }
 
@@ -39,11 +40,11 @@ QString Tts::SelfUpdatingTranslator::translate(const char *context,
 // or should this be a method in Settings?
 auto Tts::SelfUpdatingTranslator::loadLocale() -> LocaleDescriptor
 {
-    bool useAutoLocale = settings_.loadAutoLocaleSetting();
+    bool useAutoLocale = settings_->loadAutoLocaleSetting();
     if (useAutoLocale)
         return autoLocale();
 
-    LocaleDescriptor ld = settings_.loadLocaleSetting();
+    LocaleDescriptor ld = settings_->loadLocaleSetting();
     if (ld.language <= QLocale::C) {
         return autoLocale();
     }

@@ -1,6 +1,7 @@
 #ifndef OTTQ_20250829_1807_INCLUDE
 #define OTTQ_20250829_1807_INCLUDE
 
+#include "abstract_tts_settings.hpp"
 #include "tts_settings.hpp"
 #include "locale_descriptor.hpp"
 #include <QLocale>
@@ -12,7 +13,10 @@ namespace Tts {
 class SelfUpdatingTranslator : public QTranslator
 {
 public:
-    explicit SelfUpdatingTranslator(QObject *parent = nullptr);
+    explicit SelfUpdatingTranslator(
+        QObject *parent = nullptr,
+        std::shared_ptr<Tts::AbstractSettings> settings =
+            std::make_shared<Tts::Settings>());
 
     Tts::LocaleDescriptor localeDescriptor();
     QLocale locale();
@@ -20,7 +24,7 @@ public:
                       const char *disambiguation = nullptr, int n = -1);
 
 private:
-    Tts::Settings settings_;
+    std::shared_ptr<Tts::AbstractSettings> settings_;
 
     LocaleDescriptor loadLocale();
 

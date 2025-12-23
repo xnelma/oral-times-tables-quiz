@@ -1,6 +1,7 @@
 #ifndef OTTQ_20250829_1809_INCLUDE
 #define OTTQ_20250829_1809_INCLUDE
 
+#include "abstract_tts_settings.hpp"
 #include "locale_descriptor.hpp"
 #include <QString>
 #include <QSettings>
@@ -8,18 +9,18 @@
 
 namespace Tts {
 
-class Settings
+class Settings : public AbstractSettings
 {
 public:
     Settings();
 
-    LocaleDescriptor loadLocaleSetting();
-    bool loadAutoLocaleSetting();
-    double loadVoiceRateSetting();
+    LocaleDescriptor loadLocaleSetting() override;
+    bool loadAutoLocaleSetting() override;
+    double loadVoiceRateSetting() override;
 
-    void saveLocaleSetting(const LocaleDescriptor &ld);
-    void saveAutoLocaleSetting(const bool useAutoLocale);
-    void saveVoiceRateSetting(const double rate);
+    void saveLocaleSetting(const LocaleDescriptor &ld) override;
+    void saveAutoLocaleSetting(const bool useAutoLocale) override;
+    void saveVoiceRateSetting(const double rate) override;
 
 private:
     QSettings settings_;
