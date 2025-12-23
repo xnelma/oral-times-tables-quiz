@@ -9,12 +9,12 @@ class AbstractSettings
 {
 public:
     AbstractSettings() { }
-    AbstractSettings(AbstractSettings const &) { }
-    AbstractSettings(AbstractSettings &&) noexcept { }
+    AbstractSettings(AbstractSettings const &) = default;
+    AbstractSettings(AbstractSettings &&) noexcept = default;
     virtual ~AbstractSettings() = default;
 
-    AbstractSettings &operator=(AbstractSettings const &) { return *this; }
-    AbstractSettings &operator=(AbstractSettings &&) noexcept { return *this; }
+    AbstractSettings &operator=(AbstractSettings const &) = default;
+    AbstractSettings &operator=(AbstractSettings &&) noexcept = default;
 
     virtual LocaleDescriptor loadLocaleSetting() = 0;
     virtual bool loadAutoLocaleSetting() = 0;
