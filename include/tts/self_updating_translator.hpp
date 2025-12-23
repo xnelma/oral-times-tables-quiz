@@ -26,7 +26,7 @@ public:
 private:
     std::shared_ptr<Tts::AbstractSettings> settings_;
 
-    LocaleDescriptor loadLocale();
+    LocaleDescriptor loadLocaleKey();
 
     bool load();
     // hide load(.), because a manually loaded translation would be overriden.

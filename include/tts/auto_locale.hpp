@@ -20,6 +20,8 @@ struct AutoLocale : public LocaleDescriptor
 {
     AutoLocale() { set(); }
 
+    Tts::LocaleDescriptor resourceKey;
+
 private:
     void set()
     {
@@ -49,21 +51,26 @@ private:
             if (resource == system) {
                 language = system.language;
                 territory = system.territory;
+                resourceKey = resource;
                 return;
             }
 
             // The preferred fallback would be finding a translation resource
             // with a matching language. Of those translation resources, take
             // the first.
-            if (!fallback.has_value() && resource.language == system.language)
+            if (!fallback.has_value() && resource.language == system.language) {
                 fallback = system;
+                resourceKey = resource;
+            }
         }
 
         // If there is no translation available for the system language, use the
         // first translation resource as 'automatic' tts locale.
         // It can still be changed manually anyways.
-        if (!fallback.has_value())
+        if (!fallback.has_value()) {
             fallback = resources.begin()->first;
+            resourceKey = *fallback;
+        }
 
         language = fallback->language;
         territory = fallback->territory;

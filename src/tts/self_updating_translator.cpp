@@ -38,15 +38,15 @@ QString Tts::SelfUpdatingTranslator::translate(const char *context,
 // TODO this can be a namespace function?
 // name it getLocaleDescriptor otherwise?
 // or should this be a method in Settings?
-auto Tts::SelfUpdatingTranslator::loadLocale() -> LocaleDescriptor
+auto Tts::SelfUpdatingTranslator::loadLocaleKey() -> LocaleDescriptor
 {
     bool useAutoLocale = settings_->loadAutoLocaleSetting();
     if (useAutoLocale)
-        return AutoLocale();
+        return AutoLocale().resourceKey;
 
     LocaleDescriptor ld = settings_->loadLocaleSetting();
     if (ld.language <= QLocale::C) {
-        return AutoLocale();
+        return AutoLocale().resourceKey;
     }
     // If the territory is QLocale::AnyTerritory, that's the same as the
     // default argument for QLocale, so it doesn't need to be checked.
@@ -57,7 +57,7 @@ auto Tts::SelfUpdatingTranslator::loadLocale() -> LocaleDescriptor
 bool Tts::SelfUpdatingTranslator::load()
 {
     // Update translation, if the locale changed.
-    Tts::LocaleDescriptor updatedLocale = loadLocale();
+    Tts::LocaleDescriptor updatedLocale = loadLocaleKey();
     if (localeDescriptor() == updatedLocale)
         return true;
 
