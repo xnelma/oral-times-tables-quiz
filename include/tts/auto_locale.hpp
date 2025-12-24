@@ -79,4 +79,11 @@ private:
 
 } // namespace Tts
 
+template <Tts::ExtendsResources TR = Tts::TranslationResources>
+std::ostream &operator<<(std::ostream &os, const Tts::AutoLocale<TR> &ld)
+{
+    return os << static_cast<Tts::LocaleDescriptor>(ld) << ", key "
+              << ld.resourceKey;
+}
+
 #endif // OTTQ_20250829_1806_INCLUDE
