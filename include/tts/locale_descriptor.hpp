@@ -19,23 +19,14 @@ struct LocaleDescriptor
     static Tts::LocaleDescriptor fromFileName(const QString &qmFileName);
     static Tts::LocaleDescriptor fromResourcePath(const QString &qmPath);
 
-    QLocale::Language language() const { return language_; }
-    QLocale::Territory territory() const { return territory_; }
-    virtual LocaleDescriptor resourceKey() const { return *this; };
-
     LocaleDescriptor &operator=(LocaleDescriptor const &) = default;
     LocaleDescriptor &operator=(LocaleDescriptor &&) = default;
 
     bool operator==(const LocaleDescriptor &ld) const;
     bool operator<(const LocaleDescriptor &ld) const;
 
-protected:
-    void setLanguage(const QLocale::Language &l) { language_ = l; }
-    void setTerritory(const QLocale::Territory &t) { territory_ = t; }
-
-private:
-    QLocale::Language language_;
-    QLocale::Territory territory_;
+    QLocale::Language language;
+    QLocale::Territory territory;
 };
 
 } // namespace Tts

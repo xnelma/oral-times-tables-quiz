@@ -20,12 +20,9 @@ struct AutoLocale : public LocaleDescriptor
 {
     AutoLocale() { set(); }
 
-    // TODO update in getter for language and territory
-    Tts::LocaleDescriptor resourceKey() const override { return resourceKey_; }
+    Tts::LocaleDescriptor resourceKey;
 
 private:
-    Tts::LocaleDescriptor resourceKey_;
-
     void set()
     {
         // Init with default constructor for QLocale instead of
@@ -52,19 +49,18 @@ private:
             Tts::LocaleDescriptor resource = r.first;
 
             if (resource == system) {
-                setLanguage(system.language());
-                setTerritory(system.territory());
-                resourceKey_ = std::move(resource);
+                language = system.language;
+                territory = system.territory;
+                resourceKey = resource;
                 return;
             }
 
             // The preferred fallback would be finding a translation resource
             // with a matching language. Of those translation resources, take
             // the first.
-            if (!fallback.has_value()
-                && resource.language() == system.language()) {
+            if (!fallback.has_value() && resource.language == system.language) {
                 fallback = system;
-                resourceKey_ = std::move(resource);
+                resourceKey = resource;
             }
         }
 
@@ -73,11 +69,11 @@ private:
         // It can still be changed manually anyways.
         if (!fallback.has_value()) {
             fallback = resources.begin()->first;
-            resourceKey_ = *fallback;
+            resourceKey = *fallback;
         }
 
-        setLanguage(fallback->language());
-        setTerritory(fallback->territory());
+        language = fallback->language;
+        territory = fallback->territory;
     }
 };
 
