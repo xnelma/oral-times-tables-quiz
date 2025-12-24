@@ -18,7 +18,7 @@ public:
     LanguageName() : language_(""), territory_("") { }
     LanguageName(const Tts::LocaleDescriptor &ld)
     {
-        QLocale l(ld.language, ld.territory);
+        QLocale l(ld.language(), ld.territory());
         language_ = l.nativeLanguageName();
         territory_ = l.nativeTerritoryName();
     }

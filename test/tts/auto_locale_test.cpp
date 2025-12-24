@@ -10,11 +10,11 @@ TEST(AutoLocaleTest, FindsUniqueResource)
 
     // Prepare one entry that also is the match.
     auto match = Tts::LocaleDescriptor(QLocale::English, QLocale::UnitedStates);
-    QLocale::setDefault(QLocale(match.language, match.territory));
+    QLocale::setDefault(QLocale(match.language(), match.territory()));
     TestTranslationResources::get().insert({ match, "" });
     auto expected = match;
 
-    Tts::LocaleDescriptor result = Tts::AutoLocale<TestTranslationResources>();
+    auto result = Tts::AutoLocale<TestTranslationResources>();
     EXPECT_EQ(result, expected);
 
     // Insert more entries, all different in locale and territory; keep 'match'
@@ -29,9 +29,8 @@ TEST(AutoLocaleTest, FindsUniqueResource)
     // Insert another entry and change 'match'.
     TestTranslationResources::get().insert(
         { Tts::LocaleDescriptor(QLocale::Italian, QLocale::Italy), "" });
-    match.language = QLocale::French;
-    match.territory = QLocale::France;
-    QLocale::setDefault(QLocale(match.language, match.territory));
+    match = Tts::LocaleDescriptor(QLocale::French, QLocale::France);
+    QLocale::setDefault(QLocale(match.language(), match.territory()));
     expected = match;
 
     result = Tts::AutoLocale<TestTranslationResources>();
@@ -55,6 +54,6 @@ TEST(AutoLocaleTest, UsesSystemLocaleForSameLanguageMissingTerritory)
 
     auto expected = Tts::LocaleDescriptor(QLocale::English, QLocale::Germany);
 
-    Tts::LocaleDescriptor result = Tts::AutoLocale<TestTranslationResources>();
+    auto result = Tts::AutoLocale<TestTranslationResources>();
     EXPECT_EQ(result, expected);
 }

@@ -10,8 +10,8 @@ struct std::hash<Tts::LocaleDescriptor>
 {
     std::size_t operator()(const Tts::LocaleDescriptor &ld) const
     {
-        return std::hash<int>()(ld.language)
-            ^ std::hash<int>()(ld.territory << 1);
+        return std::hash<int>()(ld.language())
+            ^ std::hash<int>()(ld.territory() << 1);
     }
 };
 

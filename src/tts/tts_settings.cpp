@@ -27,8 +27,8 @@ double Tts::Settings::loadVoiceRateSetting()
 
 void Tts::Settings::saveLocaleSetting(const LocaleDescriptor &ld)
 {
-    settings_.setValue(SettingsKeys::language, ld.language);
-    settings_.setValue(SettingsKeys::territory, ld.territory);
+    settings_.setValue(SettingsKeys::language, ld.language());
+    settings_.setValue(SettingsKeys::territory, ld.territory());
 }
 
 void Tts::Settings::saveAutoLocaleSetting(const bool useAutoLocale)

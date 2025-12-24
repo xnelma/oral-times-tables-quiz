@@ -3,18 +3,18 @@
 #include <exception>
 
 Tts::LocaleDescriptor::LocaleDescriptor()
-    : language(QLocale::C), territory(QLocale::AnyTerritory)
+    : language_(QLocale::C), territory_(QLocale::AnyTerritory)
 {
 }
 
 Tts::LocaleDescriptor::LocaleDescriptor(const QLocale::Language &l,
                                         const QLocale::Territory &t)
-    : language(l), territory(t)
+    : language_(l), territory_(t)
 {
 }
 
 Tts::LocaleDescriptor::LocaleDescriptor(const QLocale &l)
-    : language(l.language()), territory(l.territory())
+    : language_(l.language()), territory_(l.territory())
 {
 }
 
@@ -62,19 +62,19 @@ auto Tts::LocaleDescriptor::fromResourcePath(const QString &qmPath)
 
 bool Tts::LocaleDescriptor::operator==(const Tts::LocaleDescriptor &ld) const
 {
-    return language == ld.language && territory == ld.territory;
+    return language_ == ld.language() && territory_ == ld.territory();
 }
 
 bool Tts::LocaleDescriptor::operator<(const Tts::LocaleDescriptor &ld) const
 {
-    return language < ld.language
-        || (language == ld.language && territory < ld.territory);
+    return language_ < ld.language()
+        || (language_ == ld.language() && territory_ < ld.territory());
 }
 
 std::ostream &operator<<(std::ostream &os, const Tts::LocaleDescriptor &ld)
 {
-    auto languageStr = QLocale::languageToString(ld.language);
-    auto territoryStr = QLocale::territoryToString(ld.territory);
+    auto languageStr = QLocale::languageToString(ld.language());
+    auto territoryStr = QLocale::territoryToString(ld.territory());
 
     return os << "(" << languageStr.toUtf8().data() << ", "
               << territoryStr.toUtf8().data() << ")";

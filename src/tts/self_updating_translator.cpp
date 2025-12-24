@@ -20,7 +20,7 @@ auto Tts::SelfUpdatingTranslator::localeDescriptor() -> LocaleDescriptor
 QLocale Tts::SelfUpdatingTranslator::locale()
 {
     auto ld = localeDescriptor();
-    return QLocale(ld.language, ld.territory);
+    return QLocale(ld.language(), ld.territory());
 }
 
 QString Tts::SelfUpdatingTranslator::translate(const char *context,
@@ -42,11 +42,11 @@ auto Tts::SelfUpdatingTranslator::loadLocaleKey() -> LocaleDescriptor
 {
     bool useAutoLocale = settings_->loadAutoLocaleSetting();
     if (useAutoLocale)
-        return AutoLocale().resourceKey;
+        return AutoLocale().resourceKey();
 
     LocaleDescriptor ld = settings_->loadLocaleSetting();
-    if (ld.language <= QLocale::C) {
-        return AutoLocale().resourceKey;
+    if (ld.language() <= QLocale::C) {
+        return AutoLocale().resourceKey();
     }
     // If the territory is QLocale::AnyTerritory, that's the same as the
     // default argument for QLocale, so it doesn't need to be checked.
