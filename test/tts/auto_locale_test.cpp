@@ -14,7 +14,7 @@ TEST(AutoLocaleTest, FindsUniqueResource)
     TestTranslationResources::get().insert({ match, "" });
     auto expected = match;
 
-    Tts::LocaleDescriptor result = Tts::AutoLocale<TestTranslationResources>();
+    auto result = Tts::AutoLocale<TestTranslationResources>();
     EXPECT_EQ(result, expected);
 
     // Insert more entries, all different in locale and territory; keep 'match'
@@ -55,6 +55,6 @@ TEST(AutoLocaleTest, UsesSystemLocaleForSameLanguageMissingTerritory)
 
     auto expected = Tts::LocaleDescriptor(QLocale::English, QLocale::Germany);
 
-    Tts::LocaleDescriptor result = Tts::AutoLocale<TestTranslationResources>();
+    auto result = Tts::AutoLocale<TestTranslationResources>();
     EXPECT_EQ(result, expected);
 }

@@ -29,8 +29,8 @@ struct LocaleDescriptor
     QLocale::Territory territory;
 };
 
-} // namespace Tts
-
 std::ostream &operator<<(std::ostream &os, const Tts::LocaleDescriptor &ld);
+
+} // namespace Tts
 
 #endif // OTTQ_20250829_1805_INCLUDE

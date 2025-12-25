@@ -71,7 +71,7 @@ bool Tts::LocaleDescriptor::operator<(const Tts::LocaleDescriptor &ld) const
         || (language == ld.language && territory < ld.territory);
 }
 
-std::ostream &operator<<(std::ostream &os, const Tts::LocaleDescriptor &ld)
+std::ostream &Tts::operator<<(std::ostream &os, const Tts::LocaleDescriptor &ld)
 {
     auto languageStr = QLocale::languageToString(ld.language);
     auto territoryStr = QLocale::territoryToString(ld.territory);
