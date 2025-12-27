@@ -42,11 +42,11 @@ auto Tts::SelfUpdatingTranslator::loadLocaleKey() -> LocaleDescriptor
 {
     bool useAutoLocale = settings_->loadAutoLocaleSetting();
     if (useAutoLocale)
-        return AutoLocale().resourceKey;
+        return AutoLocale().resourceKey();
 
     LocaleDescriptor ld = settings_->loadLocaleSetting();
     if (ld.language <= QLocale::C) {
-        return AutoLocale().resourceKey;
+        return AutoLocale().resourceKey();
     }
     // If the territory is QLocale::AnyTerritory, that's the same as the
     // default argument for QLocale, so it doesn't need to be checked.

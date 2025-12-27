@@ -28,9 +28,11 @@ struct AutoLocale : public LocaleDescriptor
             set();
     }
 
-    Tts::LocaleDescriptor resourceKey;
+    Tts::LocaleDescriptor resourceKey() const override { return resourceKey_; }
 
 private:
+    Tts::LocaleDescriptor resourceKey_;
+
     void set()
     {
         // Init with default constructor for QLocale instead of
@@ -59,7 +61,7 @@ private:
             if (resource == system) {
                 language = system.language;
                 territory = system.territory;
-                resourceKey = resource;
+                resourceKey_ = resource;
                 return;
             }
 
@@ -68,7 +70,7 @@ private:
             // the first.
             if (!fallback.has_value() && resource.language == system.language) {
                 fallback = system;
-                resourceKey = resource;
+                resourceKey_ = resource;
             }
         }
 
@@ -77,7 +79,7 @@ private:
         // It can still be changed manually anyways.
         if (!fallback.has_value()) {
             fallback = resources.begin()->first;
-            resourceKey = *fallback;
+            resourceKey_ = *fallback;
         }
 
         language = fallback->language;
@@ -89,7 +91,7 @@ template <Tts::ExtendsResources TR = Tts::TranslationResources>
 inline std::ostream &operator<<(std::ostream &os, const Tts::AutoLocale<TR> &ld)
 {
     return os << static_cast<Tts::LocaleDescriptor>(ld) << ", key "
-              << ld.resourceKey;
+              << ld.resourceKey();
 }
 
 } // namespace Tts

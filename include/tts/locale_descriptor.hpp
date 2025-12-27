@@ -25,6 +25,8 @@ struct LocaleDescriptor
     bool operator==(const LocaleDescriptor &ld) const;
     bool operator<(const LocaleDescriptor &ld) const;
 
+    virtual LocaleDescriptor resourceKey() const { return *this; }
+
     QLocale::Language language;
     QLocale::Territory territory;
 };
