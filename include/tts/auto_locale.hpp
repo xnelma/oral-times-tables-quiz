@@ -20,6 +20,14 @@ struct AutoLocale : public LocaleDescriptor
 {
     AutoLocale() { set(); }
 
+    void update()
+    {
+        QLocale updatedSystem;
+        if (updatedSystem.language() != language
+            || updatedSystem.territory() != territory)
+            set();
+    }
+
     Tts::LocaleDescriptor resourceKey;
 
 private:

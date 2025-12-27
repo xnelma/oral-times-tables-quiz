@@ -58,3 +58,60 @@ TEST(AutoLocaleTest, UsesSystemLocaleForSameLanguageMissingTerritory)
     auto result = Tts::AutoLocale<TestTranslationResources>();
     EXPECT_EQ(result, expected);
 }
+
+TEST(AutoLocaleTest, CatchesLanguageUpdate)
+{
+    Tts::LocaleDescriptor oldMatch =
+        Tts::LocaleDescriptor(QLocale::English, QLocale::Germany);
+    Tts::LocaleDescriptor newMatch =
+        Tts::LocaleDescriptor(QLocale::German, QLocale::Germany);
+
+    TestTranslationResources::get().clear();
+    TestTranslationResources::get().insert(
+        { { oldMatch, "" }, { newMatch, "" } });
+
+    QLocale::setDefault(QLocale(oldMatch.language, oldMatch.territory));
+    auto result = Tts::AutoLocale<TestTranslationResources>();
+    EXPECT_EQ(result, oldMatch);
+
+    QLocale::setDefault(QLocale(newMatch.language, newMatch.territory));
+    result.update();
+    EXPECT_EQ(result, newMatch);
+}
+
+TEST(AutoLocaleTest, CatchesTerritoryUpdateForSameLanguage)
+{
+    auto oldMatch = Tts::LocaleDescriptor(QLocale::English, QLocale::Germany);
+    auto newMatch =
+        Tts::LocaleDescriptor(QLocale::English, QLocale::UnitedKingdom);
+
+    TestTranslationResources::get().clear();
+    TestTranslationResources::get().insert(
+        { { oldMatch, "" }, { newMatch, "" } });
+
+    QLocale::setDefault(QLocale(oldMatch.language, oldMatch.territory));
+    auto result = Tts::AutoLocale<TestTranslationResources>();
+    EXPECT_EQ(result, oldMatch);
+
+    QLocale::setDefault(QLocale(newMatch.language, newMatch.territory));
+    result.update();
+    EXPECT_EQ(result, newMatch);
+}
+
+TEST(AutoLocaleTest, CatchesTerritoryUpdateForDifferentLanguage)
+{
+    auto oldMatch = Tts::LocaleDescriptor(QLocale::English, QLocale::Germany);
+    auto newMatch = Tts::LocaleDescriptor(QLocale::French, QLocale::France);
+
+    TestTranslationResources::get().clear();
+    TestTranslationResources::get().insert(
+        { { oldMatch, "" }, { newMatch, "" } });
+
+    QLocale::setDefault(QLocale(oldMatch.language, oldMatch.territory));
+    auto result = Tts::AutoLocale<TestTranslationResources>();
+    EXPECT_EQ(result, oldMatch);
+
+    QLocale::setDefault(QLocale(newMatch.language, newMatch.territory));
+    result.update();
+    EXPECT_EQ(result, newMatch);
+}
