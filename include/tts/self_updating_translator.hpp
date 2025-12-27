@@ -26,8 +26,6 @@ public:
 private:
     std::shared_ptr<Tts::AbstractSettings> settings_;
 
-    LocaleDescriptor loadLocaleKey();
-
     bool load();
     // hide load(.), because a manually loaded translation would be overriden.
     bool load(const QString &filename, const QString &directory = QString(),

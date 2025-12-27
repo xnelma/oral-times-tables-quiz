@@ -35,33 +35,14 @@ QString Tts::SelfUpdatingTranslator::translate(const char *context,
     return QTranslator::translate(context, sourceText, disambiguation, n);
 }
 
-// TODO this can be a namespace function?
-// name it getLocaleDescriptor otherwise?
-// or should this be a method in Settings?
-auto Tts::SelfUpdatingTranslator::loadLocaleKey() -> LocaleDescriptor
-{
-    bool useAutoLocale = settings_->loadAutoLocaleSetting();
-    if (useAutoLocale)
-        return AutoLocale().resourceKey();
-
-    LocaleDescriptor ld = settings_->loadLocaleSetting();
-    if (ld.language <= QLocale::C) {
-        return AutoLocale().resourceKey();
-    }
-    // If the territory is QLocale::AnyTerritory, that's the same as the
-    // default argument for QLocale, so it doesn't need to be checked.
-
-    return ld;
-}
-
 bool Tts::SelfUpdatingTranslator::load()
 {
     // Update translation, if the locale changed.
-    Tts::LocaleDescriptor updatedLocale = loadLocaleKey();
-    if (localeDescriptor() == updatedLocale)
+    Tts::LocaleDescriptor updatedLocaleKey = settings_->locale().resourceKey();
+    if (localeDescriptor() == updatedLocaleKey)
         return true;
 
-    QString resourcePath = TranslationResources::get()[updatedLocale];
+    QString resourcePath = TranslationResources::get()[updatedLocaleKey];
     return load(resourcePath);
 
     // TODO would it be possible to have separate qm files for tts?
