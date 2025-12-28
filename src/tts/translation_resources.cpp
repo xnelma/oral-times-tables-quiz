@@ -1,6 +1,4 @@
 #include "translation_resources.hpp"
-#include "auto_locale.hpp"
-#include <QFile>
 #include <QDirIterator>
 #include <algorithm>
 #include <iterator>

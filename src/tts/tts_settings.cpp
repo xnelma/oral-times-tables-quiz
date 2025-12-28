@@ -4,12 +4,11 @@ Tts::Settings::Settings() { }
 
 auto Tts::Settings::loadLocaleSetting() -> LocaleDescriptor
 {
-    auto l = settings_.value(SettingsKeys::language, SettingsDefaults::language)
-                 .value<QLocale::Language>();
-    auto t =
+    return LocaleDescriptor(
+        settings_.value(SettingsKeys::language, SettingsDefaults::language)
+            .value<QLocale::Language>(),
         settings_.value(SettingsKeys::territory, SettingsDefaults::territory)
-            .value<QLocale::Territory>();
-    return LocaleDescriptor(l, t);
+            .value<QLocale::Territory>());
 }
 
 bool Tts::Settings::loadAutoLocaleSetting()
