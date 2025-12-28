@@ -8,7 +8,7 @@ namespace Tts {
 
 struct LocaleDescriptor
 {
-    explicit LocaleDescriptor();
+    LocaleDescriptor();
     LocaleDescriptor(LocaleDescriptor const &other) = default;
     LocaleDescriptor(LocaleDescriptor &&) noexcept = default;
     explicit LocaleDescriptor(const QLocale::Language &l,

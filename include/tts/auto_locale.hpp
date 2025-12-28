@@ -8,6 +8,7 @@
 #include <QFile>
 #include <QDirIterator>
 #include <exception>
+#include <ostream>
 
 namespace Tts {
 
@@ -44,12 +45,12 @@ private:
 
         // T::resources() is not saved in a static local variable on purpose:
         // it can change for unit tests.
-        // It can already be static in T::resources() to avoid rebuilding the
-        // list on every call.
+        // It can already have a state in the resources getter to avoid
+        // rebuilding the list on every call.
         const Tts::ResourceMap resources = TR::get();
 
         // An empty translation resource list should not be possible. If the
-        // translations are id-based, there is not even a default english
+        // translations are id-based, there is not even a default English
         // translation available, so allowing the c-locale as fallback would
         // not make sense.
         if (resources.size() == 0)
