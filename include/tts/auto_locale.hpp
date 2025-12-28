@@ -2,29 +2,98 @@
 #define OTTQ_20250829_1806_INCLUDE
 
 #include "locale_descriptor.hpp"
+#include "translation_resources.hpp"
 #include <QLocale>
 #include <QRegularExpression>
+#include <QFile>
+#include <QDirIterator>
+#include <exception>
+#include <ostream>
 
 namespace Tts {
 
-QLocale autoLocale();
+template <typename T>
+concept ExtendsResources = std::is_base_of_v<Tts::TranslationResources, T>;
+// C++20
 
-static void resolveFallbackLocale(QLocale system, QLocale resource,
-                                  QLocale &fallback);
+template <ExtendsResources TR = Tts::TranslationResources>
+struct AutoLocale : public LocaleDescriptor
+{
+    AutoLocale() { set(); }
 
-// Path to generated translation resources.
-const QString qmDirPath = ":/qt/qml/OttqApp/i18n/";
-const QString qmFilePath = qmDirPath + "qml_%1.qm";
+    void update()
+    {
+        QLocale updatedSystem;
+        if (updatedSystem.language() != language
+            || updatedSystem.territory() != territory)
+            set();
+    }
 
-// Regex for getting the locale name from a translation resource file name.
-// File names could for example be qml_xx.qm or qml_xx_XX.qm, and more
-// generally [prefix]xx.qm or [prefix]xx_XX.qm or with a third letter for
-// language or region and allowing '-' as delimiter.
-// This is an oversimplified assumption and requires that only language and
-// maybe territory are specified when registering the translation resources.
-// But it allows for changing the resource prefix of translation files.
-const auto qmLocaleNameRegex =
-    QRegularExpression("^.*([a-z]{2,3})([_-][A-Z]{2,3}){,1}.qm$");
+    Tts::LocaleDescriptor resourceKey() const override { return resourceKey_; }
+
+private:
+    Tts::LocaleDescriptor resourceKey_;
+
+    void set()
+    {
+        // Init with default constructor for QLocale instead of
+        // QLocale::system() to allow setting a different 'system' locale by
+        // setting a default locale, for example for unit testing.
+        Tts::LocaleDescriptor system = Tts::LocaleDescriptor(QLocale());
+
+        std::optional<Tts::LocaleDescriptor> fallback;
+
+        // T::resources() is not saved in a static local variable on purpose:
+        // it can change for unit tests.
+        // It can already have a state in the resources getter to avoid
+        // rebuilding the list on every call.
+        const Tts::ResourceMap resources = TR::get();
+
+        // An empty translation resource list should not be possible. If the
+        // translations are id-based, there is not even a default English
+        // translation available, so allowing the c-locale as fallback would
+        // not make sense.
+        if (resources.size() == 0)
+            throw std::invalid_argument("No translation resource files found.");
+
+        for (Tts::ResourcePair r : resources) {
+            Tts::LocaleDescriptor resource = r.first;
+
+            if (resource == system) {
+                language = system.language;
+                territory = system.territory;
+                resourceKey_ = resource;
+                return;
+            }
+
+            // The preferred fallback would be finding a translation resource
+            // with a matching language. Of those translation resources, take
+            // the first.
+            if (!fallback.has_value() && resource.language == system.language) {
+                fallback = system;
+                resourceKey_ = resource;
+            }
+        }
+
+        // If there is no translation available for the system language, use the
+        // first translation resource as 'automatic' tts locale.
+        // It can still be changed manually anyways.
+        if (!fallback.has_value()) {
+            fallback = resources.begin()->first;
+            resourceKey_ = *fallback;
+        }
+
+        language = fallback->language;
+        territory = fallback->territory;
+    }
+};
+
+template <Tts::ExtendsResources TR = Tts::TranslationResources>
+inline std::ostream &operator<<(std::ostream &os, const Tts::AutoLocale<TR> &ld)
+{
+    return os << static_cast<Tts::LocaleDescriptor>(ld) << ", key "
+              << ld.resourceKey();
+}
 
 } // namespace Tts
 

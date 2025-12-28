@@ -1,5 +1,4 @@
 add_library(TimesTables STATIC
-    placeholder.cpp
     quiz.cpp
 )
 

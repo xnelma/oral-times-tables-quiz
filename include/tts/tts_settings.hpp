@@ -1,33 +1,51 @@
 #ifndef OTTQ_20250829_1809_INCLUDE
 #define OTTQ_20250829_1809_INCLUDE
 
+#include "abstract_tts_settings.hpp"
 #include "locale_descriptor.hpp"
 #include <QString>
 #include <QSettings>
+#include <QLocale>
 
 namespace Tts {
 
-class Settings
+class Settings : public AbstractSettings
 {
 public:
     Settings();
 
-    LocaleDescriptor loadLocaleSetting();
-    bool loadAutoLocaleSetting();
-    double loadVoiceRateSetting();
+    LocaleDescriptor loadLocaleSetting() override;
+    bool loadAutoLocaleSetting() override;
+    double loadVoiceRateSetting() override;
 
-    void saveLocaleSetting(const LocaleDescriptor &ld);
-    void saveAutoLocaleSetting(const bool useAutoLocale);
-    void saveVoiceRateSetting(const double rate);
+    void saveLocaleSetting(const LocaleDescriptor &ld) override;
+    void saveAutoLocaleSetting(const bool useAutoLocale) override;
+    void saveVoiceRateSetting(const double rate) override;
 
 private:
-    const QString languageKey_;
-    const QString territoryKey_;
-    const QString autoLocaleKey_;
-    const QString voiceRateKey_;
-
     QSettings settings_;
 };
+
+namespace SettingsKeys {
+
+static const QString prefix = "Tts";
+static const QString localePrefix = prefix + "Locale";
+
+static const QString language = localePrefix + "/language";
+static const QString territory = localePrefix + "/territory";
+static const QString autoLocale = localePrefix + "/useAutoLocale";
+static const QString voiceRate = prefix + "/voiceRate";
+
+} // namespace SettingsKeys
+
+namespace SettingsDefaults {
+
+static const QLocale::Language language = QLocale::AnyLanguage;
+static const QLocale::Territory territory = QLocale::AnyTerritory;
+static const bool autoLocale = true;
+static const double voiceRate = 0;
+
+} // namespace SettingsDefaults
 
 } // namespace Tts
 

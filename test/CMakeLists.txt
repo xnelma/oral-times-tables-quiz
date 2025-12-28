@@ -14,19 +14,6 @@ target_link_libraries(GTest::GTest INTERFACE
 )
 
 enable_testing()
-
-add_executable(PlaceholderTest
-    placeholder_test.cpp
-)
-
-target_link_libraries(PlaceholderTest PRIVATE
-    TimesTables
-    GTest::gtest_main
-)
-
-target_include_directories(PlaceholderTest PRIVATE
-    "${PROJECT_SOURCE_DIR}/include/timestables"
-)
-
 include(GoogleTest)
-add_test(NAME PlaceholderTest COMMAND PlaceholderTest)
+
+add_subdirectory(tts)
