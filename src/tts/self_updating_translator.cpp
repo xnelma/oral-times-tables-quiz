@@ -5,6 +5,7 @@
 #include "translation_resources.hpp"
 #include <QFile>
 #include <QDirIterator>
+#include <string>
 
 Tts::SelfUpdatingTranslator::SelfUpdatingTranslator(
     QObject *parent, std::shared_ptr<Tts::AbstractSettings> settings)
@@ -29,8 +30,18 @@ QString Tts::SelfUpdatingTranslator::translate(const char *context,
                                                int n)
 {
     // Update translation.
-    if (!load())
-        throw std::runtime_error("translation could not be loaded");
+    bool ok = false;
+    std::string msg = "";
+    try {
+        ok = load();
+    } catch (const std::invalid_argument &e) {
+        msg = e.what();
+    }
+
+    if (!ok) {
+        throw std::runtime_error(
+            "translation could not be loaded" + msg != "" ? msg : "");
+    }
 
     return QTranslator::translate(context, sourceText, disambiguation, n);
 }
@@ -43,6 +54,10 @@ bool Tts::SelfUpdatingTranslator::load()
         return true;
 
     QString resourcePath = TranslationResources::get().at(updatedLocaleKey);
+    if (!QFile(resourcePath).exists())
+        throw std::invalid_argument("Invalid resource path \""
+                                    + resourcePath.toStdString() + "\"");
+
     return load(resourcePath);
 
     // TODO would it be possible to have separate qm files for tts?
