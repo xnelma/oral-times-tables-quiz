@@ -6,6 +6,7 @@
 #include <QFile>
 #include <QDirIterator>
 #include <string>
+#include <sstream>
 
 Tts::SelfUpdatingTranslator::SelfUpdatingTranslator(
     QObject *parent, std::shared_ptr<Tts::AbstractSettings> settings)
@@ -52,6 +53,11 @@ bool Tts::SelfUpdatingTranslator::load()
     Tts::LocaleDescriptor updatedLocaleKey = settings_->locale().resourceKey();
     if (localeDescriptor() == updatedLocaleKey)
         return true;
+
+    std::stringstream ss;
+    ss << updatedLocaleKey;
+    if (!TranslationResources::get().contains(updatedLocaleKey))
+        throw std::invalid_argument("Invalid locale descriptor " + ss.str());
 
     QString resourcePath = TranslationResources::get().at(updatedLocaleKey);
     if (!QFile(resourcePath).exists())
