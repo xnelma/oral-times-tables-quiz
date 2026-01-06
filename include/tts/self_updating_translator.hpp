@@ -10,7 +10,7 @@
 
 namespace Tts {
 
-class SelfUpdatingTranslator : public QTranslator
+class SelfUpdatingTranslator
 {
 public:
     explicit SelfUpdatingTranslator(
@@ -25,17 +25,9 @@ public:
 
 private:
     std::shared_ptr<Tts::AbstractSettings> settings_;
+    QTranslator translator_;
 
     bool load();
-    // hide load(.), because a manually loaded translation would be overriden.
-    bool load(const QString &filename, const QString &directory = QString(),
-              const QString &searchDelimiters = QString(),
-              const QString &suffix = QString());
-    bool load(const QLocale &locale, const QString &filename,
-              const QString &prefix = QString(),
-              const QString &directory = QString(),
-              const QString &suffix = QString());
-    bool load(const uchar *data, int len, const QString &directory = QString());
 };
 
 } // namespace Tts

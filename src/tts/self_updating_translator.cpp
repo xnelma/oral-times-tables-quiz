@@ -10,13 +10,13 @@
 
 Tts::SelfUpdatingTranslator::SelfUpdatingTranslator(
     QObject *parent, std::shared_ptr<Tts::AbstractSettings> settings)
-    : QTranslator(parent), settings_(settings)
+    : translator_(QTranslator(parent)), settings_(settings)
 {
 }
 
 auto Tts::SelfUpdatingTranslator::localeDescriptor() -> LocaleDescriptor
 {
-    return Tts::LocaleDescriptor::fromResourcePath(QTranslator::filePath());
+    return Tts::LocaleDescriptor::fromResourcePath(translator_.filePath());
 }
 
 QLocale Tts::SelfUpdatingTranslator::locale()
@@ -44,7 +44,7 @@ QString Tts::SelfUpdatingTranslator::translate(const char *context,
             "translation could not be loaded" + msg != "" ? msg : "");
     }
 
-    return QTranslator::translate(context, sourceText, disambiguation, n);
+    return translator_.translate(context, sourceText, disambiguation, n);
 }
 
 bool Tts::SelfUpdatingTranslator::load()
@@ -64,30 +64,7 @@ bool Tts::SelfUpdatingTranslator::load()
         throw std::invalid_argument("Invalid resource path \""
                                     + resourcePath.toStdString() + "\"");
 
-    return load(resourcePath);
+    return translator_.load(resourcePath);
 
     // TODO would it be possible to have separate qm files for tts?
-}
-
-bool Tts::SelfUpdatingTranslator::load(const QString &filename,
-                                       const QString &directory,
-                                       const QString &searchDelimiters,
-                                       const QString &suffix)
-{
-    return QTranslator::load(filename, directory, searchDelimiters, suffix);
-}
-
-bool Tts::SelfUpdatingTranslator::load(const QLocale &locale,
-                                       const QString &filename,
-                                       const QString &prefix,
-                                       const QString &directory,
-                                       const QString &suffix)
-{
-    return QTranslator::load(locale, filename, prefix, directory, suffix);
-}
-
-bool Tts::SelfUpdatingTranslator::load(const uchar *data, int len,
-                                       const QString &directory)
-{
-    return QTranslator::load(data, len, directory);
 }
