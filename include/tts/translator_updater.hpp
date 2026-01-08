@@ -3,20 +3,21 @@
 
 #include "abstract_tts_settings.hpp"
 #include "locale_descriptor.hpp"
+#include "abstract_translator.hpp"
 #include <QLocale>
-#include <QTranslator>
 
 namespace Tts {
 
 namespace TranslatorUpdater {
 
 // TODO move to translator class
-LocaleDescriptor localeDescriptor(const QTranslator &translator);
-QLocale locale(const QTranslator &translator);
+LocaleDescriptor localeDescriptor(Tts::AbstractTranslator &translator);
+QLocale locale(Tts::AbstractTranslator &translator);
 
 bool updateLocaleKey(LocaleDescriptor &localeKey,
                      Tts::AbstractSettings &settings);
-void update(QTranslator &translator, const LocaleDescriptor &updatedLocaleKey);
+void update(Tts::AbstractTranslator &translator,
+            const LocaleDescriptor &updatedLocaleKey);
 
 } // namespace TranslatorUpdater
 

@@ -4,13 +4,13 @@
 #include <QFile>
 #include <sstream>
 
-auto Tts::TranslatorUpdater::localeDescriptor(const QTranslator &translator)
-    -> LocaleDescriptor
+auto Tts::TranslatorUpdater::localeDescriptor(
+    Tts::AbstractTranslator &translator) -> LocaleDescriptor
 {
     return Tts::LocaleDescriptor::fromResourcePath(translator.filePath());
 }
 
-QLocale Tts::TranslatorUpdater::locale(const QTranslator &translator)
+QLocale Tts::TranslatorUpdater::locale(Tts::AbstractTranslator &translator)
 {
     auto ld = localeDescriptor(translator);
     return QLocale(ld.language, ld.territory);
@@ -28,7 +28,8 @@ bool Tts::TranslatorUpdater::updateLocaleKey(Tts::LocaleDescriptor &localeKey,
 }
 
 void Tts::TranslatorUpdater::update(
-    QTranslator &translator, const Tts::LocaleDescriptor &updatedLocaleKey)
+    Tts::AbstractTranslator &translator,
+    const Tts::LocaleDescriptor &updatedLocaleKey)
 {
     if (!TranslationResources::get().contains(updatedLocaleKey)) {
         std::stringstream ss;
