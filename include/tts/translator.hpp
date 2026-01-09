@@ -12,6 +12,7 @@ public:
     Translator(QObject *parent = nullptr);
 
     QString filePath() override;
+    QLocale locale() override;
     QString translate(const char *context, const char *sourceText,
                       const char *disambiguation = nullptr,
                       int n = -1) override;

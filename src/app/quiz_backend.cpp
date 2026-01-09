@@ -64,7 +64,7 @@ void QuizBackend::setupStateMachine()
 
     auto setupTts = [this]() {
         Tts::Settings settings;
-        auto locale = Tts::TranslatorUpdater::locale(translator_); // TODO
+        auto locale = translator_.locale();
         double rate = settings.loadVoiceRateSetting();
         tts_->setLocale(QLocale(locale.language(), locale.territory()));
         // FIXME QLocale::system() and
@@ -175,7 +175,7 @@ QString QuizBackend::state()
 
 QString QuizBackend::localeName()
 {
-    return Tts::TranslatorUpdater::locale(translator_).name(); // TODO
+    return translator_.locale().name();
 }
 
 int QuizBackend::numQuestionsRemaining()
