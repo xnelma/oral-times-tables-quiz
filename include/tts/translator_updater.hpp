@@ -12,7 +12,7 @@ namespace TranslatorUpdater {
 bool updateLocaleKey(LocaleDescriptor &localeKey,
                      Tts::AbstractSettings &settings);
 void update(Tts::AbstractTranslator &translator,
-            const LocaleDescriptor &updatedLocaleKey);
+            Tts::AbstractSettings &settings);
 
 } // namespace TranslatorUpdater
 

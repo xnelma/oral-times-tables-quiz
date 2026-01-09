@@ -15,20 +15,23 @@ bool Tts::TranslatorUpdater::updateLocaleKey(Tts::LocaleDescriptor &localeKey,
     return true;
 }
 
-void Tts::TranslatorUpdater::update(
-    Tts::AbstractTranslator &translator,
-    const Tts::LocaleDescriptor &updatedLocaleKey)
+void Tts::TranslatorUpdater::update(Tts::AbstractTranslator &translator,
+                                    Tts::AbstractSettings &settings)
 {
-    if (!TranslationResources::get().contains(updatedLocaleKey)) {
+    auto localeDescriptor = translator.localeDescriptor();
+    if (!updateLocaleKey(localeDescriptor, settings))
+        return;
+
+    if (!TranslationResources::get().contains(localeDescriptor)) {
         std::stringstream ss;
-        ss << updatedLocaleKey;
+        ss << localeDescriptor;
         throw std::invalid_argument(
             std::format("No matching key in translation resources for locale "
                         "descriptor {}.",
                         ss.str()));
     }
 
-    QString resourcePath = TranslationResources::get().at(updatedLocaleKey);
+    QString resourcePath = TranslationResources::get().at(localeDescriptor);
     if (!QFile(resourcePath).exists())
         throw std::invalid_argument(
             std::format("Resource path \"{}\" does not exist.",

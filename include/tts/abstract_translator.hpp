@@ -1,6 +1,7 @@
 #ifndef OTTQ_20260106_2039_INCLUDE
 #define OTTQ_20260106_2039_INCLUDE
 
+#include "locale_descriptor.hpp"
 #include <QString>
 #include <QLocale>
 
@@ -18,6 +19,7 @@ public:
     AbstractTranslator &operator=(AbstractTranslator &&) noexcept = default;
 
     virtual QString filePath() = 0;
+    virtual Tts::LocaleDescriptor localeDescriptor() = 0;
     virtual QLocale locale() = 0;
     virtual QString translate(const char *context, const char *sourceText,
                               const char *disambiguation = nullptr,

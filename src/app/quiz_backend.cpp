@@ -41,10 +41,7 @@ void QuizBackend::setupStateMachine()
     auto setupTranslation = [this]() {
         try {
             // Update translation, if the locale changed.
-            auto localeKey =
-                Tts::LocaleDescriptor::fromResourcePath(translator_.filePath());
-            if (Tts::TranslatorUpdater::updateLocaleKey(localeKey, settings_))
-                Tts::TranslatorUpdater::update(translator_, localeKey);
+            Tts::TranslatorUpdater::update(translator_, settings_);
 
             questionBase_ = translator_.translate(
                 QuizConstants::translationContext, QuizConstants::questionBase);

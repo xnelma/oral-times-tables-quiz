@@ -8,9 +8,14 @@ QString Tts::Translator::filePath()
     return translator_.filePath();
 }
 
+auto Tts::Translator::localeDescriptor() -> LocaleDescriptor
+{
+    return Tts::LocaleDescriptor::fromResourcePath(filePath());
+}
+
 QLocale Tts::Translator::locale()
 {
-    auto ld = Tts::LocaleDescriptor::fromResourcePath(filePath());
+    auto ld = localeDescriptor();
     return QLocale(ld.language, ld.territory);
 }
 
