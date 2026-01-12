@@ -3,7 +3,7 @@
 
 #include "quiz_state_machine.hpp"
 #include "quiz_config.hpp"
-#include "tts/translator_updater.hpp"
+#include "tts/self_updating_translator.hpp"
 #include "tts/tts_settings.hpp"
 #include "tts/translator.hpp"
 #include "timestables/quiz.hpp"
@@ -66,7 +66,7 @@ private:
     // The class outlives QuizView being on top of the stack, so the locale
     // can be updated in the settings and would need to be applied when
     // returning to the view. This would be handled inside the translator.
-    Tts::Translator translator_;
+    Tts::SelfUpdatingTranslator<Tts::Translator> translator_;
     Tts::Settings settings_;
     QString questionBase_;
 };

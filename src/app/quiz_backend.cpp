@@ -6,7 +6,7 @@
 QuizBackend::QuizBackend(QObject *parent)
     : QObject(parent),
       tts_(std::make_shared<QTextToSpeech>(this)),
-      translator_(this),
+      translator_(Tts::SelfUpdatingTranslator(this)),
       questionBase_(QuizConstants::questionBase)
 {
     setupStateMachine();
@@ -40,9 +40,6 @@ void QuizBackend::setupStateMachine()
     };
     auto setupTranslation = [this]() {
         try {
-            // Update translation, if the locale changed.
-            Tts::TranslatorUpdater::update(translator_, settings_);
-
             questionBase_ = translator_.translate(
                 QuizConstants::translationContext, QuizConstants::questionBase);
             emit localeNameChanged();
@@ -60,9 +57,8 @@ void QuizBackend::setupStateMachine()
     });
 
     auto setupTts = [this]() {
-        Tts::Settings settings;
         auto locale = translator_.locale();
-        double rate = settings.loadVoiceRateSetting();
+        double rate = settings_.loadVoiceRateSetting();
         tts_->setLocale(QLocale(locale.language(), locale.territory()));
         // FIXME QLocale::system() and
         // QLocale(l_sys.language(), l_sys.territory()) compare to different
