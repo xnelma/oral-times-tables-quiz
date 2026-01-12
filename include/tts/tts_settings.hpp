@@ -27,7 +27,7 @@ private:
 
     AutoLocale<Tts::TranslationResources> autoLocale_;
 
-    LocaleDescriptor &getAutoLocale() override;
+    LocaleDescriptor &autoLocale() override;
 };
 
 namespace SettingsKeys {

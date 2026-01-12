@@ -22,7 +22,8 @@ private:
     void updateLocale()
     {
         auto localeDescriptor = T::localeDescriptor();
-        auto settingsLocaleDescriptor = settings_->locale().resourceKey();
+        auto settingsLocaleDescriptor =
+            settings_->resolvedLocale().resourceKey();
         if (settingsLocaleDescriptor == localeDescriptor)
             return;
         localeDescriptor = std::move(settingsLocaleDescriptor);

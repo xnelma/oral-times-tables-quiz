@@ -14,7 +14,7 @@ private:
 
     Tts::AutoLocale<TestTranslationResources> autoLocale_;
 
-    Tts::LocaleDescriptor &getAutoLocale() override
+    Tts::LocaleDescriptor &autoLocale() override
     {
         autoLocale_ = Tts::AutoLocale<TestTranslationResources>();
         return autoLocale_;
@@ -23,7 +23,7 @@ private:
 public:
     TestSettings() { }
 
-    Tts::LocaleDescriptor loadLocaleSetting() override { return getLocale(); }
+    Tts::LocaleDescriptor loadLocaleSetting() override { return locale(); }
     bool loadAutoLocaleSetting() override { return useAutoLocale_; }
     double loadVoiceRateSetting() override { return voiceRate_; }
 

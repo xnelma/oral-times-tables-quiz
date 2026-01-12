@@ -13,8 +13,8 @@ private:
     LocaleDescriptor locale_;
 
 protected:
-    virtual LocaleDescriptor &getAutoLocale() = 0;
-    LocaleDescriptor &getLocale() { return locale_; }
+    virtual LocaleDescriptor &autoLocale() = 0;
+    LocaleDescriptor &locale() { return locale_; }
     void setLocale(const Tts::LocaleDescriptor &locale) { locale_ = locale; }
 
 public:
@@ -26,11 +26,11 @@ public:
     AbstractSettings &operator=(AbstractSettings const &) = default;
     AbstractSettings &operator=(AbstractSettings &&) noexcept = default;
 
-    LocaleDescriptor &locale()
+    LocaleDescriptor &resolvedLocale()
     {
         locale_ = loadLocaleSetting();
         if (loadAutoLocaleSetting() || locale_.language <= QLocale::C) {
-            return getAutoLocale();
+            return autoLocale();
         }
 
         return locale_;
