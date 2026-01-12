@@ -9,6 +9,14 @@ namespace Tts {
 
 class AbstractSettings
 {
+private:
+    LocaleDescriptor locale_;
+
+protected:
+    virtual LocaleDescriptor &getAutoLocale() = 0;
+    LocaleDescriptor &getLocale() { return locale_; }
+    void setLocale(const Tts::LocaleDescriptor &locale) { locale_ = locale; }
+
 public:
     AbstractSettings() { }
     AbstractSettings(AbstractSettings const &) = default;
@@ -22,8 +30,7 @@ public:
     {
         locale_ = loadLocaleSetting();
         if (loadAutoLocaleSetting() || locale_.language <= QLocale::C) {
-            autoLocale_ = Tts::AutoLocale();
-            return autoLocale_;
+            return getAutoLocale();
         }
 
         return locale_;
@@ -36,10 +43,6 @@ public:
     virtual void saveLocaleSetting(const LocaleDescriptor &ld) = 0;
     virtual void saveAutoLocaleSetting(const bool useAutoLocale) = 0;
     virtual void saveVoiceRateSetting(const double rate) = 0;
-
-private:
-    LocaleDescriptor locale_;
-    AutoLocale<Tts::TranslationResources> autoLocale_;
 };
 
 } // namespace Tts

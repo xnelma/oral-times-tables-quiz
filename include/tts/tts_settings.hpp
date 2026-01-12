@@ -24,6 +24,10 @@ public:
 
 private:
     QSettings settings_;
+
+    AutoLocale<Tts::TranslationResources> autoLocale_;
+
+    LocaleDescriptor &getAutoLocale() override;
 };
 
 namespace SettingsKeys {

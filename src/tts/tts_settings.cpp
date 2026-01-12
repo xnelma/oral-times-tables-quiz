@@ -39,3 +39,9 @@ void Tts::Settings::saveVoiceRateSetting(const double rate)
 {
     settings_.setValue(SettingsKeys::voiceRate, rate);
 }
+
+auto Tts::Settings::getAutoLocale() -> LocaleDescriptor &
+{
+    autoLocale_ = Tts::AutoLocale();
+    return autoLocale_;
+}
