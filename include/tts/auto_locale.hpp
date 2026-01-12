@@ -54,7 +54,9 @@ private:
         // translation available, so allowing the c-locale as fallback would
         // not make sense.
         if (resources.size() == 0)
-            throw std::invalid_argument("No translation resource files found.");
+            throw std::invalid_argument(
+                "No translation resource files found "
+                "to match against system locale for auto-resolving it.");
 
         for (Tts::ResourcePair r : resources) {
             Tts::LocaleDescriptor resource = r.first;
