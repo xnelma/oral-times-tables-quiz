@@ -11,7 +11,15 @@ namespace Tts {
 template <typename T>
 concept ExtendsTranslator = std::is_base_of_v<Tts::AbstractTranslator, T>;
 
-template <ExtendsTranslator T = Tts::Translator>
+#ifndef EXTENDS_RESOURCES
+#  define EXTENDS_RESOURCES
+template <typename T>
+concept ExtendsResources = std::is_base_of_v<Tts::TranslationResources, T>;
+// C++20
+#endif // EXTENDS_RESOURCES
+
+template <ExtendsTranslator T = Tts::Translator,
+          ExtendsResources TR = Tts::TranslationResources>
 class SelfUpdatingTranslator : public T
 {
 private:
@@ -28,10 +36,10 @@ private:
             return;
         localeDescriptor = std::move(settingsLocaleDescriptor);
 
-        if (TranslationResources::get().empty())
+        if (TR::get().empty())
             throw std::invalid_argument("Translation resources are empty.");
 
-        if (!TranslationResources::get().contains(localeDescriptor)) {
+        if (!TR::get().contains(localeDescriptor)) {
             std::stringstream ss;
             ss << localeDescriptor;
             throw std::invalid_argument(
@@ -40,7 +48,7 @@ private:
                             ss.str()));
         }
 
-        QString resourcePath = TranslationResources::get().at(localeDescriptor);
+        QString resourcePath = TR::get().at(localeDescriptor);
         if (!QFile(resourcePath).exists())
             throw std::invalid_argument(
                 std::format("Resource path \"{}\" does not exist.",

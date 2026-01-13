@@ -12,9 +12,12 @@
 
 namespace Tts {
 
+#ifndef EXTENDS_RESOURCES
+#  define EXTENDS_RESOURCES
 template <typename T>
 concept ExtendsResources = std::is_base_of_v<Tts::TranslationResources, T>;
 // C++20
+#endif // EXTENDS_RESOURCES
 
 template <ExtendsResources TR = Tts::TranslationResources>
 struct AutoLocale : public LocaleDescriptor
