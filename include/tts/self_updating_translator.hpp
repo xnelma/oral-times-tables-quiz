@@ -28,6 +28,9 @@ private:
             return;
         localeDescriptor = std::move(settingsLocaleDescriptor);
 
+        if (TranslationResources::get().empty())
+            throw std::invalid_argument("Translation resources are empty.");
+
         if (!TranslationResources::get().contains(localeDescriptor)) {
             std::stringstream ss;
             ss << localeDescriptor;
