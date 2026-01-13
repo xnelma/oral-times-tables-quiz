@@ -14,8 +14,6 @@ private:
 
 protected:
     virtual LocaleDescriptor &autoLocale() = 0;
-    LocaleDescriptor &locale() { return locale_; }
-    void setLocale(const Tts::LocaleDescriptor &locale) { locale_ = locale; }
 
 public:
     AbstractSettings() { }

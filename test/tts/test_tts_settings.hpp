@@ -9,6 +9,7 @@
 class TestSettings : public Tts::AbstractSettings
 {
 private:
+    Tts::LocaleDescriptor savedLocale_;
     bool useAutoLocale_{ false };
     double voiceRate_{ 0 };
 
@@ -23,13 +24,13 @@ private:
 public:
     TestSettings() { }
 
-    Tts::LocaleDescriptor loadLocaleSetting() override { return locale(); }
+    Tts::LocaleDescriptor loadLocaleSetting() override { return savedLocale_; }
     bool loadAutoLocaleSetting() override { return useAutoLocale_; }
     double loadVoiceRateSetting() override { return voiceRate_; }
 
     void saveLocaleSetting(const Tts::LocaleDescriptor &ld) override
     {
-        setLocale(ld);
+        savedLocale_ = std::move(ld);
     }
     void saveAutoLocaleSetting(const bool useAutoLocale) override
     {
