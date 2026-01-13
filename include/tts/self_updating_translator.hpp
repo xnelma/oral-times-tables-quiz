@@ -49,11 +49,6 @@ private:
         }
 
         QString resourcePath = TR::get().at(localeDescriptor);
-        if (!QFile(resourcePath).exists())
-            throw std::invalid_argument(
-                std::format("Resource path \"{}\" does not exist.",
-                            resourcePath.toStdString()));
-
         bool ok = T::load(resourcePath);
 
         if (!ok)

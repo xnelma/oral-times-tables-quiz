@@ -75,9 +75,10 @@ public:
     bool load(const QString &filename) override
     {
         if (!translations_.contains(filename))
-            return false;
+            throw std::invalid_argument(
+                std::format("Resource path \"{}\" does not exist.",
+                            filename.toStdString()));
 
-        // if successful:
         filePath_ = filename;
         return true;
     }

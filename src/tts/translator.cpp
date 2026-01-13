@@ -1,5 +1,6 @@
 #include "translator.hpp"
 #include "locale_descriptor.hpp"
+#include <QFile>
 
 Tts::Translator::Translator(QObject *parent) : translator_(parent) { }
 
@@ -27,5 +28,9 @@ QString Tts::Translator::translate(const char *context, const char *sourceText,
 
 bool Tts::Translator::load(const QString &filename)
 {
+    if (!QFile(filename).exists())
+        throw std::invalid_argument(std::format(
+            "Resource path \"{}\" does not exist.", filename.toStdString()));
+
     return translator_.load(filename);
 }
