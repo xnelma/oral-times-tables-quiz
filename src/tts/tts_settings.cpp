@@ -42,6 +42,6 @@ void Tts::Settings::saveVoiceRateSetting(const double rate)
 
 auto Tts::Settings::autoLocale() -> LocaleDescriptor &
 {
-    autoLocale_ = Tts::AutoLocale();
+    autoLocale_.update();
     return autoLocale_;
 }

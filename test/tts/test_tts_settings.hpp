@@ -17,7 +17,7 @@ private:
 
     Tts::LocaleDescriptor &autoLocale() override
     {
-        autoLocale_ = Tts::AutoLocale<TestTranslationResources>();
+        autoLocale_.update();
         return autoLocale_;
     }
 
