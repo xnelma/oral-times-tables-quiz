@@ -13,33 +13,36 @@ concept ExtendsTranslator = std::is_base_of_v<Tts::AbstractTranslator, T>;
 
 #ifndef EXTENDS_RESOURCES
 #  define EXTENDS_RESOURCES
-template <typename T>
-concept ExtendsResources = std::is_base_of_v<Tts::TranslationResources, T>;
+template <typename TR>
+concept ExtendsResources = std::is_base_of_v<Tts::TranslationResources, TR>;
 // C++20
 #endif // EXTENDS_RESOURCES
 
-template <ExtendsTranslator T = Tts::Translator,
-          ExtendsResources TR = Tts::TranslationResources>
-class SelfUpdatingTranslator : public T
+template <ExtendsTranslator TTranslator = Tts::Translator,
+          ExtendsResources TTranslationResources = Tts::TranslationResources>
+class SelfUpdatingTranslator : public TTranslator
 {
 private:
     std::shared_ptr<Tts::AbstractSettings> settings_;
 
-    bool load(const QString &filename) override { return T::load(filename); }
+    bool load(const QString &filename) override
+    {
+        return TTranslator::load(filename);
+    }
 
     void updateLocale()
     {
-        auto localeDescriptor = T::localeDescriptor();
+        auto localeDescriptor = TTranslator::localeDescriptor();
         auto settingsLocaleDescriptor =
             settings_->resolvedLocale().resourceKey();
         if (settingsLocaleDescriptor == localeDescriptor)
             return;
         localeDescriptor = std::move(settingsLocaleDescriptor);
 
-        if (TR::get().empty())
+        if (TTranslationResources::get().empty())
             throw std::invalid_argument("Translation resources are empty.");
 
-        if (!TR::get().contains(localeDescriptor)) {
+        if (!TTranslationResources::get().contains(localeDescriptor)) {
             std::stringstream ss;
             ss << localeDescriptor;
             throw std::invalid_argument(
@@ -48,8 +51,9 @@ private:
                             ss.str()));
         }
 
-        QString resourcePath = TR::get().at(localeDescriptor);
-        bool ok = T::load(resourcePath);
+        QString resourcePath =
+            TTranslationResources::get().at(localeDescriptor);
+        bool ok = TTranslator::load(resourcePath);
 
         if (!ok)
             throw std::runtime_error("Translation could not be loaded.");
@@ -69,7 +73,7 @@ public:
         QObject *parent,
         std::shared_ptr<Tts::AbstractSettings> settings =
             std::make_shared<Tts::Settings>())
-        : T(parent), settings_(settings)
+        : TTranslator(parent), settings_(settings)
     {
     }
 
@@ -77,7 +81,7 @@ public:
                       const char *disambiguation = nullptr, int n = -1)
     {
         updateLocale();
-        return T::translate(context, sourceText, disambiguation, n);
+        return TTranslator::translate(context, sourceText, disambiguation, n);
     }
 };
 
