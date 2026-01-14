@@ -17,21 +17,20 @@ TEST(TranslatorUpdaterTest, TestTranslatorWorks)
     EXPECT_EQ(translator.localeDescriptor(),
               Tts::LocaleDescriptor(QLocale::English, QLocale::AnyTerritory));
     EXPECT_EQ(translator.filePath(), TtsTest::ResourcePaths::en);
-    const char *test = "test";
-    QString res = translator.translate(nullptr, test);
-    std::string testStr{ test };
-    TtsTest::Translator::permutate(testStr, TtsTest::Locale::En);
-    EXPECT_EQ(res, QString::fromStdString(testStr));
+    std::string test = "test";
+    QString res = translator.translate(nullptr, test.c_str());
+    TtsTest::Translator::permutate(test, TtsTest::Locale::En);
+    EXPECT_EQ(res, QString::fromStdString(test));
 
     translator.load(TtsTest::ResourcePaths::de);
 
     EXPECT_EQ(translator.localeDescriptor(),
               Tts::LocaleDescriptor(QLocale::German, QLocale::AnyTerritory));
     EXPECT_EQ(translator.filePath(), TtsTest::ResourcePaths::de);
-    res = translator.translate(nullptr, test);
-    testStr = test;
-    TtsTest::Translator::permutate(testStr, TtsTest::Locale::De);
-    EXPECT_EQ(res, QString::fromStdString(testStr));
+    test = "test";
+    res = translator.translate(nullptr, test.c_str());
+    TtsTest::Translator::permutate(test, TtsTest::Locale::De);
+    EXPECT_EQ(res, QString::fromStdString(test));
 }
 
 TEST(TranslatorUpdaterTest, CatchesSettingsUpdate)
@@ -56,11 +55,10 @@ TEST(TranslatorUpdaterTest, CatchesSettingsUpdate)
     Tts::LocaleDescriptor translatorLocale = translator.localeDescriptor();
     EXPECT_EQ(translatorLocale, cur);
 
-    const char *test = "test";
-    QString res = translator.translate(nullptr, test);
-    std::string testStr{ test };
-    TtsTest::Translator::permutate(testStr, TtsTest::Locale::En);
-    EXPECT_EQ(res, QString::fromStdString(testStr));
+    std::string test = "test";
+    QString res = translator.translate(nullptr, test.c_str());
+    TtsTest::Translator::permutate(test, TtsTest::Locale::En);
+    EXPECT_EQ(res, QString::fromStdString(test));
 
     auto newCur = Tts::LocaleDescriptor(QLocale::German, QLocale::AnyTerritory);
     TestTranslationResources::get().insert(
@@ -69,10 +67,10 @@ TEST(TranslatorUpdaterTest, CatchesSettingsUpdate)
     // update settings with new locale
     settings->saveLocaleSetting(newCur);
 
-    res = translator.translate(nullptr, test);
-    testStr = test;
-    TtsTest::Translator::permutate(testStr, TtsTest::Locale::De);
-    EXPECT_EQ(res, QString::fromStdString(testStr));
+    test = "test";
+    res = translator.translate(nullptr, test.c_str());
+    TtsTest::Translator::permutate(test, TtsTest::Locale::De);
+    EXPECT_EQ(res, QString::fromStdString(test));
 
     translatorLocale = translator.localeDescriptor();
     EXPECT_EQ(translatorLocale, newCur);
@@ -105,11 +103,10 @@ TEST(TranslatorUpdaterTest, CatchesSystemLocaleUpdate)
     Tts::LocaleDescriptor translatorLocale = translator.localeDescriptor();
     EXPECT_EQ(translatorLocale, curEn);
 
-    const char *test = "test";
-    QString res = translator.translate(nullptr, test);
-    std::string testStr{ test };
-    TtsTest::Translator::permutate(testStr, TtsTest::Locale::En);
-    EXPECT_EQ(res, QString::fromStdString(testStr));
+    std::string test = "test";
+    QString res = translator.translate(nullptr, test.c_str());
+    TtsTest::Translator::permutate(test, TtsTest::Locale::En);
+    EXPECT_EQ(res, QString::fromStdString(test));
 
     // update system locale
     auto newSys = Tts::LocaleDescriptor(QLocale::German, QLocale::Germany);
@@ -117,10 +114,10 @@ TEST(TranslatorUpdaterTest, CatchesSystemLocaleUpdate)
     EXPECT_EQ(settings->resolvedLocale(), newSys);
     EXPECT_EQ(settings->resolvedLocale().resourceKey(), curDe);
 
-    res = translator.translate(nullptr, test);
-    testStr = test;
-    TtsTest::Translator::permutate(testStr, TtsTest::Locale::De);
-    EXPECT_EQ(res, QString::fromStdString(testStr));
+    test = "test";
+    res = translator.translate(nullptr, test.c_str());
+    TtsTest::Translator::permutate(test, TtsTest::Locale::De);
+    EXPECT_EQ(res, QString::fromStdString(test));
 
     translatorLocale = translator.localeDescriptor();
     EXPECT_EQ(translatorLocale, curDe);
