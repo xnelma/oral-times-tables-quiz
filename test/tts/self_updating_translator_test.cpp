@@ -46,7 +46,7 @@ protected:
         settings_ = std::make_shared<TestSettings>();
         settings_->saveLocaleSetting(enAny_);
         settings_->saveAutoLocaleSetting(false);
-        translator_ = std::make_shared<
+        translator_ = std::make_unique<
             Tts::SelfUpdatingTranslator<TtsTest::Translator,
                                         TestTranslationResources>>(settings_);
 
@@ -62,7 +62,7 @@ protected:
 
     // NOLINTBEGIN(cppcoreguidelines-non-private-member-variables-in-classes)
     std::shared_ptr<TestSettings> settings_;
-    std::shared_ptr<Tts::SelfUpdatingTranslator<TtsTest::Translator,
+    std::unique_ptr<Tts::SelfUpdatingTranslator<TtsTest::Translator,
                                                 TestTranslationResources>>
         translator_;
 
