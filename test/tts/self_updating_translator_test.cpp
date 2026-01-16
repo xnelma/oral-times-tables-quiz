@@ -5,7 +5,7 @@
 #include <gtest/gtest.h>
 #include <string>
 
-TEST(TranslatorUpdaterTest, TestTranslatorWorks)
+TEST(TestTranslatorTest, TestTranslatorWorks)
 {
     std::unordered_map<QString, TtsTest::Locale> translations;
     translations.insert({ TtsTest::ResourcePaths::en, TtsTest::Locale::En });
@@ -33,92 +33,92 @@ TEST(TranslatorUpdaterTest, TestTranslatorWorks)
     EXPECT_EQ(res, QString::fromStdString(test));
 }
 
-TEST(TranslatorUpdaterTest, CatchesSettingsUpdate)
+class SelfUpdatingTranslatorTest : public testing::Test
 {
-    TestTranslationResources::get().clear();
-    auto sys = Tts::LocaleDescriptor(QLocale::English, QLocale::UnitedStates);
-    auto cur = Tts::LocaleDescriptor(QLocale::English, QLocale::AnyTerritory);
-    QLocale::setDefault(QLocale(sys.language, sys.territory));
-    TestTranslationResources::get().insert({ cur, TtsTest::ResourcePaths::en });
+protected:
+    SelfUpdatingTranslatorTest()
+    {
+        TestTranslationResources::get().insert(
+            { enAny_, TtsTest::ResourcePaths::en });
+        TestTranslationResources::get().insert(
+            { deAny_, TtsTest::ResourcePaths::de });
 
-    std::shared_ptr<TestSettings> settings = std::make_shared<TestSettings>();
-    settings->saveLocaleSetting(cur);
-    settings->saveAutoLocaleSetting(false);
+        settings_ = std::make_shared<TestSettings>();
+        settings_->saveLocaleSetting(enAny_);
+        settings_->saveAutoLocaleSetting(false);
+        translator_ = std::make_shared<
+            Tts::SelfUpdatingTranslator<TtsTest::Translator,
+                                        TestTranslationResources>>(settings_);
 
-    Tts::SelfUpdatingTranslator<TtsTest::Translator, TestTranslationResources>
-        translator(settings);
-    std::unordered_map<QString, TtsTest::Locale> translations;
-    translations.insert({ TtsTest::ResourcePaths::en, TtsTest::Locale::En });
-    translations.insert({ TtsTest::ResourcePaths::de, TtsTest::Locale::De });
-    translator.setup(translations, TtsTest::ResourcePaths::en);
+        QLocale::setDefault(QLocale(enUs_.language, enUs_.territory));
 
-    Tts::LocaleDescriptor translatorLocale = translator.localeDescriptor();
-    EXPECT_EQ(translatorLocale, cur);
+        std::unordered_map<QString, TtsTest::Locale> translations;
+        translations.insert(
+            { TtsTest::ResourcePaths::en, TtsTest::Locale::En });
+        translations.insert(
+            { TtsTest::ResourcePaths::de, TtsTest::Locale::De });
+        translator_->setup(translations, TtsTest::ResourcePaths::en);
+    }
 
-    std::string test = "test";
-    QString res = translator.translate(nullptr, test.c_str());
-    TtsTest::Translator::permutate(test, TtsTest::Locale::En);
-    EXPECT_EQ(res, QString::fromStdString(test));
+    // NOLINTBEGIN(cppcoreguidelines-non-private-member-variables-in-classes)
+    std::shared_ptr<TestSettings> settings_;
+    std::shared_ptr<Tts::SelfUpdatingTranslator<TtsTest::Translator,
+                                                TestTranslationResources>>
+        translator_;
 
-    auto newCur = Tts::LocaleDescriptor(QLocale::German, QLocale::AnyTerritory);
-    TestTranslationResources::get().insert(
-        { newCur, TtsTest::ResourcePaths::de });
+    Tts::LocaleDescriptor enUs_{ QLocale::English, QLocale::UnitedStates };
+    Tts::LocaleDescriptor deDe_{ QLocale::German, QLocale::Germany };
+    Tts::LocaleDescriptor enAny_{ QLocale::English, QLocale::AnyTerritory };
+    Tts::LocaleDescriptor deAny_{ QLocale::German, QLocale::AnyTerritory };
+
+    std::string test1_ = "test1";
+    std::string test2_ = "test2";
+    // NOLINTEND(cppcoreguidelines-non-private-member-variables-in-classes)
+};
+
+TEST_F(SelfUpdatingTranslatorTest, CatchesSettingsUpdate)
+{
+    Tts::LocaleDescriptor translatorLocale = translator_->localeDescriptor();
+    EXPECT_EQ(translatorLocale, enAny_);
+
+    QString result = translator_->translate(nullptr, test1_.c_str());
+    TtsTest::Translator::permutate(test1_, TtsTest::Locale::En);
+    EXPECT_EQ(result, QString::fromStdString(test1_));
 
     // update settings with new locale
-    settings->saveLocaleSetting(newCur);
+    settings_->saveLocaleSetting(deAny_);
 
-    test = "test";
-    res = translator.translate(nullptr, test.c_str());
-    TtsTest::Translator::permutate(test, TtsTest::Locale::De);
-    EXPECT_EQ(res, QString::fromStdString(test));
+    result = translator_->translate(nullptr, test2_.c_str());
+    TtsTest::Translator::permutate(test2_, TtsTest::Locale::De);
+    EXPECT_EQ(result.toStdString(), test2_);
 
-    translatorLocale = translator.localeDescriptor();
-    EXPECT_EQ(translatorLocale, newCur);
+    translatorLocale = translator_->localeDescriptor();
+    EXPECT_EQ(translatorLocale, deAny_);
 }
 
-TEST(TranslatorUpdaterTest, CatchesSystemLocaleUpdate)
+TEST_F(SelfUpdatingTranslatorTest, CatchesSystemLocaleUpdate)
 {
-    TestTranslationResources::get().clear();
-    auto sys = Tts::LocaleDescriptor(QLocale::English, QLocale::UnitedStates);
-    auto curEn = Tts::LocaleDescriptor(QLocale::English, QLocale::AnyTerritory);
-    auto curDe = Tts::LocaleDescriptor(QLocale::German, QLocale::AnyTerritory);
-    QLocale::setDefault(QLocale(sys.language, sys.territory));
-    TestTranslationResources::get().insert(
-        { curEn, TtsTest::ResourcePaths::en });
-    TestTranslationResources::get().insert(
-        { curDe, TtsTest::ResourcePaths::de });
+    settings_->saveAutoLocaleSetting(true);
 
-    std::shared_ptr<TestSettings> settings = std::make_shared<TestSettings>();
-    settings->saveAutoLocaleSetting(true);
-    EXPECT_EQ(settings->resolvedLocale(), sys);
-    EXPECT_EQ(settings->resolvedLocale().resourceKey(), curEn);
+    EXPECT_EQ(settings_->resolvedLocale(), enUs_);
+    EXPECT_EQ(settings_->resolvedLocale().resourceKey(), enAny_);
 
-    Tts::SelfUpdatingTranslator<TtsTest::Translator, TestTranslationResources>
-        translator(settings);
-    std::unordered_map<QString, TtsTest::Locale> translations;
-    translations.insert({ TtsTest::ResourcePaths::en, TtsTest::Locale::En });
-    translations.insert({ TtsTest::ResourcePaths::de, TtsTest::Locale::De });
-    translator.setup(translations, TtsTest::ResourcePaths::en);
+    Tts::LocaleDescriptor translatorLocale = translator_->localeDescriptor();
+    EXPECT_EQ(translatorLocale, enAny_);
 
-    Tts::LocaleDescriptor translatorLocale = translator.localeDescriptor();
-    EXPECT_EQ(translatorLocale, curEn);
-
-    std::string test = "test";
-    QString res = translator.translate(nullptr, test.c_str());
-    TtsTest::Translator::permutate(test, TtsTest::Locale::En);
-    EXPECT_EQ(res, QString::fromStdString(test));
+    QString result = translator_->translate(nullptr, test1_.c_str());
+    TtsTest::Translator::permutate(test1_, TtsTest::Locale::En);
+    EXPECT_EQ(result, QString::fromStdString(test1_));
 
     // update system locale
-    auto newSys = Tts::LocaleDescriptor(QLocale::German, QLocale::Germany);
-    QLocale::setDefault(QLocale(newSys.language, newSys.territory));
-    EXPECT_EQ(settings->resolvedLocale(), newSys);
-    EXPECT_EQ(settings->resolvedLocale().resourceKey(), curDe);
+    QLocale::setDefault(QLocale(deDe_.language, deDe_.territory));
+    EXPECT_EQ(settings_->resolvedLocale(), deDe_);
+    EXPECT_EQ(settings_->resolvedLocale().resourceKey(), deAny_);
 
-    test = "test";
-    res = translator.translate(nullptr, test.c_str());
-    TtsTest::Translator::permutate(test, TtsTest::Locale::De);
-    EXPECT_EQ(res, QString::fromStdString(test));
+    result = translator_->translate(nullptr, test2_.c_str());
+    TtsTest::Translator::permutate(test2_, TtsTest::Locale::De);
+    EXPECT_EQ(result, QString::fromStdString(test2_));
 
-    translatorLocale = translator.localeDescriptor();
-    EXPECT_EQ(translatorLocale, curDe);
+    translatorLocale = translator_->localeDescriptor();
+    EXPECT_EQ(translatorLocale, deAny_);
 }
