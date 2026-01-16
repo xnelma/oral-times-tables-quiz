@@ -38,17 +38,18 @@ class SelfUpdatingTranslatorTest : public testing::Test
 protected:
     SelfUpdatingTranslatorTest()
     {
-        TestTranslationResources::get().insert(
+        TtsTest::TranslationResources::get().insert(
             { enAny_, TtsTest::ResourcePaths::en });
-        TestTranslationResources::get().insert(
+        TtsTest::TranslationResources::get().insert(
             { deAny_, TtsTest::ResourcePaths::de });
 
-        settings_ = std::make_shared<TestSettings>();
+        settings_ = std::make_shared<TtsTest::Settings>();
         settings_->saveLocaleSetting(enAny_);
         settings_->saveAutoLocaleSetting(false);
         translator_ = std::make_unique<
             Tts::SelfUpdatingTranslator<TtsTest::Translator,
-                                        TestTranslationResources>>(settings_);
+                                        TtsTest::TranslationResources>>(
+            settings_);
 
         QLocale::setDefault(QLocale(enUs_.language, enUs_.territory));
 
@@ -61,9 +62,9 @@ protected:
     }
 
     // NOLINTBEGIN(cppcoreguidelines-non-private-member-variables-in-classes)
-    std::shared_ptr<TestSettings> settings_;
+    std::shared_ptr<TtsTest::Settings> settings_;
     std::unique_ptr<Tts::SelfUpdatingTranslator<TtsTest::Translator,
-                                                TestTranslationResources>>
+                                                TtsTest::TranslationResources>>
         translator_;
 
     Tts::LocaleDescriptor enUs_{ QLocale::English, QLocale::UnitedStates };

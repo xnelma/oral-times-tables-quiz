@@ -6,14 +6,16 @@
 #include "test_translation_resources.hpp"
 #include "auto_locale.hpp"
 
-class TestSettings : public Tts::AbstractSettings
+namespace TtsTest {
+
+class Settings : public Tts::AbstractSettings
 {
 private:
     Tts::LocaleDescriptor savedLocale_;
     bool savedUseAutoLocale_{ false };
     double savedVoiceRate_{ 0 };
 
-    Tts::AutoLocale<TestTranslationResources> autoLocale_;
+    Tts::AutoLocale<TtsTest::TranslationResources> autoLocale_;
 
     Tts::LocaleDescriptor &autoLocale() override
     {
@@ -22,7 +24,7 @@ private:
     }
 
 public:
-    TestSettings() { }
+    Settings() { }
 
     Tts::LocaleDescriptor loadLocaleSetting() override { return savedLocale_; }
     bool loadAutoLocaleSetting() override { return savedUseAutoLocale_; }
@@ -41,5 +43,7 @@ public:
         savedVoiceRate_ = voiceRate;
     }
 };
+
+} // namespace TtsTest
 
 #endif // OTTQ_20251222_1939_INCLUDE
