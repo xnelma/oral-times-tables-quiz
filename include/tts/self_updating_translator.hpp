@@ -1,5 +1,5 @@
-#ifndef OTTQ_20260112_0952_INCLUDE
-#define OTTQ_20260112_0952_INCLUDE
+#ifndef OTTQ_20250829_1807_INCLUDE
+#define OTTQ_20250829_1807_INCLUDE
 
 #include "abstract_translator.hpp"
 #include "abstract_tts_settings.hpp"
@@ -87,4 +87,4 @@ public:
 
 } // namespace Tts
 
-#endif // OTTQ_20260112_0952_INCLUDE
+#endif // OTTQ_20250829_1807_INCLUDE
