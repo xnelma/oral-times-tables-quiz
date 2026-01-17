@@ -1,6 +1,8 @@
 #include "translation_resources.hpp"
 
-struct TestTranslationResources : Tts::TranslationResources
+namespace TtsTest {
+
+struct TranslationResources : Tts::TranslationResources
 {
     static Tts::ResourceMap &get()
     {
@@ -8,3 +10,5 @@ struct TestTranslationResources : Tts::TranslationResources
         return tmp;
     }
 };
+
+} // namespace TtsTest

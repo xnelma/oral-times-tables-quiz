@@ -6,9 +6,14 @@ add_executable(LocaleDescriptorTest
     from_filename_test.cpp
 )
 
+add_executable(SelfUpdatingTranslatorTest
+    self_updating_translator_test.cpp
+)
+
 set(TestNames
     AutoLocaleTest
     LocaleDescriptorTest
+    SelfUpdatingTranslatorTest
 )
 
 foreach(TestName IN LISTS TestNames)

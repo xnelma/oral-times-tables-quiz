@@ -1,5 +1,4 @@
 #include "quiz_backend.hpp"
-#include "tts/tts_settings.hpp"
 #include "timestables/factor_range.hpp"
 #include "timestables/question.hpp"
 #include <QtLogging>
@@ -7,7 +6,7 @@
 QuizBackend::QuizBackend(QObject *parent)
     : QObject(parent),
       tts_(std::make_shared<QTextToSpeech>(this)),
-      translator_(this),
+      translator_(Tts::SelfUpdatingTranslator(this)),
       questionBase_(QuizConstants::questionBase)
 {
     setupStateMachine();
@@ -44,6 +43,9 @@ void QuizBackend::setupStateMachine()
             questionBase_ = translator_.translate(
                 QuizConstants::translationContext, QuizConstants::questionBase);
             emit localeNameChanged();
+        } catch (const std::invalid_argument &e) {
+            qCritical("Translation setup failed: %s", e.what());
+            throw std::domain_error(e.what());
         } catch (const std::runtime_error &e) {
             qCritical("Translation setup failed: %s", e.what());
             throw std::domain_error(e.what());
@@ -55,9 +57,8 @@ void QuizBackend::setupStateMachine()
     });
 
     auto setupTts = [this]() {
-        Tts::Settings settings;
         auto locale = translator_.locale();
-        double rate = settings.loadVoiceRateSetting();
+        double rate = settings_.loadVoiceRateSetting();
         tts_->setLocale(QLocale(locale.language(), locale.territory()));
         // FIXME QLocale::system() and
         // QLocale(l_sys.language(), l_sys.territory()) compare to different

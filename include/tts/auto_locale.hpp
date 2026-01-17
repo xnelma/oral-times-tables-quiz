@@ -12,11 +12,14 @@
 
 namespace Tts {
 
+#ifndef EXTENDS_RESOURCES
+#  define EXTENDS_RESOURCES
 template <typename T>
 concept ExtendsResources = std::is_base_of_v<Tts::TranslationResources, T>;
 // C++20
+#endif // EXTENDS_RESOURCES
 
-template <ExtendsResources TR = Tts::TranslationResources>
+template <ExtendsResources TTranslationResources = Tts::TranslationResources>
 struct AutoLocale : public LocaleDescriptor
 {
     AutoLocale() { set(); }
@@ -47,14 +50,16 @@ private:
         // it can change for unit tests.
         // It can already have a state in the resources getter to avoid
         // rebuilding the list on every call.
-        const Tts::ResourceMap resources = TR::get();
+        const Tts::ResourceMap resources = TTranslationResources::get();
 
         // An empty translation resource list should not be possible. If the
         // translations are id-based, there is not even a default English
         // translation available, so allowing the c-locale as fallback would
         // not make sense.
         if (resources.size() == 0)
-            throw std::invalid_argument("No translation resource files found.");
+            throw std::invalid_argument(
+                "No translation resource files found "
+                "to match against system locale for auto-resolving it.");
 
         for (Tts::ResourcePair r : resources) {
             Tts::LocaleDescriptor resource = r.first;
@@ -88,8 +93,10 @@ private:
     }
 };
 
-template <Tts::ExtendsResources TR = Tts::TranslationResources>
-inline std::ostream &operator<<(std::ostream &os, const Tts::AutoLocale<TR> &ld)
+template <
+    Tts::ExtendsResources TTranslationResources = Tts::TranslationResources>
+inline std::ostream &
+operator<<(std::ostream &os, const Tts::AutoLocale<TTranslationResources> &ld)
 {
     return os << static_cast<Tts::LocaleDescriptor>(ld) << ", key "
               << ld.resourceKey();
