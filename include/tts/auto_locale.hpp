@@ -4,9 +4,6 @@
 #include "locale_descriptor.hpp"
 #include "translation_resources.hpp"
 #include <QLocale>
-#include <QRegularExpression>
-#include <QFile>
-#include <QDirIterator>
 #include <exception>
 #include <ostream>
 

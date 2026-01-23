@@ -1,5 +1,5 @@
 #include "locale_descriptor.hpp"
-#include <QRegularExpression>
+#include <regex>
 #include <exception>
 
 Tts::LocaleDescriptor::LocaleDescriptor()
@@ -18,7 +18,7 @@ Tts::LocaleDescriptor::LocaleDescriptor(const QLocale &l)
 {
 }
 
-auto Tts::LocaleDescriptor::fromFileName(const QString &qmFileName)
+auto Tts::LocaleDescriptor::fromFileName(const std::string &qmFileName)
     -> LocaleDescriptor
 {
     // Regex for parsing the locale name from a translation resource file
@@ -29,20 +29,30 @@ auto Tts::LocaleDescriptor::fromFileName(const QString &qmFileName)
     // A third letter for language or territory is also possible, and the
     // delimiter could also be '-'.
     // The file name is assumed to not contain a script code.
-    static const auto qmLocaleNameRegex =
-        QRegularExpression("^.*([a-z]{2,3})([_-][A-Z]{2,3}){,1}.qm$");
+    static const std::regex qmLocaleNameRegex(
+        "([a-z]{2,3})([_-][A-Z]{2,3})?\\.qm$");
 
-    QRegularExpressionMatch match = qmLocaleNameRegex.match(qmFileName);
-    if (!match.hasMatch())
+    std::smatch match;
+    if (!std::regex_search(qmFileName, match, qmLocaleNameRegex))
         throw std::invalid_argument(
             "Invalid file name format. The expected format is xx.qm or"
             "xx_XX.qm/xx-XX.qm with a third x/X also being valid.");
 
-    QLocale::Language language = QLocale::codeToLanguage(match.captured(1));
+    QLocale::Language language = QLocale::C;
     QLocale::Territory territory = QLocale::AnyTerritory;
-    if (match.lastCapturedIndex() >= 2) {
-        // (This group starts with the delimiter; remove the first char.)
-        territory = QLocale::codeToTerritory(match.captured(2).removeAt(0));
+
+    // The first match contains the complete sequence; groups can be at
+    // indices >= 1.
+    if (match.size() > 1)
+        language = QLocale::codeToLanguage(QString::fromStdString(match[1]));
+    if (match.size() > 2) {
+        // There could be an empty match for the second group.
+        auto t = match[2].str();
+        if (t.length() > 0) {
+            // This group starts with the delimiter; remove the first character.
+            t.erase(t.begin());
+            territory = QLocale::codeToTerritory(QString::fromStdString(t));
+        }
     }
 
     return Tts::LocaleDescriptor(language, territory);
@@ -57,7 +67,7 @@ auto Tts::LocaleDescriptor::fromResourcePath(const QString &qmPath)
     // TODO if I don't use QFile for parsing, should I handle other
     // separators than "/"?
     QString fileName = *(--qmPath.split("/").end());
-    return fromFileName(fileName);
+    return fromFileName(fileName.toStdString());
 }
 
 bool Tts::LocaleDescriptor::operator==(const Tts::LocaleDescriptor &ld) const
