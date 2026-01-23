@@ -16,7 +16,7 @@ struct LocaleDescriptor
     explicit LocaleDescriptor(const QLocale &l);
     virtual ~LocaleDescriptor() = default;
 
-    static Tts::LocaleDescriptor fromFileName(const QString &qmFileName);
+    static Tts::LocaleDescriptor fromFileName(const std::string &qmFileName);
     static Tts::LocaleDescriptor fromResourcePath(const QString &qmPath);
 
     LocaleDescriptor &operator=(LocaleDescriptor const &) = default;
