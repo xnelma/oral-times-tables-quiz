@@ -30,7 +30,7 @@ auto Tts::LocaleDescriptor::fromFileName(const QString &qmFileName)
     // delimiter could also be '-'.
     // The file name is assumed to not contain a script code.
     static const auto qmLocaleNameRegex =
-        QRegularExpression("^.*([a-z]{2,3})([_-][A-Z]{2,3}){,1}.qm$");
+        QRegularExpression("([a-z]{2,3})([_-][A-Z]{2,3})?\\.qm$");
 
     QRegularExpressionMatch match = qmLocaleNameRegex.match(qmFileName);
     if (!match.hasMatch())
