@@ -55,8 +55,7 @@ private:
         // not make sense.
         if (resources.size() == 0)
             throw std::invalid_argument(
-                "No translation resource files found "
-                "to match against system locale for auto-resolving it.");
+                "No translation resource files found for auto locale");
 
         for (Tts::ResourcePair r : resources) {
             Tts::LocaleDescriptor resource = r.first;
