@@ -7,7 +7,7 @@ QuizBackend::QuizBackend(QObject *parent)
     : QObject(parent),
       tts_(std::make_shared<QTextToSpeech>(this)),
       translator_(Tts::SelfUpdatingTranslator(this)),
-      questionBase_(QuizConstants::questionBase)
+      questionBase_(TimesTables::question)
 {
     setupStateMachine();
 }
@@ -41,7 +41,7 @@ void QuizBackend::setupStateMachine()
     auto setupTranslation = [this]() {
         try {
             questionBase_ = translator_.translate(
-                QuizConstants::translationContext, QuizConstants::questionBase);
+                QuizConstants::translationContext, TimesTables::question);
             emit localeNameChanged();
         } catch (const std::invalid_argument &e) {
             qCritical("Translation setup failed: %s", e.what());

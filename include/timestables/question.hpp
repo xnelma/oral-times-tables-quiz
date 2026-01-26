@@ -3,6 +3,8 @@
 
 namespace TimesTables {
 
+static const char *const question = "%1 times %2";
+
 struct Question
 {
     bool check(const int product) { return factor * number == product; }
