@@ -44,11 +44,10 @@ private:
 
         if (!TTranslationResources::get().contains(localeDescriptor)) {
             std::stringstream ss;
-            ss << localeDescriptor;
-            throw std::invalid_argument(
-                std::format("No matching key in translation resources for "
-                            "locale descriptor {}.",
-                            ss.str()));
+            ss << "No matching key in translation resources for locale "
+                  "descriptor "
+               << localeDescriptor << ".";
+            throw std::invalid_argument(ss.str());
         }
 
         QString resourcePath =
