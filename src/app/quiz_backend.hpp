@@ -73,7 +73,7 @@ private:
 
 namespace QuizConstants {
 
-static const char *const translationContext = "QuizView";
+static const char *const translationContext = "Translator";
 
 } // namespace QuizConstants
 
