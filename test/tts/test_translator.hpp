@@ -62,11 +62,11 @@ public:
         return QLocale(ld.language, ld.territory);
     }
 
-    QString translate(const std::string &sourceText) override
+    std::string translate(const std::string &sourceText) override
     {
         std::string tmp{ sourceText };
         permutate(tmp, translations_.at(filePath_));
-        return QString::fromStdString(tmp);
+        return tmp;
     }
 
     bool load(const QString &filename) override

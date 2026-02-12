@@ -18,9 +18,9 @@ TEST(TestTranslatorTest, TestTranslatorWorks)
               Tts::LocaleDescriptor(QLocale::English, QLocale::AnyTerritory));
     EXPECT_EQ(translator.filePath(), TtsTest::ResourcePaths::en);
     std::string test = "test";
-    QString res = translator.translate(test);
+    std::string res = translator.translate(test);
     TtsTest::Translator::permutate(test, TtsTest::Locale::En);
-    EXPECT_EQ(res, QString::fromStdString(test));
+    EXPECT_EQ(res, test);
 
     translator.load(TtsTest::ResourcePaths::de);
 
@@ -30,7 +30,7 @@ TEST(TestTranslatorTest, TestTranslatorWorks)
     test = "test";
     res = translator.translate(test);
     TtsTest::Translator::permutate(test, TtsTest::Locale::De);
-    EXPECT_EQ(res, QString::fromStdString(test));
+    EXPECT_EQ(res, test);
 }
 
 class SelfUpdatingTranslatorTest : public testing::Test
@@ -82,16 +82,16 @@ TEST_F(SelfUpdatingTranslatorTest, CatchesSettingsUpdate)
     Tts::LocaleDescriptor translatorLocale = translator_->localeDescriptor();
     EXPECT_EQ(translatorLocale, enAny_);
 
-    QString result = translator_->translate(test1_);
+    std::string result = translator_->translate(test1_);
     TtsTest::Translator::permutate(test1_, TtsTest::Locale::En);
-    EXPECT_EQ(result, QString::fromStdString(test1_));
+    EXPECT_EQ(result, test1_);
 
     // update settings with new locale
     settings_->saveLocaleSetting(deAny_);
 
     result = translator_->translate(test2_);
     TtsTest::Translator::permutate(test2_, TtsTest::Locale::De);
-    EXPECT_EQ(result.toStdString(), test2_);
+    EXPECT_EQ(result, test2_);
 
     translatorLocale = translator_->localeDescriptor();
     EXPECT_EQ(translatorLocale, deAny_);
@@ -107,9 +107,9 @@ TEST_F(SelfUpdatingTranslatorTest, CatchesSystemLocaleUpdate)
     Tts::LocaleDescriptor translatorLocale = translator_->localeDescriptor();
     EXPECT_EQ(translatorLocale, enAny_);
 
-    QString result = translator_->translate(test1_);
+    std::string result = translator_->translate(test1_);
     TtsTest::Translator::permutate(test1_, TtsTest::Locale::En);
-    EXPECT_EQ(result, QString::fromStdString(test1_));
+    EXPECT_EQ(result, test1_);
 
     // update system locale
     QLocale::setDefault(QLocale(deDe_.language, deDe_.territory));
@@ -118,7 +118,7 @@ TEST_F(SelfUpdatingTranslatorTest, CatchesSystemLocaleUpdate)
 
     result = translator_->translate(test2_);
     TtsTest::Translator::permutate(test2_, TtsTest::Locale::De);
-    EXPECT_EQ(result, QString::fromStdString(test2_));
+    EXPECT_EQ(result, test2_);
 
     translatorLocale = translator_->localeDescriptor();
     EXPECT_EQ(translatorLocale, deAny_);

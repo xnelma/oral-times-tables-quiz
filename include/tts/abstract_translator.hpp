@@ -21,7 +21,10 @@ public:
     virtual QString filePath() = 0;
     virtual Tts::LocaleDescriptor localeDescriptor() = 0;
     virtual QLocale locale() = 0;
-    virtual QString translate(const std::string &sourceText) = 0;
+    // The translation libraries (so far) used have return values for the
+    // translations, therefore also use a return value instead of a non-const
+    // parameter.
+    virtual std::string translate(const std::string &sourceText) = 0;
     virtual bool load(const QString &filename) = 0;
 };
 
