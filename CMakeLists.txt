@@ -23,6 +23,8 @@ find_package(Qt6
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 set(CMAKE_AUTOMOC ON)
 
+add_compile_definitions(TRANSLATION_DOMAIN="Translator")
+
 qt_standard_project_setup(
     REQUIRES 6.7 # Qt 6.8 upwards only supports Android 9 upwards
     I18N_TRANSLATED_LANGUAGES de

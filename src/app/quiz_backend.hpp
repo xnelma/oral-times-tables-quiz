@@ -71,10 +71,4 @@ private:
     QString questionBase_;
 };
 
-namespace QuizConstants {
-
-static const char *const translationContext = "Translator";
-
-} // namespace QuizConstants
-
 #endif // OTTQ_20250829_1810_INCLUDE

@@ -40,8 +40,7 @@ void QuizBackend::setupStateMachine()
     };
     auto setupTranslation = [this]() {
         try {
-            questionBase_ = translator_.translate(
-                QuizConstants::translationContext, TimesTables::question);
+            questionBase_ = translator_.translate(TimesTables::question);
             emit localeNameChanged();
         } catch (const std::invalid_argument &e) {
             qCritical("Translation setup failed: %s", e.what());
