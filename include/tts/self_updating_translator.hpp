@@ -76,11 +76,10 @@ public:
     {
     }
 
-    QString translate(const char *context, const char *sourceText,
-                      const char *disambiguation = nullptr, int n = -1)
+    QString translate(const char *context, const char *sourceText)
     {
         updateLocale();
-        return TTranslator::translate(context, sourceText, disambiguation, n);
+        return TTranslator::translate(context, sourceText);
     }
 };
 

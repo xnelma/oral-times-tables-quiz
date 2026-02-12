@@ -14,9 +14,7 @@ public:
     QString filePath() override;
     Tts::LocaleDescriptor localeDescriptor() override;
     QLocale locale() override;
-    QString translate(const char *context, const char *sourceText,
-                      const char *disambiguation = nullptr,
-                      int n = -1) override;
+    QString translate(const char *context, const char *sourceText) override;
     bool load(const QString &filename) override;
 
 private:

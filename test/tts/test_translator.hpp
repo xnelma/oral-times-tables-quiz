@@ -63,8 +63,7 @@ public:
     }
 
     // NOLINTBEGIN(bugprone-easily-swappable-parameters)
-    QString translate(const char *context, const char *sourceText,
-                      const char *disambiguation = nullptr, int n = -1) override
+    QString translate(const char *context, const char *sourceText) override
     // NOLINTEND(bugprone-easily-swappable-parameters)
     {
         std::string sourceTextStr{ sourceText };
