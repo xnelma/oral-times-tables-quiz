@@ -76,7 +76,7 @@ public:
     {
     }
 
-    QString translate(const char *sourceText)
+    QString translate(const std::string &sourceText)
     {
         updateLocale();
         return TTranslator::translate(sourceText);

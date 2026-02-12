@@ -62,13 +62,11 @@ public:
         return QLocale(ld.language, ld.territory);
     }
 
-    // NOLINTBEGIN(bugprone-easily-swappable-parameters)
-    QString translate(const char *sourceText) override
-    // NOLINTEND(bugprone-easily-swappable-parameters)
+    QString translate(const std::string &sourceText) override
     {
-        std::string sourceTextStr{ sourceText };
-        permutate(sourceTextStr, translations_.at(filePath_));
-        return QString::fromStdString(sourceTextStr);
+        std::string tmp{ sourceText };
+        permutate(tmp, translations_.at(filePath_));
+        return QString::fromStdString(tmp);
     }
 
     bool load(const QString &filename) override

@@ -20,9 +20,9 @@ QLocale Tts::Translator::locale()
     return QLocale(ld.language, ld.territory);
 }
 
-QString Tts::Translator::translate(const char *sourceText)
+QString Tts::Translator::translate(const std::string &sourceText)
 {
-    return translator_.translate(TRANSLATION_DOMAIN, sourceText);
+    return translator_.translate(TRANSLATION_DOMAIN, sourceText.c_str());
 }
 
 bool Tts::Translator::load(const QString &filename)

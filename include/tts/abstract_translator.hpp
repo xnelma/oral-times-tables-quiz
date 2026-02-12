@@ -21,7 +21,7 @@ public:
     virtual QString filePath() = 0;
     virtual Tts::LocaleDescriptor localeDescriptor() = 0;
     virtual QLocale locale() = 0;
-    virtual QString translate(const char *sourceText) = 0;
+    virtual QString translate(const std::string &sourceText) = 0;
     virtual bool load(const QString &filename) = 0;
 };
 
