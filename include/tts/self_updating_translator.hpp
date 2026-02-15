@@ -4,7 +4,9 @@
 #include "abstract_translator.hpp"
 #include "abstract_tts_settings.hpp"
 #include "tts_settings.hpp"
-#include "translator.hpp"
+#if defined QT_TRANSLATOR
+#  include "translator.hpp"
+#endif
 
 namespace Tts {
 
@@ -18,7 +20,10 @@ concept ExtendsResources = std::is_base_of_v<Tts::TranslationResources, TR>;
 // C++20
 #endif // EXTENDS_RESOURCES
 
-template <ExtendsTranslator TTranslator = Tts::Translator,
+template <ExtendsTranslator TTranslator =
+#if defined QT_TRANSLATOR
+              Tts::Translator,
+#endif
           ExtendsResources TTranslationResources = Tts::TranslationResources>
 class SelfUpdatingTranslator : public TTranslator
 {

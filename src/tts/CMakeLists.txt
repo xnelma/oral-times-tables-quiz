@@ -1,9 +1,17 @@
-add_library(Tts STATIC
+set(TtsSources)
+list(APPEND TtsSources
     tts_settings.cpp
-    translator.cpp
     locale_descriptor.cpp
     translation_resources.cpp
 )
+
+if(${Translator} MATCHES QT_TRANSLATOR)
+list(APPEND TtsSources
+    translator.cpp
+)
+endif()
+
+add_library(Tts STATIC ${TtsSources})
 
 target_link_libraries(Tts PRIVATE
     Qt6::Quick

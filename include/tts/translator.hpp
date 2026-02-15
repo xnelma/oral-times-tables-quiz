@@ -1,8 +1,8 @@
-#ifndef OTTQ_20260106_2042_INCLUDE
-#define OTTQ_20260106_2042_INCLUDE
+#if !defined OTTQ_20260106_2042_INCLUDE && defined QT_TRANSLATOR
+#  define OTTQ_20260106_2042_INCLUDE
 
-#include "abstract_translator.hpp"
-#include <QTranslator>
+#  include "abstract_translator.hpp"
+#  include <QTranslator>
 
 namespace Tts {
 

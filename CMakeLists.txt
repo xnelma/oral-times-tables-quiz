@@ -23,7 +23,20 @@ find_package(Qt6
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 set(CMAKE_AUTOMOC ON)
 
-add_compile_definitions(TRANSLATION_DOMAIN="Translator")
+# Set up translator:
+# Use capital letters for the names because they are used as cpp text macros.
+set(TranslatorImplementations QT_TRANSLATOR)
+set(Translator QT_TRANSLATOR)
+if(NOT ${Translator} IN_LIST TranslatorImplementations)
+    message(FATAL_ERROR
+            "-- Could NOT find translator implementation ${Translator} "
+            "(Should be one of ${TranslatorImplementations})")
+endif()
+add_compile_definitions(${Translator})
+if(${Translator} MATCHES QT_TRANSLATOR)
+    set(TRANSLATION_DOMAIN "Translator")
+endif()
+add_compile_definitions(TRANSLATION_DOMAIN="${TRANSLATION_DOMAIN}")
 
 qt_standard_project_setup(
     REQUIRES 6.7 # Qt 6.8 upwards only supports Android 9 upwards
