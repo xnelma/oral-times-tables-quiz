@@ -7,8 +7,7 @@
 QuizBackend::QuizBackend(QObject *parent)
     : QObject(parent),
       tts_(std::make_shared<QTextToSpeech>(this)),
-      translator_(Tts::SelfUpdatingTranslator(this)),
-      questionBase_(TimesTables::question)
+      translator_(Tts::SelfUpdatingTranslator(this))
 {
     setupStateMachine();
 }
