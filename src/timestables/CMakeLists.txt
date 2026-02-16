@@ -4,6 +4,7 @@ add_library(TimesTables STATIC
 
 target_link_libraries(TimesTables PRIVATE
     Qt6::Core
+    Boost::locale
 )
 
 target_include_directories(TimesTables PRIVATE

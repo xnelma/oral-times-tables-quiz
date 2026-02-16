@@ -19,6 +19,10 @@ find_package(Qt6
         Test
         StateMachine
 )
+find_package(Boost
+    REQUIRED COMPONENTS
+        locale
+)
 
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 set(CMAKE_AUTOMOC ON)
