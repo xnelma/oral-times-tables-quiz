@@ -2,6 +2,7 @@
 #include "timestables/factor_range.hpp"
 #include "timestables/question.hpp"
 #include <QtLogging>
+#include <format>
 
 QuizBackend::QuizBackend(QObject *parent)
     : QObject(parent),
@@ -40,8 +41,7 @@ void QuizBackend::setupStateMachine()
     };
     auto setupTranslation = [this]() {
         try {
-            questionBase_ = QString::fromStdString(
-                translator_.translate(TimesTables::question));
+            questionBase_ = translator_.translate(TimesTables::question);
             emit localeNameChanged();
         } catch (const std::invalid_argument &e) {
             qCritical("Translation setup failed: %s", e.what());
@@ -101,7 +101,9 @@ QString QuizBackend::question()
 {
     try {
         TimesTables::Question q = quiz_.question();
-        return questionBase_.arg(q.factor).arg(q.number);
+        std::string qStr = std::vformat(
+            questionBase_, std::make_format_args(q.factor, q.number));
+        return QString::fromStdString(qStr);
     } catch (std::out_of_range &e) {
         qCritical("Could not get the question: %s", e.what());
         throw std::domain_error(e.what());

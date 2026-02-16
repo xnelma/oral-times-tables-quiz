@@ -68,7 +68,7 @@ private:
     // returning to the view. This would be handled inside the translator.
     Tts::SelfUpdatingTranslator<Tts::Translator> translator_;
     Tts::Settings settings_;
-    QString questionBase_;
+    std::string questionBase_;
 };
 
 #endif // OTTQ_20250829_1810_INCLUDE

@@ -40,8 +40,8 @@
     <name>Translator</name>
     <message>
         <location filename="../quiz_backend.hpp" line="76"/>
-        <source>%1 times %2</source>
-        <translation>%1 mal %2</translation>
+        <source>{} times {}</source>
+        <translation>{} mal {}</translation>
     </message>
 </context>
 <context>

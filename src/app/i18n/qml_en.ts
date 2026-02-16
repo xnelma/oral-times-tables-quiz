@@ -6,8 +6,8 @@
     <message>
         <!-- Needed in case the .qm file for en is loaded explicitly -->
         <location filename="../quiz_backend.hpp" line="76"/>
-        <source>%1 times %2</source>
-        <translation>%1 times %2</translation>
+        <source>{} times {}</source>
+        <translation>{} times {}</translation>
     </message>
 </context>
 </TS>

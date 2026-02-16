@@ -3,7 +3,7 @@
 
 namespace TimesTables {
 
-static const char *const question = "%1 times %2";
+static const char *const question = "{} times {}";
 
 struct Question
 {
