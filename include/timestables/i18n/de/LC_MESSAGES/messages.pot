@@ -1,0 +1,22 @@
+# Translations for the timestables questions used as text-to-speech input.
+# Copyright (C) 2026
+# This file is distributed under the same license as the OTTQ package.
+# xnelma <151833954+xnelma@users.noreply.github.com>, 2026.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-02-22 12:56+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: include/timestables/question.hpp:12
+msgid "{} times {}"
+msgstr ""
