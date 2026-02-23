@@ -6,6 +6,8 @@
 #include "tts_settings.hpp"
 #if defined QT_TRANSLATOR
 #  include "translator.hpp"
+#elif defined BOOST_TRANSLATOR
+#  include "boost_translator.hpp"
 #endif
 
 namespace Tts {
@@ -20,10 +22,7 @@ concept ExtendsResources = std::is_base_of_v<Tts::TranslationResources, TR>;
 // C++20
 #endif // EXTENDS_RESOURCES
 
-template <ExtendsTranslator TTranslator =
-#if defined QT_TRANSLATOR
-              Tts::Translator,
-#endif
+template <ExtendsTranslator TTranslator = Tts::Translator,
           ExtendsResources TTranslationResources = Tts::TranslationResources>
 class SelfUpdatingTranslator : public TTranslator
 {
@@ -81,7 +80,11 @@ public:
     {
     }
 
+#if defined BOOST_TRANSLATOR
+    std::string translate(const boost::locale::basic_message<char> &sourceText)
+#else
     std::string translate(const std::string &sourceText)
+#endif
     {
         updateLocale();
         return TTranslator::translate(sourceText);

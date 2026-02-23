@@ -29,8 +29,9 @@ set(CMAKE_AUTOMOC ON)
 
 # Set up translator:
 # Use capital letters for the names because they are used as cpp text macros.
-set(TranslatorImplementations QT_TRANSLATOR)
+set(TranslatorImplementations QT_TRANSLATOR BOOST_TRANSLATOR)
 set(Translator QT_TRANSLATOR)
+#set(Translator BOOST_TRANSLATOR)
 if(NOT ${Translator} IN_LIST TranslatorImplementations)
     message(FATAL_ERROR
             "-- Could NOT find translator implementation ${Translator} "
@@ -39,6 +40,8 @@ endif()
 add_compile_definitions(${Translator})
 if(${Translator} MATCHES QT_TRANSLATOR)
     set(TRANSLATION_DOMAIN "Translator")
+elseif(${Translator} MATCHES BOOST_TRANSLATOR)
+    set(TRANSLATION_DOMAIN "messages")
 endif()
 add_compile_definitions(TRANSLATION_DOMAIN="${TRANSLATION_DOMAIN}")
 

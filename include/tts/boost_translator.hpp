@@ -1,0 +1,22 @@
+#if !defined OTTQ_20260209_1318_INCLUDE && defined BOOST_TRANSLATOR
+#  define OTTQ_20260209_1318_INCLUDE
+
+#  include "abstract_translator.hpp"
+#  include <boost/locale.hpp>
+
+namespace Tts {
+
+class Translator : public AbstractTranslator
+{
+public:
+    QString filePath() override;
+    Tts::LocaleDescriptor localeDescriptor() override;
+    QLocale locale() override;
+    std::string
+    translate(const boost::locale::basic_message<char> &sourceText) override;
+    bool load(const QString &filename) override;
+};
+
+} // namespace Tts
+
+#endif // OTTQ_20260209_1318_INCLUDE

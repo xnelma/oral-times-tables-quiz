@@ -9,6 +9,10 @@ if(${Translator} MATCHES QT_TRANSLATOR)
 list(APPEND TtsSources
     translator.cpp
 )
+elseif(${Translator} MATCHES BOOST_TRANSLATOR)
+list(APPEND TtsSources
+    boost_translator.cpp
+)
 endif()
 
 add_library(Tts STATIC ${TtsSources})

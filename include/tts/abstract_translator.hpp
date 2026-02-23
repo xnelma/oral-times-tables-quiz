@@ -4,6 +4,9 @@
 #include "locale_descriptor.hpp"
 #include <QString>
 #include <QLocale>
+#if defined BOOST_TRANSLATOR
+#  include <boost/locale.hpp>
+#endif
 
 namespace Tts {
 
@@ -24,7 +27,12 @@ public:
     // The translation libraries (so far) used have return values for the
     // translations, therefore also use a return value instead of a non-const
     // parameter.
+#if defined BOOST_TRANSLATOR
+    virtual std::string
+    translate(const boost::locale::basic_message<char> &sourceText) = 0;
+#else
     virtual std::string translate(const std::string &sourceText) = 0;
+#endif
     virtual bool load(const QString &filename) = 0;
 };
 

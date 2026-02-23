@@ -1,6 +1,11 @@
 #ifndef OTTQ_20260109_1448_INCLUDE
 #define OTTQ_20260109_1448_INCLUDE
 
+#ifdef BOOST_TRANSLATOR
+#  undef BOOST_TRANSLATOR
+#  define QT_TRANSLATOR // test only with std::string source text type
+#endif
+
 #include "abstract_translator.hpp"
 #include <QString>
 #include <string>
