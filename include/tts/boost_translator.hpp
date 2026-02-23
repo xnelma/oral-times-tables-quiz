@@ -20,6 +20,7 @@ public:
 
 private:
     boost::locale::generator generator_;
+    std::locale locale_;
 };
 
 } // namespace Tts
