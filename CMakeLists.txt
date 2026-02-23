@@ -42,8 +42,10 @@ if(${Translator} MATCHES QT_TRANSLATOR)
     set(TRANSLATION_DOMAIN "Translator")
 elseif(${Translator} MATCHES BOOST_TRANSLATOR)
     set(TRANSLATION_DOMAIN "messages")
+    set(TranslationDir "./include/timestables/i18n")
 endif()
 add_compile_definitions(TRANSLATION_DOMAIN="${TRANSLATION_DOMAIN}")
+add_compile_definitions(TRANSLATION_DIR="${TranslationDir}")
 
 qt_standard_project_setup(
     REQUIRES 6.7 # Qt 6.8 upwards only supports Android 9 upwards

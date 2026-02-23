@@ -1,6 +1,10 @@
 #include "boost_translator.hpp"
 
-#include <boost/locale.hpp>
+Tts::Translator::Translator()
+{
+    generator_.add_messages_path(TRANSLATION_DIR);
+    generator_.add_messages_domain(TRANSLATION_DOMAIN);
+}
 
 QString Tts::Translator::filePath()
 {

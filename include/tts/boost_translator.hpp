@@ -9,12 +9,17 @@ namespace Tts {
 class Translator : public AbstractTranslator
 {
 public:
+    Translator();
+
     QString filePath() override;
     Tts::LocaleDescriptor localeDescriptor() override;
     QLocale locale() override;
     std::string
     translate(const boost::locale::basic_message<char> &sourceText) override;
     bool load(const QString &filename) override;
+
+private:
+    boost::locale::generator generator_;
 };
 
 } // namespace Tts
