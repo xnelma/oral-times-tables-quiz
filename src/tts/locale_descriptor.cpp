@@ -30,13 +30,15 @@ auto Tts::LocaleDescriptor::fromFileName(const std::string &qmFileName)
     // delimiter could also be '-'.
     // The file name is assumed to not contain a script code.
     static const std::regex qmLocaleNameRegex(
-        "([a-z]{2,3})([_-][A-Z]{2,3})?\\.qm$");
+        "([a-z]{2,3})([_-][A-Z]{2,3})?\\." TRANSLATION_FILE_ENDING "$");
 
     std::smatch match;
     if (!std::regex_search(qmFileName, match, qmLocaleNameRegex))
         throw std::invalid_argument(
-            "Invalid file name format. The expected format is xx.qm or"
-            "xx_XX.qm/xx-XX.qm with a third x/X also being valid.");
+            "Invalid file name format. The expected format is "
+            "xx." TRANSLATION_FILE_ENDING " or "
+            "xx_XX." TRANSLATION_FILE_ENDING "/xx-XX." TRANSLATION_FILE_ENDING
+            " with a third x/X also being valid.");
 
     QLocale::Language language = QLocale::C;
     QLocale::Territory territory = QLocale::AnyTerritory;
