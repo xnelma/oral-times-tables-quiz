@@ -60,16 +60,16 @@ auto Tts::LocaleDescriptor::fromFileName(const std::string &qmFileName)
     return Tts::LocaleDescriptor(language, territory);
 }
 
-auto Tts::LocaleDescriptor::fromResourcePath(const QString &qmPath)
+auto Tts::LocaleDescriptor::fromResourcePath(const std::string &qmPath)
     -> LocaleDescriptor
 {
-    if (qmPath.isEmpty() || qmPath.endsWith("/"))
+    if (qmPath.empty() || qmPath.ends_with("/") /* C++20 */)
         return Tts::LocaleDescriptor();
 
     // TODO if I don't use QFile for parsing, should I handle other
     // separators than "/"?
-    QString fileName = *(--qmPath.split("/").end());
-    return fromFileName(fileName.toStdString());
+    std::string fileName = qmPath.substr(qmPath.find("/"));
+    return fromFileName(fileName);
 }
 
 bool Tts::LocaleDescriptor::operator==(const Tts::LocaleDescriptor &ld) const

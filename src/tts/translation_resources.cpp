@@ -16,7 +16,7 @@ Tts::ResourceMap &Tts::TranslationResources::get()
     QDirIterator it(":", { "*.qm" }, QDir::Files, QDirIterator::Subdirectories);
     while (it.hasNext()) {
         QString dir = it.next();
-        auto descriptor = LocaleDescriptor::fromResourcePath(dir);
+        auto descriptor = LocaleDescriptor::fromResourcePath(dir.toStdString());
 
         resources.insert({ descriptor, dir });
     }

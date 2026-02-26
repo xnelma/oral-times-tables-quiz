@@ -11,7 +11,7 @@ QString Tts::Translator::filePath()
 
 auto Tts::Translator::localeDescriptor() -> LocaleDescriptor
 {
-    return Tts::LocaleDescriptor::fromResourcePath(filePath());
+    return Tts::LocaleDescriptor::fromResourcePath(filePath().toStdString());
 }
 
 QLocale Tts::Translator::locale()
