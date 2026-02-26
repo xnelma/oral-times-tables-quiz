@@ -34,11 +34,12 @@ auto Tts::LocaleDescriptor::fromFileName(const std::string &fileName)
 
     std::smatch match;
     if (!std::regex_search(fileName, match, localeNameRegex))
-        throw std::invalid_argument(
-            "Invalid file name format. The expected format is "
+        throw std::invalid_argument(std::vformat(
+            "Invalid file name format {}. The expected format is "
             "xx." TRANSLATION_FILE_ENDING " or "
             "xx_XX." TRANSLATION_FILE_ENDING "/xx-XX." TRANSLATION_FILE_ENDING
-            " with a third x/X also being valid.");
+            " with a third x/X also being valid.",
+            std::make_format_args(fileName)));
 
     QLocale::Language language = QLocale::C;
     QLocale::Territory territory = QLocale::AnyTerritory;
