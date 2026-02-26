@@ -4,6 +4,7 @@ add_executable(AutoLocaleTest
 
 add_executable(LocaleDescriptorTest
     from_filename_test.cpp
+    from_resourcepath_test.cpp
 )
 
 add_executable(SelfUpdatingTranslatorTest
