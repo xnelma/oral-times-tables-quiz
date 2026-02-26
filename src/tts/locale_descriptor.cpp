@@ -18,7 +18,7 @@ Tts::LocaleDescriptor::LocaleDescriptor(const QLocale &l)
 {
 }
 
-auto Tts::LocaleDescriptor::fromFileName(const std::string &qmFileName)
+auto Tts::LocaleDescriptor::fromFileName(const std::string &fileName)
     -> LocaleDescriptor
 {
     // Regex for parsing the locale name from a translation resource file
@@ -29,11 +29,11 @@ auto Tts::LocaleDescriptor::fromFileName(const std::string &qmFileName)
     // A third letter for language or territory is also possible, and the
     // delimiter could also be '-'.
     // The file name is assumed to not contain a script code.
-    static const std::regex qmLocaleNameRegex(
+    static const std::regex localeNameRegex(
         "([a-z]{2,3})([_-][A-Z]{2,3})?\\." TRANSLATION_FILE_ENDING "$");
 
     std::smatch match;
-    if (!std::regex_search(qmFileName, match, qmLocaleNameRegex))
+    if (!std::regex_search(fileName, match, localeNameRegex))
         throw std::invalid_argument(
             "Invalid file name format. The expected format is "
             "xx." TRANSLATION_FILE_ENDING " or "
@@ -60,15 +60,15 @@ auto Tts::LocaleDescriptor::fromFileName(const std::string &qmFileName)
     return Tts::LocaleDescriptor(language, territory);
 }
 
-auto Tts::LocaleDescriptor::fromResourcePath(const std::string &qmPath)
+auto Tts::LocaleDescriptor::fromResourcePath(const std::string &path)
     -> LocaleDescriptor
 {
-    if (qmPath.empty() || qmPath.ends_with("/") /* C++20 */)
+    if (path.empty() || path.ends_with("/") /* C++20 */)
         return Tts::LocaleDescriptor();
 
     // TODO if I don't use QFile for parsing, should I handle other
     // separators than "/"?
-    std::string fileName = qmPath.substr(qmPath.find("/"));
+    std::string fileName = path.substr(path.find("/"));
     return fromFileName(fileName);
 }
 
