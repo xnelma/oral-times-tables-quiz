@@ -1,5 +1,9 @@
 #include "translation_resources.hpp"
-#include <QDirIterator>
+#if defined QT_TRANSLATOR
+#  include <QDirIterator>
+#elif defined BOOST_TRANSLATOR
+#  include <filesystem>
+#endif
 #include <algorithm>
 #include <iterator>
 #include <stdexcept>
@@ -12,6 +16,7 @@ Tts::ResourceMap &Tts::TranslationResources::get()
     if (resources.size() > 0)
         return resources;
 
+#if defined QT_TRANSLATOR
     // ":" is the base path for Qt Resource files.
     QDirIterator it(":", { "*.qm" }, QDir::Files, QDirIterator::Subdirectories);
     while (it.hasNext()) {
@@ -20,6 +25,18 @@ Tts::ResourceMap &Tts::TranslationResources::get()
 
         resources.insert({ descriptor, dir });
     }
+#elif defined BOOST_TRANSLATOR
+    std::ranges::for_each(
+        std::filesystem::recursive_directory_iterator(TRANSLATION_DIR),
+        [](const auto &dirEntry) {
+            auto filename = dirEntry.path().filename().string();
+            if (filename.ends_with(".po") /* C++20 */) {
+                auto descriptor = LocaleDescriptor::fromFileName(filename);
+                resources.insert(
+                    { descriptor, QString::fromStdString(filename) });
+            }
+        });
+#endif
 
     return resources;
 }
