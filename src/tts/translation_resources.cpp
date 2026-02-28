@@ -29,11 +29,13 @@ Tts::ResourceMap &Tts::TranslationResources::get()
     std::ranges::for_each(
         std::filesystem::recursive_directory_iterator(TRANSLATION_DIR),
         [](const auto &dirEntry) {
-            auto filename = dirEntry.path().filename().string();
-            if (filename.ends_with(".po") /* C++20 */) {
-                auto descriptor = LocaleDescriptor::fromFileName(filename);
+            auto dir = dirEntry.path();
+            auto dirStr = dir.string();
+            if (dirStr.ends_with(".po") /* C++20 */) {
+                auto descriptor =
+                    LocaleDescriptor::fromFileName(dir.filename().string());
                 resources.insert(
-                    { descriptor, QString::fromStdString(filename) });
+                    { descriptor, QString::fromStdString(dirStr) });
             }
         });
 #endif
