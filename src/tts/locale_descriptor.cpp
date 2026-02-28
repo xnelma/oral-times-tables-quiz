@@ -1,6 +1,7 @@
 #include "locale_descriptor.hpp"
 #include <regex>
 #include <exception>
+#include <filesystem>
 
 Tts::LocaleDescriptor::LocaleDescriptor()
     : language(QLocale::C), territory(QLocale::AnyTerritory)
@@ -67,10 +68,8 @@ auto Tts::LocaleDescriptor::fromResourcePath(const std::string &path)
     if (path.empty() || path.ends_with("/") /* C++20 */)
         return Tts::LocaleDescriptor();
 
-    // TODO if I don't use QFile for parsing, should I handle other
-    // separators than "/"?
-    std::string fileName = path.substr(path.find("/"));
-    return fromFileName(fileName);
+    std::string filename = std::filesystem::path(path).filename().string();
+    return fromFileName(filename);
 }
 
 bool Tts::LocaleDescriptor::operator==(const Tts::LocaleDescriptor &ld) const
