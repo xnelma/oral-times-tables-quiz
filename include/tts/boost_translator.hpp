@@ -21,6 +21,7 @@ public:
 private:
     boost::locale::generator generator_;
     std::locale locale_;
+    std::string localeName_;
 };
 
 } // namespace Tts
