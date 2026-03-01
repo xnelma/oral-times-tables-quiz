@@ -33,7 +33,7 @@ public:
 #else
     virtual std::string translate(const std::string &sourceText) = 0;
 #endif
-    virtual bool load(const QString &filename) = 0;
+    virtual bool load(const QString &filePath) = 0;
 };
 
 } // namespace Tts

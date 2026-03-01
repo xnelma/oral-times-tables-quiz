@@ -27,13 +27,13 @@ std::string Tts::Translator::translate(const std::string &sourceText)
         .toStdString();
 }
 
-bool Tts::Translator::load(const QString &filename)
+bool Tts::Translator::load(const QString &filePath)
 {
-    if (!QFile(filename).exists())
+    if (!QFile(filePath).exists())
         throw std::invalid_argument(std::format(
-            "Resource path \"{}\" does not exist.", filename.toStdString()));
+            "Resource path \"{}\" does not exist.", filePath.toStdString()));
 
-    return translator_.load(filename);
+    return translator_.load(filePath);
 }
 
 #endif

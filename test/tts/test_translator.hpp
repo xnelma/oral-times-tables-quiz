@@ -74,14 +74,14 @@ public:
         return tmp;
     }
 
-    bool load(const QString &filename) override
+    bool load(const QString &filePath) override
     {
-        if (!translations_.contains(filename))
+        if (!translations_.contains(filePath))
             throw std::invalid_argument(
                 std::format("Resource path \"{}\" does not exist.",
-                            filename.toStdString()));
+                            filePath.toStdString()));
 
-        filePath_ = filename;
+        filePath_ = filePath;
         return true;
     }
 };
