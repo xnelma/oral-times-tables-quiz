@@ -23,7 +23,7 @@ TEST(TestTranslatorTest, TestTranslatorWorks)
     TtsTest::Translator::permutate(test, TtsTest::Locale::En);
     EXPECT_EQ(res, test);
 
-    translator.load(TtsTest::ResourcePaths::de);
+    translator.load(TtsTest::ResourcePaths::de.toStdString());
 
     EXPECT_EQ(translator.localeDescriptor(),
               Tts::LocaleDescriptor(QLocale::German, QLocale::AnyTerritory));

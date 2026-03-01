@@ -1,7 +1,6 @@
 #if defined BOOST_TRANSLATOR // Needed for the linter.
 #  include "boost_translator.hpp"
 #  include <filesystem>
-#  include <QString>
 
 Tts::Translator::Translator()
 {
@@ -41,9 +40,9 @@ Tts::Translator::translate(const boost::locale::basic_message<char> &sourceText)
     return sourceText.str(locale_);
 }
 
-bool Tts::Translator::load(const QString &filePath)
+bool Tts::Translator::load(const std::string &filePath)
 {
-    std::filesystem::path p = filePath.toStdString();
+    std::filesystem::path p = filePath;
     if (!std::filesystem::exists(p))
         return false;
 

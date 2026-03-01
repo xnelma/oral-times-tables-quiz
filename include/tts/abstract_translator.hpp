@@ -2,7 +2,6 @@
 #define OTTQ_20260106_2039_INCLUDE
 
 #include "locale_descriptor.hpp"
-#include <QString>
 #include <QLocale>
 #if defined BOOST_TRANSLATOR
 #  include <boost/locale.hpp>
@@ -33,7 +32,7 @@ public:
 #else
     virtual std::string translate(const std::string &sourceText) = 0;
 #endif
-    virtual bool load(const QString &filePath) = 0;
+    virtual bool load(const std::string &filePath) = 0;
 };
 
 } // namespace Tts

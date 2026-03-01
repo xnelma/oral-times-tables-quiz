@@ -29,7 +29,7 @@ class SelfUpdatingTranslator : public TTranslator
 private:
     std::shared_ptr<Tts::AbstractSettings> settings_;
 
-    bool load(const QString &filename) override
+    bool load(const std::string &filename) override
     {
         return TTranslator::load(filename);
     }
@@ -56,7 +56,7 @@ private:
 
         std::string resourcePath =
             TTranslationResources::get().at(localeDescriptor);
-        bool ok = TTranslator::load(QString::fromStdString(resourcePath));
+        bool ok = TTranslator::load(resourcePath);
 
         if (!ok)
             throw std::runtime_error("Translation could not be loaded.");
