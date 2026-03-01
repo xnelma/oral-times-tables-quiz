@@ -7,7 +7,7 @@
 
 TEST(TestTranslatorTest, TestTranslatorWorks)
 {
-    std::unordered_map<QString, TtsTest::Locale> translations;
+    std::unordered_map<std::string, TtsTest::Locale> translations;
     translations.insert({ TtsTest::ResourcePaths::en, TtsTest::Locale::En });
     translations.insert({ TtsTest::ResourcePaths::de, TtsTest::Locale::De });
 
@@ -16,19 +16,17 @@ TEST(TestTranslatorTest, TestTranslatorWorks)
 
     EXPECT_EQ(translator.localeDescriptor(),
               Tts::LocaleDescriptor(QLocale::English, QLocale::AnyTerritory));
-    EXPECT_EQ(QString::fromStdString(translator.filePath()),
-              TtsTest::ResourcePaths::en);
+    EXPECT_EQ(translator.filePath(), TtsTest::ResourcePaths::en);
     std::string test = "test";
     std::string res = translator.translate(test);
     TtsTest::Translator::permutate(test, TtsTest::Locale::En);
     EXPECT_EQ(res, test);
 
-    translator.load(TtsTest::ResourcePaths::de.toStdString());
+    translator.load(TtsTest::ResourcePaths::de);
 
     EXPECT_EQ(translator.localeDescriptor(),
               Tts::LocaleDescriptor(QLocale::German, QLocale::AnyTerritory));
-    EXPECT_EQ(QString::fromStdString(translator.filePath()),
-              TtsTest::ResourcePaths::de);
+    EXPECT_EQ(translator.filePath(), TtsTest::ResourcePaths::de);
     test = "test";
     res = translator.translate(test);
     TtsTest::Translator::permutate(test, TtsTest::Locale::De);
@@ -41,9 +39,9 @@ protected:
     SelfUpdatingTranslatorTest()
     {
         TtsTest::TranslationResources::get().insert(
-            { enAny_, TtsTest::ResourcePaths::en.toStdString() });
+            { enAny_, TtsTest::ResourcePaths::en });
         TtsTest::TranslationResources::get().insert(
-            { deAny_, TtsTest::ResourcePaths::de.toStdString() });
+            { deAny_, TtsTest::ResourcePaths::de });
 
         settings_ = std::make_shared<TtsTest::Settings>();
         settings_->saveLocaleSetting(enAny_);
@@ -55,7 +53,7 @@ protected:
 
         QLocale::setDefault(QLocale(enUs_.language, enUs_.territory));
 
-        std::unordered_map<QString, TtsTest::Locale> translations;
+        std::unordered_map<std::string, TtsTest::Locale> translations;
         translations.insert(
             { TtsTest::ResourcePaths::en, TtsTest::Locale::En });
         translations.insert(

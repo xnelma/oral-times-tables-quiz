@@ -7,7 +7,6 @@
 #endif
 
 #include "abstract_translator.hpp"
-#include <QString>
 #include <string>
 
 namespace TtsTest {
@@ -16,22 +15,22 @@ enum Locale { En, De };
 
 namespace ResourcePaths {
 
-const QString en = "my/filepath/en";
-const QString de = "my/filepath/de";
+const std::string en = "my/filepath/en";
+const std::string de = "my/filepath/de";
 
 } // namespace ResourcePaths
 
 class Translator : public Tts::AbstractTranslator
 {
 private:
-    std::unordered_map<QString, Locale> translations_;
-    QString filePath_;
+    std::unordered_map<std::string, Locale> translations_;
+    std::string filePath_;
 
 public:
     Translator() { }
 
-    void setup(const std::unordered_map<QString, Locale> &translations,
-               const QString &filePath)
+    void setup(const std::unordered_map<std::string, Locale> &translations,
+               const std::string &filePath)
     {
         translations_ = std::move(translations);
         filePath_ = std::move(filePath);
@@ -43,7 +42,7 @@ public:
             std::ranges::next_permutation(str.begin(), str.end());
     }
 
-    std::string filePath() override { return filePath_.toStdString(); }
+    std::string filePath() override { return filePath_; }
 
     Tts::LocaleDescriptor localeDescriptor() override
     {
@@ -76,11 +75,11 @@ public:
 
     bool load(const std::string &filePath) override
     {
-        if (!translations_.contains(QString::fromStdString(filePath)))
+        if (!translations_.contains(filePath))
             throw std::invalid_argument(
                 std::format("Resource path \"{}\" does not exist.", filePath));
 
-        filePath_ = QString::fromStdString(filePath);
+        filePath_ = filePath;
         return true;
     }
 };
