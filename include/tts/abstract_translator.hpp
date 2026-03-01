@@ -21,7 +21,7 @@ public:
     AbstractTranslator &operator=(AbstractTranslator const &) = default;
     AbstractTranslator &operator=(AbstractTranslator &&) noexcept = default;
 
-    virtual QString filePath() = 0;
+    virtual std::string filePath() = 0;
     virtual Tts::LocaleDescriptor localeDescriptor() = 0;
     virtual QLocale locale() = 0;
     // The translation libraries (so far) used have return values for the

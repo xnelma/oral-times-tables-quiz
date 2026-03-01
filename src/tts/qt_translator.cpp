@@ -5,14 +5,14 @@
 
 Tts::Translator::Translator(QObject *parent) : translator_(parent) { }
 
-QString Tts::Translator::filePath()
+std::string Tts::Translator::filePath()
 {
-    return translator_.filePath();
+    return translator_.filePath().toStdString();
 }
 
 auto Tts::Translator::localeDescriptor() -> LocaleDescriptor
 {
-    return Tts::LocaleDescriptor::fromResourcePath(filePath().toStdString());
+    return Tts::LocaleDescriptor::fromResourcePath(filePath());
 }
 
 QLocale Tts::Translator::locale()

@@ -16,7 +16,8 @@ TEST(TestTranslatorTest, TestTranslatorWorks)
 
     EXPECT_EQ(translator.localeDescriptor(),
               Tts::LocaleDescriptor(QLocale::English, QLocale::AnyTerritory));
-    EXPECT_EQ(translator.filePath(), TtsTest::ResourcePaths::en);
+    EXPECT_EQ(QString::fromStdString(translator.filePath()),
+              TtsTest::ResourcePaths::en);
     std::string test = "test";
     std::string res = translator.translate(test);
     TtsTest::Translator::permutate(test, TtsTest::Locale::En);
@@ -26,7 +27,8 @@ TEST(TestTranslatorTest, TestTranslatorWorks)
 
     EXPECT_EQ(translator.localeDescriptor(),
               Tts::LocaleDescriptor(QLocale::German, QLocale::AnyTerritory));
-    EXPECT_EQ(translator.filePath(), TtsTest::ResourcePaths::de);
+    EXPECT_EQ(QString::fromStdString(translator.filePath()),
+              TtsTest::ResourcePaths::de);
     test = "test";
     res = translator.translate(test);
     TtsTest::Translator::permutate(test, TtsTest::Locale::De);

@@ -43,7 +43,7 @@ public:
             std::ranges::next_permutation(str.begin(), str.end());
     }
 
-    QString filePath() override { return filePath_; }
+    std::string filePath() override { return filePath_.toStdString(); }
 
     Tts::LocaleDescriptor localeDescriptor() override
     {

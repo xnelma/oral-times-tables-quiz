@@ -1,6 +1,7 @@
 #if defined BOOST_TRANSLATOR // Needed for the linter.
 #  include "boost_translator.hpp"
 #  include <filesystem>
+#  include <QString>
 
 Tts::Translator::Translator()
 {
@@ -8,22 +9,22 @@ Tts::Translator::Translator()
     generator_.add_messages_domain(TRANSLATION_DOMAIN);
 }
 
-QString Tts::Translator::filePath()
+std::string Tts::Translator::filePath()
 {
     if (localeName_.empty())
         return "";
 
-    return QString::fromStdString(std::vformat(
-        TRANSLATION_DIR "/{}.po", std::make_format_args(localeName_)));
+    return std::vformat(TRANSLATION_DIR "/{}.po",
+                        std::make_format_args(localeName_));
 }
 
 auto Tts::Translator::localeDescriptor() -> LocaleDescriptor
 {
     auto path = filePath();
-    if (path.isEmpty())
+    if (path.empty())
         return Tts::LocaleDescriptor();
 
-    return Tts::LocaleDescriptor::fromResourcePath(path.toStdString());
+    return Tts::LocaleDescriptor::fromResourcePath(path);
 }
 
 QLocale Tts::Translator::locale()

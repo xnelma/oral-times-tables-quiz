@@ -11,7 +11,7 @@ class Translator : public AbstractTranslator
 public:
     Translator(QObject *parent = nullptr);
 
-    QString filePath() override;
+    std::string filePath() override;
     Tts::LocaleDescriptor localeDescriptor() override;
     QLocale locale() override;
     std::string translate(const std::string &sourceText) override;
