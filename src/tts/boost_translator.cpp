@@ -1,5 +1,6 @@
-#include "boost_translator.hpp"
-#include <filesystem>
+#if defined BOOST_TRANSLATOR // Needed for the linter.
+#  include "boost_translator.hpp"
+#  include <filesystem>
 
 Tts::Translator::Translator()
 {
@@ -57,3 +58,5 @@ bool Tts::Translator::load(const QString &filePath)
 
     return true;
 }
+
+#endif

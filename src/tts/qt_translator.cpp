@@ -1,6 +1,7 @@
-#include "qt_translator.hpp"
-#include "locale_descriptor.hpp"
-#include <QFile>
+#if defined QT_TRANSLATOR // Needed for the linter.
+#  include "qt_translator.hpp"
+#  include "locale_descriptor.hpp"
+#  include <QFile>
 
 Tts::Translator::Translator(QObject *parent) : translator_(parent) { }
 
@@ -34,3 +35,5 @@ bool Tts::Translator::load(const QString &filename)
 
     return translator_.load(filename);
 }
+
+#endif
