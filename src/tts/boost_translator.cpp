@@ -39,10 +39,9 @@ Tts::Translator::translate(const boost::locale::basic_message<char> &sourceText)
     return sourceText.str(locale_);
 }
 
-bool Tts::Translator::load(const QString &filename)
-// TODO rename to filePath
+bool Tts::Translator::load(const QString &filePath)
 {
-    std::filesystem::path p = filename.toStdString();
+    std::filesystem::path p = filePath.toStdString();
     if (!std::filesystem::exists(p))
         return false;
 

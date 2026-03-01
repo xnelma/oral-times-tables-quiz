@@ -16,7 +16,7 @@ public:
     QLocale locale() override;
     std::string
     translate(const boost::locale::basic_message<char> &sourceText) override;
-    bool load(const QString &filename) override;
+    bool load(const QString &filePath) override;
 
 private:
     boost::locale::generator generator_;
