@@ -54,9 +54,9 @@ private:
             throw std::invalid_argument(ss.str());
         }
 
-        QString resourcePath =
+        std::string resourcePath =
             TTranslationResources::get().at(localeDescriptor);
-        bool ok = TTranslator::load(resourcePath);
+        bool ok = TTranslator::load(QString::fromStdString(resourcePath));
 
         if (!ok)
             throw std::runtime_error("Translation could not be loaded.");

@@ -19,8 +19,8 @@ struct std::hash<Tts::LocaleDescriptor>
 
 namespace Tts {
 
-typedef std::unordered_map<Tts::LocaleDescriptor, QString> ResourceMap;
-typedef std::pair<Tts::LocaleDescriptor, QString> ResourcePair;
+typedef std::unordered_map<Tts::LocaleDescriptor, std::string> ResourceMap;
+typedef std::pair<Tts::LocaleDescriptor, std::string> ResourcePair;
 
 // Use a struct instead of a namespace to be able to use it as type in
 // templates. Then it can be replaced for testing.

@@ -20,10 +20,10 @@ Tts::ResourceMap &Tts::TranslationResources::get()
     // ":" is the base path for Qt Resource files.
     QDirIterator it(":", { "*.qm" }, QDir::Files, QDirIterator::Subdirectories);
     while (it.hasNext()) {
-        QString dir = it.next();
-        auto descriptor = LocaleDescriptor::fromResourcePath(dir.toStdString());
+        auto dirStr = it.next().toStdString();
+        auto descriptor = LocaleDescriptor::fromResourcePath(dirStr);
 
-        resources.insert({ descriptor, dir });
+        resources.insert({ descriptor, dirStr });
     }
 #elif defined BOOST_TRANSLATOR
     std::ranges::for_each(
@@ -34,8 +34,7 @@ Tts::ResourceMap &Tts::TranslationResources::get()
             if (dirStr.ends_with(".po") /* C++20 */) {
                 auto descriptor =
                     LocaleDescriptor::fromFileName(dir.filename().string());
-                resources.insert(
-                    { descriptor, QString::fromStdString(dirStr) });
+                resources.insert({ descriptor, dirStr });
             }
         });
 #endif
