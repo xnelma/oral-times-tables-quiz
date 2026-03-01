@@ -7,7 +7,7 @@ list(APPEND TtsSources
 
 if(${Translator} MATCHES QT_TRANSLATOR)
 list(APPEND TtsSources
-    translator.cpp
+    qt_translator.cpp
 )
 elseif(${Translator} MATCHES BOOST_TRANSLATOR)
 list(APPEND TtsSources

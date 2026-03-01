@@ -5,7 +5,7 @@
 #include "abstract_tts_settings.hpp"
 #include "tts_settings.hpp"
 #if defined QT_TRANSLATOR
-#  include "translator.hpp"
+#  include "qt_translator.hpp"
 #elif defined BOOST_TRANSLATOR
 #  include "boost_translator.hpp"
 #endif

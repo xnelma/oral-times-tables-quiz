@@ -1,4 +1,4 @@
-#include "translator.hpp"
+#include "qt_translator.hpp"
 #include "locale_descriptor.hpp"
 #include <QFile>
 

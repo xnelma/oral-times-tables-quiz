@@ -5,7 +5,6 @@
 #include "quiz_config.hpp"
 #include "tts/self_updating_translator.hpp"
 #include "tts/tts_settings.hpp"
-#include "tts/translator.hpp"
 #include "timestables/quiz.hpp"
 #include <QObject>
 #include <qqml.h>
