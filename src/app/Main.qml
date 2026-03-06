@@ -7,8 +7,8 @@ import QtQuick.Layouts
 ApplicationWindow {
     id: root
 
+    property QuizConfigView quizConfigViewInst
     property QuizView quizViewInst
-    property SetupView setupViewInst
 
     title: qsTr("Oral Times Tables Quiz")
     visible: true
@@ -46,7 +46,7 @@ ApplicationWindow {
                 if (!root.quizViewInst.visible)
                     root.quizViewInst.visible = true;
                 var p = {
-                    "config": root.setupViewInst.config
+                    "config": root.quizConfigViewInst.config
                 };
                 stack.push(root.quizViewInst, p);
             }
@@ -148,9 +148,9 @@ ApplicationWindow {
     Component {
         id: setupView
 
-        SetupView {
+        QuizConfigView {
             Component.onCompleted: {
-                root.setupViewInst = this;
+                root.quizConfigViewInst = this;
             }
         }
     }
