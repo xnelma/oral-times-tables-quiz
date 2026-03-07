@@ -1,6 +1,7 @@
 #ifndef OTTQ_20250829_1805_INCLUDE
 #define OTTQ_20250829_1805_INCLUDE
 
+#include "qt_locale.hpp"
 #include <QLocale>
 #include <ostream>
 
@@ -13,7 +14,7 @@ struct LocaleDescriptor
     LocaleDescriptor(LocaleDescriptor &&) noexcept = default;
     explicit LocaleDescriptor(const QLocale::Language &l,
                               const QLocale::Territory &t);
-    explicit LocaleDescriptor(const QLocale &l);
+    explicit LocaleDescriptor(const Tts::Locale &l);
     virtual ~LocaleDescriptor() = default;
 
     static Tts::LocaleDescriptor fromFileName(const std::string &qmFileName);

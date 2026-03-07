@@ -14,7 +14,7 @@ Tts::LocaleDescriptor::LocaleDescriptor(const QLocale::Language &l,
 {
 }
 
-Tts::LocaleDescriptor::LocaleDescriptor(const QLocale &l)
+Tts::LocaleDescriptor::LocaleDescriptor(const Tts::Locale &l)
     : language(l.language()), territory(l.territory())
 {
 }

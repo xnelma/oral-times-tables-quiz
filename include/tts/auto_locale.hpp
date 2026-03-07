@@ -4,7 +4,6 @@
 #include "locale_descriptor.hpp"
 #include "translation_resources.hpp"
 #include "qt_locale.hpp"
-#include <QLocale>
 #include <exception>
 #include <ostream>
 
@@ -37,10 +36,7 @@ private:
 
     void set()
     {
-        // Init with default constructor for QLocale instead of
-        // QLocale::system() to allow setting a different 'system' locale by
-        // setting a default locale, for example for unit testing.
-        Tts::LocaleDescriptor system = Tts::LocaleDescriptor(QLocale());
+        Tts::LocaleDescriptor system = Tts::LocaleDescriptor(Tts::Locale());
 
         std::optional<Tts::LocaleDescriptor> fallback;
 

@@ -10,6 +10,9 @@ struct Locale
 public:
     Locale()
     {
+        // Init with default constructor for QLocale instead of
+        // QLocale::system() to allow setting a different 'system' locale by
+        // setting a default locale, for example for unit testing.
         QLocale l;
         language_ = l.language();
         territory_ = l.territory();
