@@ -3,6 +3,7 @@
 
 #include "locale_descriptor.hpp"
 #include "translation_resources.hpp"
+#include "qt_locale.hpp"
 #include <QLocale>
 #include <exception>
 #include <ostream>
@@ -23,7 +24,7 @@ struct AutoLocale : public LocaleDescriptor
 
     void update()
     {
-        QLocale updatedSystem;
+        Tts::Locale updatedSystem;
         if (updatedSystem.language() != language
             || updatedSystem.territory() != territory)
             set();
