@@ -5,6 +5,13 @@
 
 namespace Tts {
 
+typedef QLocale::Language Language;
+typedef QLocale::Territory Territory;
+
+static const Language anyLanguage = QLocale::AnyLanguage;
+static const Language c = QLocale::C;
+static const Territory anyTerritory = QLocale::AnyTerritory;
+
 struct Locale
 {
 public:
@@ -18,12 +25,12 @@ public:
         territory_ = l.territory();
     }
 
-    QLocale::Language language() const { return language_; }
-    QLocale::Territory territory() const { return territory_; }
+    Language language() const { return language_; }
+    Territory territory() const { return territory_; }
 
 private:
-    QLocale::Language language_;
-    QLocale::Territory territory_;
+    Language language_;
+    Territory territory_;
 };
 
 } // namespace Tts

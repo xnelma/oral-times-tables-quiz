@@ -4,12 +4,12 @@
 #include <filesystem>
 
 Tts::LocaleDescriptor::LocaleDescriptor()
-    : language(QLocale::C), territory(QLocale::AnyTerritory)
+    : language(Tts::c), territory(Tts::anyTerritory)
 {
 }
 
-Tts::LocaleDescriptor::LocaleDescriptor(const QLocale::Language &l,
-                                        const QLocale::Territory &t)
+Tts::LocaleDescriptor::LocaleDescriptor(const Tts::Language &l,
+                                        const Tts::Territory &t)
     : language(l), territory(t)
 {
 }
@@ -42,8 +42,8 @@ auto Tts::LocaleDescriptor::fromFileName(const std::string &fileName)
             " with a third x/X also being valid.",
             std::make_format_args(fileName)));
 
-    QLocale::Language language = QLocale::C;
-    QLocale::Territory territory = QLocale::AnyTerritory;
+    Tts::Language language = Tts::c;
+    Tts::Territory territory = Tts::anyTerritory;
 
     // The first match contains the complete sequence; groups can be at
     // indices >= 1.
