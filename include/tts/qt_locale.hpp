@@ -2,6 +2,7 @@
 #  define OTTQ_20260301_1821_INCLUDE
 
 #  include <QLocale>
+#  include <string>
 
 namespace Tts {
 
@@ -27,6 +28,17 @@ public:
 
     Language language() const { return language_; }
     Territory territory() const { return territory_; }
+
+    // TODO move to free function?
+    static Language language(const std::string &languageCode)
+    {
+        return QLocale::codeToLanguage(QString::fromStdString(languageCode));
+    }
+
+    static Territory territory(const std::string &territoryCode)
+    {
+        return QLocale::codeToTerritory(QString::fromStdString(territoryCode));
+    }
 
 private:
     Language language_;

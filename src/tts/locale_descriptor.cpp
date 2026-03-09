@@ -48,14 +48,14 @@ auto Tts::LocaleDescriptor::fromFileName(const std::string &fileName)
     // The first match contains the complete sequence; groups can be at
     // indices >= 1.
     if (match.size() > 1)
-        language = QLocale::codeToLanguage(QString::fromStdString(match[1]));
+        language = Tts::Locale::language(match[1]);
     if (match.size() > 2) {
         // There could be an empty match for the second group.
         auto t = match[2].str();
         if (t.length() > 0) {
             // This group starts with the delimiter; remove the first character.
             t.erase(t.begin());
-            territory = QLocale::codeToTerritory(QString::fromStdString(t));
+            territory = Tts::Locale::territory(t);
         }
     }
 
