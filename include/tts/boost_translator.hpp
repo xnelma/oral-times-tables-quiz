@@ -11,11 +11,11 @@ class Translator : public AbstractTranslator
 public:
     Translator();
 
-    std::string filePath() override;
-    Tts::LocaleDescriptor localeDescriptor() override;
-    Tts::Locale locale() override;
-    std::string
-    translate(const boost::locale::basic_message<char> &sourceText) override;
+    std::string filePath() const override;
+    Tts::LocaleDescriptor localeDescriptor() const override;
+    Tts::Locale locale() const override;
+    std::string translate(
+        const boost::locale::basic_message<char> &sourceText) const override;
     bool load(const std::string &filePath) override;
 
 private:

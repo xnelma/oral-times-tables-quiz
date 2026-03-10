@@ -8,7 +8,7 @@ Tts::Translator::Translator()
     generator_.add_messages_domain(TRANSLATION_DOMAIN);
 }
 
-std::string Tts::Translator::filePath()
+std::string Tts::Translator::filePath() const
 {
     if (localeName_.empty())
         return "";
@@ -17,7 +17,7 @@ std::string Tts::Translator::filePath()
                         std::make_format_args(localeName_));
 }
 
-auto Tts::Translator::localeDescriptor() -> LocaleDescriptor
+auto Tts::Translator::localeDescriptor() const -> LocaleDescriptor
 {
     auto path = filePath();
     if (path.empty())
@@ -26,7 +26,7 @@ auto Tts::Translator::localeDescriptor() -> LocaleDescriptor
     return Tts::LocaleDescriptor::fromResourcePath(path);
 }
 
-Tts::Locale Tts::Translator::locale()
+Tts::Locale Tts::Translator::locale() const
 {
     // TODO If I am not using QLocale, but std::locale, how would I provide
     // the locale names? namespace constants?
@@ -34,8 +34,8 @@ Tts::Locale Tts::Translator::locale()
     return Tts::Locale(ld.language, ld.territory); // TODO
 }
 
-std::string
-Tts::Translator::translate(const boost::locale::basic_message<char> &sourceText)
+std::string Tts::Translator::translate(
+    const boost::locale::basic_message<char> &sourceText) const
 {
     return sourceText.str(locale_);
 }

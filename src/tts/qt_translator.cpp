@@ -5,23 +5,23 @@
 
 Tts::Translator::Translator(QObject *parent) : translator_(parent) { }
 
-std::string Tts::Translator::filePath()
+std::string Tts::Translator::filePath() const
 {
     return translator_.filePath().toStdString();
 }
 
-auto Tts::Translator::localeDescriptor() -> LocaleDescriptor
+auto Tts::Translator::localeDescriptor() const -> LocaleDescriptor
 {
     return Tts::LocaleDescriptor::fromResourcePath(filePath());
 }
 
-Tts::Locale Tts::Translator::locale()
+Tts::Locale Tts::Translator::locale() const
 {
     auto ld = localeDescriptor();
     return Tts::Locale(ld.language, ld.territory);
 }
 
-std::string Tts::Translator::translate(const std::string &sourceText)
+std::string Tts::Translator::translate(const std::string &sourceText) const
 {
     return translator_.translate(TRANSLATION_DOMAIN, sourceText.c_str())
         .toStdString();

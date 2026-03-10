@@ -42,9 +42,9 @@ public:
             std::ranges::next_permutation(str.begin(), str.end());
     }
 
-    std::string filePath() override { return filePath_; }
+    std::string filePath() const override { return filePath_; }
 
-    Tts::LocaleDescriptor localeDescriptor() override
+    Tts::LocaleDescriptor localeDescriptor() const override
     {
         switch (translations_.at(filePath_)) {
         case Locale::En:
@@ -60,13 +60,13 @@ public:
         return Tts::LocaleDescriptor(QLocale::C, QLocale::AnyTerritory);
     }
 
-    Tts::Locale locale() override
+    Tts::Locale locale() const override
     {
         auto ld = localeDescriptor();
         return Tts::Locale(ld.language, ld.territory);
     }
 
-    std::string translate(const std::string &sourceText) override
+    std::string translate(const std::string &sourceText) const override
     {
         std::string tmp{ sourceText };
         permutate(tmp, translations_.at(filePath_));
