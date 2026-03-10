@@ -15,10 +15,10 @@ auto Tts::Translator::localeDescriptor() -> LocaleDescriptor
     return Tts::LocaleDescriptor::fromResourcePath(filePath());
 }
 
-QLocale Tts::Translator::locale()
+Tts::Locale Tts::Translator::locale()
 {
     auto ld = localeDescriptor();
-    return QLocale(ld.language, ld.territory);
+    return Tts::Locale(ld.language, ld.territory);
 }
 
 std::string Tts::Translator::translate(const std::string &sourceText)

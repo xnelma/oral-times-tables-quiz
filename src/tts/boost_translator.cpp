@@ -26,12 +26,12 @@ auto Tts::Translator::localeDescriptor() -> LocaleDescriptor
     return Tts::LocaleDescriptor::fromResourcePath(path);
 }
 
-QLocale Tts::Translator::locale()
+Tts::Locale Tts::Translator::locale()
 {
     // TODO If I am not using QLocale, but std::locale, how would I provide
     // the locale names? namespace constants?
     auto ld = localeDescriptor();
-    return QLocale(ld.language, ld.territory); // TODO
+    return Tts::Locale(ld.language, ld.territory); // TODO
 }
 
 std::string

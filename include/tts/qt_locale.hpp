@@ -67,6 +67,12 @@ public:
         QLocale::setDefault(QLocale(l, t));
     }
 
+    explicit operator QLocale() const
+    {
+        return QLocale(static_cast<QLocale::Language>(language_),
+                       static_cast<QLocale::Territory>(territory_));
+    }
+
 private:
     Language language_;
     Territory territory_;

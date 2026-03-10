@@ -13,7 +13,7 @@ public:
 
     std::string filePath() override;
     Tts::LocaleDescriptor localeDescriptor() override;
-    QLocale locale() override;
+    Tts::Locale locale() override;
     std::string translate(const std::string &sourceText) override;
     bool load(const std::string &filePath) override;
 
