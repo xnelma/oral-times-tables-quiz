@@ -26,6 +26,11 @@ public:
         territory_ = l.territory();
     }
 
+    explicit Locale(const Tts::Language &l, const Tts::Territory &t)
+        : language_(l), territory_(t)
+    {
+    }
+
     Language language() const { return language_; }
     Territory territory() const { return territory_; }
 
