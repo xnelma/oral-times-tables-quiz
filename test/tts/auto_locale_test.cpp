@@ -10,7 +10,7 @@ TEST(AutoLocaleTest, FindsUniqueResource)
 
     // Prepare one entry that also is the match.
     auto match = Tts::LocaleDescriptor(QLocale::English, QLocale::UnitedStates);
-    QLocale::setDefault(QLocale(match.language, match.territory));
+    Tts::Locale::setDefault(match.language, match.territory);
     TtsTest::TranslationResources::get().insert({ match, "" });
     auto expected = match;
 
@@ -31,7 +31,7 @@ TEST(AutoLocaleTest, FindsUniqueResource)
         { Tts::LocaleDescriptor(QLocale::Italian, QLocale::Italy), "" });
     match.language = QLocale::French;
     match.territory = QLocale::France;
-    QLocale::setDefault(QLocale(match.language, match.territory));
+    Tts::Locale::setDefault(match.language, match.territory);
     expected = match;
 
     result = Tts::AutoLocale<TtsTest::TranslationResources>();
@@ -49,7 +49,7 @@ TEST(AutoLocaleTest, UsesSystemLocaleForSameLanguageMissingTerritory)
 {
     TtsTest::TranslationResources::get().clear();
 
-    QLocale::setDefault(QLocale(QLocale::English, QLocale::Germany));
+    Tts::Locale::setDefault(QLocale::English, QLocale::Germany);
     TtsTest::TranslationResources::get().insert(
         { Tts::LocaleDescriptor(QLocale::English, QLocale::UnitedStates), "" });
 
@@ -70,11 +70,11 @@ TEST(AutoLocaleTest, CatchesLanguageUpdate)
     TtsTest::TranslationResources::get().insert(
         { { oldMatch, "" }, { newMatch, "" } });
 
-    QLocale::setDefault(QLocale(oldMatch.language, oldMatch.territory));
+    Tts::Locale::setDefault(oldMatch.language, oldMatch.territory);
     auto result = Tts::AutoLocale<TtsTest::TranslationResources>();
     EXPECT_EQ(result, oldMatch);
 
-    QLocale::setDefault(QLocale(newMatch.language, newMatch.territory));
+    Tts::Locale::setDefault(newMatch.language, newMatch.territory);
     result.update();
     EXPECT_EQ(result, newMatch);
 }
@@ -89,11 +89,11 @@ TEST(AutoLocaleTest, CatchesTerritoryUpdateForSameLanguage)
     TtsTest::TranslationResources::get().insert(
         { { oldMatch, "" }, { newMatch, "" } });
 
-    QLocale::setDefault(QLocale(oldMatch.language, oldMatch.territory));
+    Tts::Locale::setDefault(oldMatch.language, oldMatch.territory);
     auto result = Tts::AutoLocale<TtsTest::TranslationResources>();
     EXPECT_EQ(result, oldMatch);
 
-    QLocale::setDefault(QLocale(newMatch.language, newMatch.territory));
+    Tts::Locale::setDefault(newMatch.language, newMatch.territory);
     result.update();
     EXPECT_EQ(result, newMatch);
 }
@@ -107,11 +107,11 @@ TEST(AutoLocaleTest, CatchesTerritoryUpdateForDifferentLanguage)
     TtsTest::TranslationResources::get().insert(
         { { oldMatch, "" }, { newMatch, "" } });
 
-    QLocale::setDefault(QLocale(oldMatch.language, oldMatch.territory));
+    Tts::Locale::setDefault(oldMatch.language, oldMatch.territory);
     auto result = Tts::AutoLocale<TtsTest::TranslationResources>();
     EXPECT_EQ(result, oldMatch);
 
-    QLocale::setDefault(QLocale(newMatch.language, newMatch.territory));
+    Tts::Locale::setDefault(newMatch.language, newMatch.territory);
     result.update();
     EXPECT_EQ(result, newMatch);
 }

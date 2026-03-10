@@ -51,7 +51,7 @@ protected:
                                         TtsTest::TranslationResources>>(
             settings_);
 
-        QLocale::setDefault(QLocale(enUs_.language, enUs_.territory));
+        Tts::Locale::setDefault(enUs_.language, enUs_.territory);
 
         std::unordered_map<std::string, TtsTest::Locale> translations;
         translations.insert(
@@ -112,7 +112,7 @@ TEST_F(SelfUpdatingTranslatorTest, CatchesSystemLocaleUpdate)
     EXPECT_EQ(result, test1_);
 
     // update system locale
-    QLocale::setDefault(QLocale(deDe_.language, deDe_.territory));
+    Tts::Locale::setDefault(deDe_.language, deDe_.territory);
     EXPECT_EQ(settings_->resolvedLocale(), deDe_);
     EXPECT_EQ(settings_->resolvedLocale().resourceKey(), deAny_);
 

@@ -52,6 +52,11 @@ public:
         return QLocale::territoryToString(t).toUtf8().data();
     }
 
+    static void setDefault(const Tts::Language &l, const Tts::Territory &t)
+    {
+        QLocale::setDefault(QLocale(l, t));
+    }
+
 private:
     Language language_;
     Territory territory_;
