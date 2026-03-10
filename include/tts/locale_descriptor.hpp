@@ -2,7 +2,6 @@
 #define OTTQ_20250829_1805_INCLUDE
 
 #include "qt_locale.hpp"
-#include <QLocale>
 #include <ostream>
 
 namespace Tts {

@@ -40,6 +40,18 @@ public:
         return QLocale::codeToTerritory(QString::fromStdString(territoryCode));
     }
 
+    static std::string languageName(const Tts::Language &l)
+    {
+        // Asserting the type of the parameter should not be necessary, because
+        // a wrong typedef should be detected at compile time.
+        return QLocale::languageToString(l).toUtf8().data();
+    }
+
+    static std::string territoryName(const Tts::Territory &t)
+    {
+        return QLocale::territoryToString(t).toUtf8().data();
+    }
+
 private:
     Language language_;
     Territory territory_;
