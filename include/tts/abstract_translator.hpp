@@ -22,7 +22,11 @@ public:
 
     virtual std::string filePath() const = 0;
     virtual Tts::LocaleDescriptor localeDescriptor() const = 0;
-    virtual Tts::Locale locale() const = 0;
+    Tts::Locale locale() const
+    {
+        auto ld = localeDescriptor();
+        return Tts::Locale(ld.language, ld.territory);
+    }
     // The translation libraries (so far) used have return values for the
     // translations, therefore also use a return value instead of a non-const
     // parameter.

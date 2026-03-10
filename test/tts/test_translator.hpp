@@ -60,12 +60,6 @@ public:
         return Tts::LocaleDescriptor(QLocale::C, QLocale::AnyTerritory);
     }
 
-    Tts::Locale locale() const override
-    {
-        auto ld = localeDescriptor();
-        return Tts::Locale(ld.language, ld.territory);
-    }
-
     std::string translate(const std::string &sourceText) const override
     {
         std::string tmp{ sourceText };

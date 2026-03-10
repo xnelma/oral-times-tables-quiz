@@ -13,7 +13,6 @@ public:
 
     std::string filePath() const override;
     Tts::LocaleDescriptor localeDescriptor() const override;
-    Tts::Locale locale() const override;
     std::string translate(
         const boost::locale::basic_message<char> &sourceText) const override;
     bool load(const std::string &filePath) override;

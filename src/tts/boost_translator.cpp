@@ -26,14 +26,6 @@ auto Tts::Translator::localeDescriptor() const -> LocaleDescriptor
     return Tts::LocaleDescriptor::fromResourcePath(path);
 }
 
-Tts::Locale Tts::Translator::locale() const
-{
-    // TODO If I am not using QLocale, but std::locale, how would I provide
-    // the locale names? namespace constants?
-    auto ld = localeDescriptor();
-    return Tts::Locale(ld.language, ld.territory); // TODO
-}
-
 std::string Tts::Translator::translate(
     const boost::locale::basic_message<char> &sourceText) const
 {
