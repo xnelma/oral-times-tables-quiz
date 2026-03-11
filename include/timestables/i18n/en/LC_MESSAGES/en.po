@@ -18,5 +18,5 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #: include/timestables/question.hpp:12
-msgid "{} times {}"
-msgstr "{} times {}"
+msgid "%1 times %2"
+msgstr "%1 times %2"

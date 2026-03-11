@@ -2,7 +2,6 @@
 #include "timestables/factor_range.hpp"
 #include "timestables/question.hpp"
 #include <QtLogging>
-#include <format>
 
 QuizBackend::QuizBackend(QObject *parent)
     : QObject(parent),
@@ -100,9 +99,9 @@ QString QuizBackend::question()
 {
     try {
         TimesTables::Question q = quiz_.question();
-        std::string qStr = std::vformat(
-            questionBase_, std::make_format_args(q.factor, q.number));
-        return QString::fromStdString(qStr);
+        return QString::fromStdString(questionBase_)
+            .arg(q.factor)
+            .arg(q.number);
     } catch (std::out_of_range &e) {
         qCritical("Could not get the question: %s", e.what());
         throw std::domain_error(e.what());
