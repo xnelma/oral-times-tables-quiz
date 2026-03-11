@@ -6,7 +6,11 @@
 QuizBackend::QuizBackend(QObject *parent)
     : QObject(parent),
       tts_(std::make_shared<QTextToSpeech>(this)),
+#ifdef QT_TRANSLATOR
       translator_(Tts::SelfUpdatingTranslator(this))
+#else
+      translator_(Tts::SelfUpdatingTranslator())
+#endif
 {
     setupStateMachine();
 }
