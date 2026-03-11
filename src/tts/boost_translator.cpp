@@ -13,8 +13,7 @@ std::string Tts::Translator::filePath() const
     if (localeName_.empty())
         return "";
 
-    return std::vformat(TRANSLATION_DIR "/{}.po",
-                        std::make_format_args(localeName_));
+    return "/" + localeName_ + ".po";
 }
 
 auto Tts::Translator::localeDescriptor() const -> LocaleDescriptor
@@ -45,8 +44,7 @@ bool Tts::Translator::load(const std::string &filePath)
     // Assume for now that the filename does not contain the encoding.
     assert(localeName_.find(".") == std::string::npos);
 
-    locale_ = generator_(
-        std::vformat("{}.UTF-8", std::make_format_args(localeName_)));
+    locale_ = generator_(localeName_ + ".UTF-8");
 
     return true;
 }

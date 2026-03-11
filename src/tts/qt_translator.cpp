@@ -2,7 +2,6 @@
 #  include "qt_translator.hpp"
 #  include "locale_descriptor.hpp"
 #  include <QFile>
-#  include <sstream>
 
 Tts::Translator::Translator(QObject *parent) : translator_(parent) { }
 
@@ -25,11 +24,9 @@ std::string Tts::Translator::translate(const std::string &sourceText) const
 bool Tts::Translator::load(const std::string &filePath)
 {
     QString qFilePath = QString::fromStdString(filePath);
-    if (!QFile(qFilePath).exists()) {
-        std::stringstream ss;
-        ss << "Resource path \"" << filePath << "\" does not exist.";
-        throw std::invalid_argument(ss.str());
-    }
+    if (!QFile(qFilePath).exists())
+        throw std::invalid_argument("Resource path \"" + filePath
+                                    + "\" does not exist.");
 
     return translator_.load(qFilePath);
 }

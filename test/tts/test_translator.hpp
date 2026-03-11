@@ -70,8 +70,8 @@ public:
     bool load(const std::string &filePath) override
     {
         if (!translations_.contains(filePath))
-            throw std::invalid_argument(
-                std::format("Resource path \"{}\" does not exist.", filePath));
+            throw std::invalid_argument("Resource path \"" + filePath
+                                        + "\" does not exist.");
 
         filePath_ = filePath;
         return true;
