@@ -2,6 +2,7 @@
 #include <regex>
 #include <exception>
 #include <filesystem>
+#include <sstream>
 
 Tts::LocaleDescriptor::LocaleDescriptor()
     : language(Tts::c), territory(Tts::anyTerritory)
@@ -34,13 +35,14 @@ auto Tts::LocaleDescriptor::fromFileName(const std::string &fileName)
         "([a-z]{2,3})([_-][A-Z]{2,3})?\\." TRANSLATION_FILE_ENDING "$");
 
     std::smatch match;
-    if (!std::regex_search(fileName, match, localeNameRegex))
-        throw std::invalid_argument(std::vformat(
-            "Invalid file name format {}. The expected format is "
-            "xx." TRANSLATION_FILE_ENDING " or "
-            "xx_XX." TRANSLATION_FILE_ENDING "/xx-XX." TRANSLATION_FILE_ENDING
-            " with a third x/X also being valid.",
-            std::make_format_args(fileName)));
+    if (!std::regex_search(fileName, match, localeNameRegex)) {
+        std::stringstream ss;
+        ss << "Invalid file name format " << fileName
+           << ". The expected format is xx." TRANSLATION_FILE_ENDING " or "
+              "xx_XX." TRANSLATION_FILE_ENDING "/xx-XX." TRANSLATION_FILE_ENDING
+              " with a third x/X also being valid.";
+        throw std::invalid_argument(ss.str());
+    }
 
     Tts::Language language = Tts::c;
     Tts::Territory territory = Tts::anyTerritory;

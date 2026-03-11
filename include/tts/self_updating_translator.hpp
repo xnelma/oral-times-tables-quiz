@@ -9,6 +9,7 @@
 #elif defined BOOST_TRANSLATOR
 #  include "boost_translator.hpp"
 #endif
+#include <sstream>
 
 namespace Tts {
 
