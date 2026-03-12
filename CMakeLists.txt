@@ -10,6 +10,16 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON) # Needed by clang-tidy
 
+set(TranslatorImplementations QT_TRANSLATOR BOOST_TRANSLATOR)
+# Use capital letters for the names because they are used as cpp text macros.
+set(Translator QT_TRANSLATOR)
+#set(Translator BOOST_TRANSLATOR)
+if(NOT ${Translator} IN_LIST TranslatorImplementations)
+    message(FATAL_ERROR
+            "-- Could NOT find translator implementation ${Translator} "
+            "(Should be one of ${TranslatorImplementations})")
+endif()
+
 find_package(Qt6
     REQUIRED COMPONENTS
         Quick
@@ -19,24 +29,17 @@ find_package(Qt6
         Test
         StateMachine
 )
-find_package(Boost
-    REQUIRED COMPONENTS
-        locale
-)
+if(${Translator} MATCHES BOOST_TRANSLATOR)
+    find_package(Boost
+        REQUIRED COMPONENTS
+            locale
+    )
+endif()
 
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 set(CMAKE_AUTOMOC ON)
 
 # Set up translator:
-# Use capital letters for the names because they are used as cpp text macros.
-set(TranslatorImplementations QT_TRANSLATOR BOOST_TRANSLATOR)
-set(Translator QT_TRANSLATOR)
-#set(Translator BOOST_TRANSLATOR)
-if(NOT ${Translator} IN_LIST TranslatorImplementations)
-    message(FATAL_ERROR
-            "-- Could NOT find translator implementation ${Translator} "
-            "(Should be one of ${TranslatorImplementations})")
-endif()
 add_compile_definitions(${Translator})
 if(${Translator} MATCHES QT_TRANSLATOR)
     set(TranslationDomain "Translator")

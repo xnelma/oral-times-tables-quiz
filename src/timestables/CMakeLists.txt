@@ -4,8 +4,13 @@ add_library(TimesTables STATIC
 
 target_link_libraries(TimesTables PRIVATE
     Qt6::Core
-    Boost::locale
 )
+
+if(${Translator} MATCHES BOOST_TRANSLATOR)
+    target_link_libraries(TimesTables PRIVATE
+        Boost::locale
+    )
+endif()
 
 target_include_directories(TimesTables PRIVATE
     "${PROJECT_SOURCE_DIR}/include/timestables"
