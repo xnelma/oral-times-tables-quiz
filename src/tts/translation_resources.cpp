@@ -53,9 +53,8 @@ std::vector<std::string> Tts::TranslationResources::getLanguageNames()
                            std::back_inserter(languageNames),
                            [](const ResourcePair &key) -> std::string {
                                LocaleDescriptor ld = key.first;
-                               return QLocale(ld.language, ld.territory)
-                                   .nativeLanguageName()
-                                   .toStdString();
+                               return Tts::Locale::nativeLanguageName(
+                                   ld.language, ld.territory);
                            });
 
     return languageNames;

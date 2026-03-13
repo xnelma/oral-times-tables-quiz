@@ -52,6 +52,12 @@ public:
         return QLocale::languageToString(l).toUtf8().data();
     }
 
+    static std::string nativeLanguageName(const Tts::Language &l,
+                                          const Tts::Territory &t)
+    {
+        return QLocale(l, t).nativeLanguageName().toStdString();
+    }
+
     static std::string territoryName(const Tts::Territory &t)
     {
         return QLocale::territoryToString(t).toUtf8().data();
