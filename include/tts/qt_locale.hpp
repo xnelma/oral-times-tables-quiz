@@ -16,23 +16,16 @@ static const Territory anyTerritory = QLocale::AnyTerritory;
 struct Locale
 {
 public:
-    Locale()
-    {
-        // Init with default constructor for QLocale instead of
-        // QLocale::system() to allow setting a different 'system' locale by
-        // setting a default locale, for example for unit testing.
-        QLocale l;
-        language_ = l.language();
-        territory_ = l.territory();
-    }
+    Locale() { }
 
     explicit Locale(const Tts::Language &l, const Tts::Territory &t)
-        : language_(l), territory_(t)
+        : qtLocale_(QLocale(static_cast<QLocale::Language>(l),
+                            static_cast<QLocale::Territory>(t)))
     {
     }
 
-    Language language() const { return language_; }
-    Territory territory() const { return territory_; }
+    Language language() const { return qtLocale_.language(); }
+    Territory territory() const { return qtLocale_.territory(); }
 
     // TODO move to free function?
     static Language language(const std::string &languageCode)
@@ -63,25 +56,20 @@ public:
         return QLocale::territoryToString(t).toUtf8().data();
     }
 
-    std::string name()
-    {
-        return QLocale(language_, territory_).name().toStdString();
-    }
+    std::string name() { return qtLocale_.name().toStdString(); }
 
     static void setDefault(const Tts::Language &l, const Tts::Territory &t)
     {
         QLocale::setDefault(QLocale(l, t));
     }
 
-    explicit operator QLocale() const
-    {
-        return QLocale(static_cast<QLocale::Language>(language_),
-                       static_cast<QLocale::Territory>(territory_));
-    }
+    explicit operator QLocale() const { return qtLocale_; }
 
 private:
-    Language language_;
-    Territory territory_;
+    // Init with default constructor for QLocale instead of
+    // QLocale::system() to allow setting a different 'system' locale by
+    // setting a default locale, for example for unit testing.
+    QLocale qtLocale_;
 };
 
 } // namespace Tts
