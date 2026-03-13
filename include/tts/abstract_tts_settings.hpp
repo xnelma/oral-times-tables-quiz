@@ -2,7 +2,7 @@
 #define OTTQ_20251222_1929_INCLUDE
 
 #include "locale_descriptor.hpp"
-#include "auto_locale.hpp"
+#include "auto_locale_descriptor.hpp"
 #include "translation_resources.hpp"
 
 namespace Tts {

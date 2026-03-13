@@ -17,9 +17,9 @@ concept ExtendsResources = std::is_base_of_v<Tts::TranslationResources, T>;
 #endif // EXTENDS_RESOURCES
 
 template <ExtendsResources TTranslationResources = Tts::TranslationResources>
-struct AutoLocale : public LocaleDescriptor
+struct AutoLocaleDescriptor : public LocaleDescriptor
 {
-    AutoLocale() { set(); }
+    AutoLocaleDescriptor() { set(); }
 
     void update()
     {
@@ -89,7 +89,8 @@ private:
 template <
     Tts::ExtendsResources TTranslationResources = Tts::TranslationResources>
 inline std::ostream &
-operator<<(std::ostream &os, const Tts::AutoLocale<TTranslationResources> &ld)
+operator<<(std::ostream &os,
+           const Tts::AutoLocaleDescriptor<TTranslationResources> &ld)
 {
     return os << static_cast<Tts::LocaleDescriptor>(ld) << ", key "
               << ld.resourceKey();

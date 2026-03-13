@@ -4,7 +4,7 @@
 #include "abstract_tts_settings.hpp"
 #include "locale_descriptor.hpp"
 #include "test_translation_resources.hpp"
-#include "auto_locale.hpp"
+#include "auto_locale_descriptor.hpp"
 
 namespace TtsTest {
 
@@ -15,7 +15,7 @@ private:
     bool savedUseAutoLocale_{ false };
     double savedVoiceRate_{ 0 };
 
-    Tts::AutoLocale<TtsTest::TranslationResources> autoLocale_;
+    Tts::AutoLocaleDescriptor<TtsTest::TranslationResources> autoLocale_;
 
     Tts::LocaleDescriptor &autoLocale() override
     {

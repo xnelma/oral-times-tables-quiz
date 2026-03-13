@@ -1,5 +1,5 @@
 #include "settings_backend.hpp"
-#include "tts/auto_locale.hpp"
+#include "tts/auto_locale_descriptor.hpp"
 #include "tts/translation_resources.hpp"
 #include <QtLogging>
 #include <stdexcept>
@@ -44,7 +44,7 @@ bool SettingsBackend::useAutoTtsLanguage()
 
 auto SettingsBackend::autoLanguage() -> LanguageName
 {
-    Tts::AutoLocale l;
+    Tts::AutoLocaleDescriptor l;
     LanguageName languageName(l);
     return languageName;
 }

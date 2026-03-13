@@ -25,7 +25,7 @@ public:
 private:
     QSettings settings_;
 
-    AutoLocale<Tts::TranslationResources> autoLocale_;
+    AutoLocaleDescriptor<Tts::TranslationResources> autoLocale_;
 
     LocaleDescriptor &autoLocale() override;
 };
