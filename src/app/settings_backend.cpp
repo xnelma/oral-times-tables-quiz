@@ -3,12 +3,24 @@
 #include "tts/translation_resources.hpp"
 #include <QtLogging>
 #include <stdexcept>
+#include <algorithm>
 
 SettingsBackend::SettingsBackend(QObject *parent) : QObject(parent) { }
 
 QStringList SettingsBackend::languages()
 {
-    return Tts::TranslationResources::getLanguageNames();
+    static QStringList languageNames;
+    if (languageNames.size() > 0)
+        return languageNames;
+
+    std::ranges::transform( // C++20
+        Tts::TranslationResources::getLanguageNames(),
+        std::back_inserter(languageNames),
+        [](const std::string &s) -> QString {
+            return QString::fromStdString(s);
+        });
+
+    return languageNames;
 }
 
 int SettingsBackend::languageIndex()

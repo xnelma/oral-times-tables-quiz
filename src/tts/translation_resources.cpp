@@ -42,20 +42,21 @@ Tts::ResourceMap &Tts::TranslationResources::get()
     return resources;
 }
 
-QStringList Tts::TranslationResources::getLanguageNames()
+std::vector<std::string> Tts::TranslationResources::getLanguageNames()
 {
-    static QStringList languageNames;
+    static std::vector<std::string> languageNames;
     if (languageNames.size() > 0)
         return languageNames;
 
     // C++20
-    std::ranges::transform(
-        TranslationResources::get(),
-        std::back_inserter(languageNames),
-        [](const ResourcePair &key) -> QString {
-            LocaleDescriptor ld = key.first;
-            return QLocale(ld.language, ld.territory).nativeLanguageName();
-        });
+    std::ranges::transform(TranslationResources::get(),
+                           std::back_inserter(languageNames),
+                           [](const ResourcePair &key) -> std::string {
+                               LocaleDescriptor ld = key.first;
+                               return QLocale(ld.language, ld.territory)
+                                   .nativeLanguageName()
+                                   .toStdString();
+                           });
 
     return languageNames;
 }
