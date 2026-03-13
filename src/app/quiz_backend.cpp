@@ -59,15 +59,8 @@ void QuizBackend::setupStateMachine()
     });
 
     auto setupTts = [this]() {
-        QLocale locale = static_cast<QLocale>(translator_.locale());
-        double rate = settings_.loadVoiceRateSetting();
-        tts_->setLocale(QLocale(locale.language(), locale.territory()));
-        // FIXME QLocale::system() and
-        // QLocale(l_sys.language(), l_sys.territory()) compare to different
-        // objects, and trying to set the former as tts locale causes tts to
-        // get into error state.
-        // Before I created a new object in qml anyways, so I did not notice it.
-        tts_->setRate(rate);
+        tts_->setLocale(static_cast<QLocale>(translator_.locale()));
+        tts_->setRate(settings_.loadVoiceRateSetting());
         if (tts_->state() == QTextToSpeech::Error) {
             // couldn't set translation
             emit showLocaleError();
