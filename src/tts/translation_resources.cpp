@@ -42,22 +42,26 @@ Tts::ResourceMap &Tts::TranslationResources::get()
     return resources;
 }
 
-std::vector<std::string> Tts::TranslationResources::getLanguageNames()
+std::vector<Tts::Locale> Tts::TranslationResources::getLocales()
 {
-    static std::vector<std::string> languageNames;
-    if (languageNames.size() > 0)
-        return languageNames;
+    // Currently this method is used to get a list of the (in case of
+    // QT_TRANSLATOR) native language names, which requires creating a
+    // QLocale object for each entry to get the name from anyways.
+    // Therefore creating a list of locales should not be much more expensive?
+
+    static std::vector<Tts::Locale> locales;
+    if (locales.size() > 0)
+        return locales;
 
     // C++20
     std::ranges::transform(TranslationResources::get(),
-                           std::back_inserter(languageNames),
-                           [](const ResourcePair &key) -> std::string {
+                           std::back_inserter(locales),
+                           [](const ResourcePair &key) -> Tts::Locale {
                                LocaleDescriptor ld = key.first;
-                               return Tts::Locale::nativeLanguageName(
-                                   ld.language, ld.territory);
+                               return Tts::Locale(ld.language, ld.territory);
                            });
 
-    return languageNames;
+    return locales;
 }
 
 long Tts::TranslationResources::index(const Tts::LocaleDescriptor &key)

@@ -2,6 +2,8 @@
 #define OTTQ_20251202_1917_INCLUDE
 
 #include "locale_descriptor.hpp"
+// TODO #ifdef QT_TRANSLATOR
+#include "qt_translator.hpp"
 #include <vector>
 #include <string>
 #include <unordered_map>
@@ -28,7 +30,7 @@ typedef std::pair<Tts::LocaleDescriptor, std::string> ResourcePair;
 struct TranslationResources
 {
     static ResourceMap &get();
-    static std::vector<std::string> getLanguageNames();
+    static std::vector<Tts::Locale> getLocales();
     static long index(const Tts::LocaleDescriptor &key);
     static Tts::LocaleDescriptor locale(const long &index);
 
