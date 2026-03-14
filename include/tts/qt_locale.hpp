@@ -8,6 +8,7 @@ namespace Tts {
 
 typedef QLocale::Language Language;
 typedef QLocale::Territory Territory;
+typedef QLocale BaseType;
 
 static const Language anyLanguage = QLocale::AnyLanguage;
 static const Language c = QLocale::C;
@@ -63,7 +64,7 @@ public:
         QLocale::setDefault(QLocale(l, t));
     }
 
-    explicit operator QLocale() const { return qtLocale_; }
+    explicit operator BaseType() const { return qtLocale_; }
 
 private:
     // Init with default constructor for QLocale instead of

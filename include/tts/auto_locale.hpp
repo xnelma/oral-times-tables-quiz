@@ -1,13 +1,14 @@
 #ifndef OTTQ_20260313_1231_INCLUDE
 #define OTTQ_20260313_1231_INCLUDE
 
+// TODO #ifdef QT_TRANSLATOR
 #include "qt_locale.hpp"
 #include "auto_locale_descriptor.hpp"
 
 namespace Tts {
 
 template <ExtendsResources TTranslationResources = Tts::TranslationResources>
-struct AutoLocale : private Tts::Locale
+struct AutoLocale
 {
 public:
     AutoLocale() { }
@@ -27,15 +28,14 @@ public:
     std::string name()
     {
         descriptor_.update();
-        return QLocale(descriptor_.language, descriptor_.territory)
-            .name()
-            .toStdString();
+        return Tts::Locale(descriptor_.language, descriptor_.territory).name();
     }
 
-    explicit operator QLocale()
+    explicit operator BaseType()
     {
         descriptor_.update();
-        return QLocale(descriptor_.language, descriptor_.territory);
+        auto l = Tts::Locale(descriptor_.language, descriptor_.territory);
+        return static_cast<BaseType>(l);
     }
 
 private:

@@ -16,11 +16,10 @@ struct LanguageName
 
 public:
     LanguageName() : language_(""), territory_("") { }
-    LanguageName(const Tts::LocaleDescriptor &ld)
+    // NOLINTNEXTLINE(bugprone-easily-swappable-parameters)
+    LanguageName(const QString &language, const QString &territory)
+        : language_(language), territory_(territory)
     {
-        QLocale l(ld.language, ld.territory);
-        language_ = l.nativeLanguageName();
-        territory_ = l.nativeTerritoryName();
     }
 
     QString language() { return language_; }
