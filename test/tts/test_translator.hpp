@@ -48,16 +48,14 @@ public:
     {
         switch (translations_.at(filePath_)) {
         case Locale::En:
-            return Tts::LocaleDescriptor(QLocale::English,
-                                         QLocale::AnyTerritory);
+            return Tts::LocaleDescriptor(Tts::English, Tts::AnyTerritory);
         case Locale::De:
-            return Tts::LocaleDescriptor(QLocale::German,
-                                         QLocale::AnyTerritory);
+            return Tts::LocaleDescriptor(Tts::German, Tts::AnyTerritory);
         default: {
         }
         }
 
-        return Tts::LocaleDescriptor(QLocale::C, QLocale::AnyTerritory);
+        return Tts::LocaleDescriptor(Tts::C, Tts::AnyTerritory);
     }
 
     std::string translate(const std::string &sourceText) const override

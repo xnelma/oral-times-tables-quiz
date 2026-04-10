@@ -1,7 +1,6 @@
 #include "test_translator.hpp"
 #include "self_updating_translator.hpp"
 #include "test_tts_settings.hpp"
-#include <QLocale>
 #include <gtest/gtest.h>
 #include <string>
 
@@ -15,7 +14,7 @@ TEST(TestTranslatorTest, TestTranslatorWorks)
     translator.setup(translations, TtsTest::ResourcePaths::en);
 
     EXPECT_EQ(translator.localeDescriptor(),
-              Tts::LocaleDescriptor(QLocale::English, QLocale::AnyTerritory));
+              Tts::LocaleDescriptor(Tts::English, Tts::AnyTerritory));
     EXPECT_EQ(translator.filePath(), TtsTest::ResourcePaths::en);
     std::string test = "test";
     std::string res = translator.translate(test);
@@ -25,7 +24,7 @@ TEST(TestTranslatorTest, TestTranslatorWorks)
     translator.load(TtsTest::ResourcePaths::de);
 
     EXPECT_EQ(translator.localeDescriptor(),
-              Tts::LocaleDescriptor(QLocale::German, QLocale::AnyTerritory));
+              Tts::LocaleDescriptor(Tts::German, Tts::AnyTerritory));
     EXPECT_EQ(translator.filePath(), TtsTest::ResourcePaths::de);
     test = "test";
     res = translator.translate(test);
@@ -67,10 +66,10 @@ protected:
                                                 TtsTest::TranslationResources>>
         translator_;
 
-    Tts::LocaleDescriptor enUs_{ QLocale::English, QLocale::UnitedStates };
-    Tts::LocaleDescriptor deDe_{ QLocale::German, QLocale::Germany };
-    Tts::LocaleDescriptor enAny_{ QLocale::English, QLocale::AnyTerritory };
-    Tts::LocaleDescriptor deAny_{ QLocale::German, QLocale::AnyTerritory };
+    Tts::LocaleDescriptor enUs_{ Tts::English, Tts::UnitedStates };
+    Tts::LocaleDescriptor deDe_{ Tts::German, Tts::Germany };
+    Tts::LocaleDescriptor enAny_{ Tts::English, Tts::AnyTerritory };
+    Tts::LocaleDescriptor deAny_{ Tts::German, Tts::AnyTerritory };
 
     std::string test1_ = "test1";
     std::string test2_ = "test2";

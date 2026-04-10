@@ -1,6 +1,5 @@
 #include "auto_locale_descriptor.hpp"
 #include "test_translation_resources.hpp"
-#include <QLocale>
 #include <gtest/gtest.h>
 #include <exception>
 
@@ -9,7 +8,7 @@ TEST(AutoLocaleTest, FindsUniqueResource)
     TtsTest::TranslationResources::get().clear();
 
     // Prepare one entry that also is the match.
-    auto match = Tts::LocaleDescriptor(QLocale::English, QLocale::UnitedStates);
+    auto match = Tts::LocaleDescriptor(Tts::English, Tts::UnitedStates);
     Tts::Locale::setDefault(match.language, match.territory);
     TtsTest::TranslationResources::get().insert({ match, "" });
     auto expected = match;
@@ -20,17 +19,17 @@ TEST(AutoLocaleTest, FindsUniqueResource)
     // Insert more entries, all different in locale and territory; keep 'match'
     // the same.
     TtsTest::TranslationResources::get().insert(
-        { { Tts::LocaleDescriptor(QLocale::German, QLocale::Germany), "" },
-          { Tts::LocaleDescriptor(QLocale::French, QLocale::France), "" } });
+        { { Tts::LocaleDescriptor(Tts::German, Tts::Germany), "" },
+          { Tts::LocaleDescriptor(Tts::French, Tts::France), "" } });
 
     result = Tts::AutoLocaleDescriptor<TtsTest::TranslationResources>();
     EXPECT_EQ(result, expected);
 
     // Insert another entry and change 'match'.
     TtsTest::TranslationResources::get().insert(
-        { Tts::LocaleDescriptor(QLocale::Italian, QLocale::Italy), "" });
-    match.language = QLocale::French;
-    match.territory = QLocale::France;
+        { Tts::LocaleDescriptor(Tts::Italian, Tts::Italy), "" });
+    match.language = Tts::French;
+    match.territory = Tts::France;
     Tts::Locale::setDefault(match.language, match.territory);
     expected = match;
 
@@ -49,11 +48,11 @@ TEST(AutoLocaleTest, UsesSystemLocaleForSameLanguageMissingTerritory)
 {
     TtsTest::TranslationResources::get().clear();
 
-    Tts::Locale::setDefault(QLocale::English, QLocale::Germany);
+    Tts::Locale::setDefault(Tts::English, Tts::Germany);
     TtsTest::TranslationResources::get().insert(
-        { Tts::LocaleDescriptor(QLocale::English, QLocale::UnitedStates), "" });
+        { Tts::LocaleDescriptor(Tts::English, Tts::UnitedStates), "" });
 
-    auto expected = Tts::LocaleDescriptor(QLocale::English, QLocale::Germany);
+    auto expected = Tts::LocaleDescriptor(Tts::English, Tts::Germany);
 
     auto result = Tts::AutoLocaleDescriptor<TtsTest::TranslationResources>();
     EXPECT_EQ(result, expected);
@@ -62,9 +61,9 @@ TEST(AutoLocaleTest, UsesSystemLocaleForSameLanguageMissingTerritory)
 TEST(AutoLocaleTest, CatchesLanguageUpdate)
 {
     Tts::LocaleDescriptor oldMatch =
-        Tts::LocaleDescriptor(QLocale::English, QLocale::Germany);
+        Tts::LocaleDescriptor(Tts::English, Tts::Germany);
     Tts::LocaleDescriptor newMatch =
-        Tts::LocaleDescriptor(QLocale::German, QLocale::Germany);
+        Tts::LocaleDescriptor(Tts::German, Tts::Germany);
 
     TtsTest::TranslationResources::get().clear();
     TtsTest::TranslationResources::get().insert(
@@ -81,9 +80,8 @@ TEST(AutoLocaleTest, CatchesLanguageUpdate)
 
 TEST(AutoLocaleTest, CatchesTerritoryUpdateForSameLanguage)
 {
-    auto oldMatch = Tts::LocaleDescriptor(QLocale::English, QLocale::Germany);
-    auto newMatch =
-        Tts::LocaleDescriptor(QLocale::English, QLocale::UnitedKingdom);
+    auto oldMatch = Tts::LocaleDescriptor(Tts::English, Tts::Germany);
+    auto newMatch = Tts::LocaleDescriptor(Tts::English, Tts::UnitedKingdom);
 
     TtsTest::TranslationResources::get().clear();
     TtsTest::TranslationResources::get().insert(
@@ -100,8 +98,8 @@ TEST(AutoLocaleTest, CatchesTerritoryUpdateForSameLanguage)
 
 TEST(AutoLocaleTest, CatchesTerritoryUpdateForDifferentLanguage)
 {
-    auto oldMatch = Tts::LocaleDescriptor(QLocale::English, QLocale::Germany);
-    auto newMatch = Tts::LocaleDescriptor(QLocale::French, QLocale::France);
+    auto oldMatch = Tts::LocaleDescriptor(Tts::English, Tts::Germany);
+    auto newMatch = Tts::LocaleDescriptor(Tts::French, Tts::France);
 
     TtsTest::TranslationResources::get().clear();
     TtsTest::TranslationResources::get().insert(

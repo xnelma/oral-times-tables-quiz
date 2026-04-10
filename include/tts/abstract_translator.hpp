@@ -2,7 +2,6 @@
 #define OTTQ_20260106_2039_INCLUDE
 
 #include "locale_descriptor.hpp"
-#include <QLocale>
 #if defined BOOST_TRANSLATOR
 #  include <boost/locale.hpp>
 #endif

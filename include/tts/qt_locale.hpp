@@ -6,13 +6,25 @@
 
 namespace Tts {
 
-typedef QLocale::Language Language;
-typedef QLocale::Territory Territory;
 typedef QLocale BaseType;
 
-static const Language anyLanguage = QLocale::AnyLanguage;
-static const Language c = QLocale::C;
-static const Territory anyTerritory = QLocale::AnyTerritory;
+enum Language {
+    AnyLanguage = QLocale::AnyLanguage,
+    C = QLocale::C,
+    German = QLocale::German,
+    English = QLocale::English,
+    French = QLocale::French,
+    Italian = QLocale::Italian
+};
+
+enum Territory {
+    AnyTerritory = QLocale::AnyTerritory,
+    Germany = QLocale::Germany,
+    UnitedStates = QLocale::UnitedStates,
+    UnitedKingdom = QLocale::UnitedKingdom,
+    France = QLocale::France,
+    Italy = QLocale::Italy
+};
 
 struct Locale
 {
@@ -25,37 +37,51 @@ public:
     {
     }
 
-    Language language() const { return qtLocale_.language(); }
-    Territory territory() const { return qtLocale_.territory(); }
+    Language language() const
+    {
+        return static_cast<Tts::Language>(qtLocale_.language());
+    }
+
+    Territory territory() const
+    {
+        return static_cast<Tts::Territory>(qtLocale_.territory());
+    }
 
     // TODO move to free function?
     static Language language(const std::string &languageCode)
     {
-        return QLocale::codeToLanguage(QString::fromStdString(languageCode));
+        return static_cast<Language>(
+            QLocale::codeToLanguage(QString::fromStdString(languageCode)));
     }
 
     static Territory territory(const std::string &territoryCode)
     {
-        return QLocale::codeToTerritory(QString::fromStdString(territoryCode));
+        return static_cast<Territory>(
+            QLocale::codeToTerritory(QString::fromStdString(territoryCode)));
     }
 
     static std::string languageName(const Tts::Language &l)
     {
         // Asserting the type of the parameter should not be necessary, because
         // a wrong typedef should be detected at compile time.
-        return QLocale::languageToString(l).toUtf8().data();
+        return QLocale::languageToString(static_cast<QLocale::Language>(l))
+            .toUtf8()
+            .data();
     }
 
     static std::string territoryName(const Tts::Territory &t)
     {
-        return QLocale::territoryToString(t).toUtf8().data();
+        return QLocale::territoryToString(static_cast<QLocale::Territory>(t))
+            .toUtf8()
+            .data();
     }
 
     std::string name() { return qtLocale_.name().toStdString(); }
 
     static void setDefault(const Tts::Language &l, const Tts::Territory &t)
     {
-        QLocale::setDefault(QLocale(l, t));
+        QLocale::setDefault(QLocale(static_cast<QLocale::Language>(l),
+                                    static_cast<QLocale::Territory>(t)));
     }
 
     explicit operator BaseType() const { return qtLocale_; }

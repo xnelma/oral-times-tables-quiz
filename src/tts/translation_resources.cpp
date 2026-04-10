@@ -44,11 +44,6 @@ Tts::ResourceMap &Tts::TranslationResources::get()
 
 std::vector<Tts::Locale> Tts::TranslationResources::getLocales()
 {
-    // Currently this method is used to get a list of the (in case of
-    // QT_TRANSLATOR) native language names, which requires creating a
-    // QLocale object for each entry to get the name from anyways.
-    // Therefore creating a list of locales should not be much more expensive?
-
     static std::vector<Tts::Locale> locales;
     if (locales.size() > 0)
         return locales;

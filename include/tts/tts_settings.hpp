@@ -5,7 +5,6 @@
 #include "locale_descriptor.hpp"
 #include <QString>
 #include <QSettings>
-#include <QLocale>
 
 namespace Tts {
 
@@ -44,8 +43,8 @@ static const QString voiceRate = prefix + "/voiceRate";
 
 namespace SettingsDefaults {
 
-static const Tts::Language language = Tts::anyLanguage;
-static const Tts::Territory territory = Tts::anyTerritory;
+static const Tts::Language language = Tts::AnyLanguage;
+static const Tts::Territory territory = Tts::AnyTerritory;
 static const bool autoLocale = true;
 static const double voiceRate = 0;
 
