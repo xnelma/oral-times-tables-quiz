@@ -22,6 +22,12 @@ target_link_libraries(Tts PRIVATE
     Qt6::Core
 )
 
+if(${Translator} MATCHES BOOST_TRANSLATOR)
+    target_link_libraries(Tts PRIVATE
+        Boost::locale
+    )
+endif()
+
 target_include_directories(Tts PRIVATE
     "${PROJECT_SOURCE_DIR}/include/tts"
 )

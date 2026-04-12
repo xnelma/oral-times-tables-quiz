@@ -1,7 +1,11 @@
 #ifndef OTTQ_20250829_1805_INCLUDE
 #define OTTQ_20250829_1805_INCLUDE
 
-#include "qt_locale.hpp"
+#if defined QT_TRANSLATOR
+#  include "qt_locale.hpp"
+#elif defined BOOST_TRANSLATOR
+#  include "boost_locale.hpp"
+#endif
 #include <ostream>
 
 namespace Tts {

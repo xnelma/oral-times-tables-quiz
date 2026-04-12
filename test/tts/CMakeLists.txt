@@ -24,6 +24,12 @@ foreach(TestName IN LISTS TestNames)
         GTest::gtest_main
     )
 
+    if(${Translator} MATCHES BOOST_TRANSLATOR)
+        target_link_libraries(${TestName} PRIVATE
+            Boost::locale
+        )
+    endif()
+
     target_include_directories(${TestName} PRIVATE
         "${PROJECT_SOURCE_DIR}/include/tts"
         "${PROJECT_SOURCE_DIR}/test/tts"

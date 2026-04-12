@@ -1,8 +1,11 @@
 #ifndef OTTQ_20260313_1231_INCLUDE
 #define OTTQ_20260313_1231_INCLUDE
 
-// TODO #ifdef QT_TRANSLATOR
-#include "qt_locale.hpp"
+#if defined QT_TRANSLATOR
+#  include "qt_locale.hpp"
+#elif defined BOOST_TRANSLATOR
+#  include "boost_locale.hpp"
+#endif
 #include "auto_locale_descriptor.hpp"
 
 namespace Tts {

@@ -3,8 +3,12 @@
 
 #include "locale_descriptor.hpp"
 #include "translation_resources.hpp"
-#include "qt_locale.hpp"
-#include <exception>
+#if defined QT_TRANSLATOR
+#  include "qt_locale.hpp"
+#elif defined BOOST_TRANSLATOR
+#  include "boost_locale.hpp"
+#endif
+#include <optional>
 #include <ostream>
 
 namespace Tts {

@@ -1,7 +1,6 @@
 #include "auto_locale_descriptor.hpp"
 #include "test_translation_resources.hpp"
 #include <gtest/gtest.h>
-#include <exception>
 
 TEST(AutoLocaleTest, FindsUniqueResource)
 {

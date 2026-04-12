@@ -59,7 +59,12 @@ void QuizBackend::setupStateMachine()
     });
 
     auto setupTts = [this]() {
-        tts_->setLocale(static_cast<QLocale>(translator_.locale()));
+#ifdef QT_TRANSLATOR
+        QLocale l = static_cast<QLocale>(translator_.locale());
+#else
+        QLocale l(QString::fromStdString(translator_.locale().name()));
+#endif
+        tts_->setLocale(l);
         tts_->setRate(settings_.loadVoiceRateSetting());
         if (tts_->state() == QTextToSpeech::Error) {
             // couldn't set translation

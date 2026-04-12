@@ -1,4 +1,4 @@
-#if !defined OTTQ_20260301_1821_INCLUDE // TODO && defined QT_TRANSLATOR
+#if !defined OTTQ_20260301_1821_INCLUDE && defined QT_TRANSLATOR
 #  define OTTQ_20260301_1821_INCLUDE
 
 #  include <QLocale>
