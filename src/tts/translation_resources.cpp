@@ -26,6 +26,12 @@ Tts::ResourceMap &Tts::TranslationResources::get()
         resources.insert({ descriptor, dirStr });
     }
 #elif defined BOOST_TRANSLATOR
+    if (!std::filesystem::exists(TRANSLATION_DIR))
+        throw std::invalid_argument(
+            "Invalid translation directory \'" + std::string(TRANSLATION_DIR)
+            + "\' (Current directory: \'"
+            + std::filesystem::current_path().string() + "\')");
+
     std::ranges::for_each(
         std::filesystem::recursive_directory_iterator(TRANSLATION_DIR),
         [](const auto &dirEntry) {
