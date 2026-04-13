@@ -10,21 +10,21 @@ namespace Tts {
 typedef std::locale BaseType;
 
 enum Language {
-    AnyLanguage, // ""
-    C, // "c"
-    German, // "de"
-    English, // "en"
-    French, // "fr"
-    Italian // "it"
+    any, // ""
+    c,
+    de,
+    en,
+    fr,
+    it
 };
 
 enum Territory {
-    AnyTerritory, // ""
-    Germany, // "DE"
-    UnitedStates, // "US"
-    UnitedKingdom, // "UK"
-    France, // "FR"
-    Italy // "IT"
+    ANY, // ""
+    DE,
+    US,
+    UK,
+    FR,
+    IT
 };
 
 struct Locale
@@ -39,8 +39,8 @@ public:
             language_ = language(l);
             territory_ = territory(t);
         } else {
-            language_ = Tts::C;
-            territory_ = Tts::AnyTerritory;
+            language_ = Tts::c;
+            territory_ = Tts::ANY;
         }
     }
 
@@ -55,57 +55,57 @@ public:
     static Language language(const std::string &languageCode)
     {
         if (languageCode == "")
-            return Tts::AnyLanguage;
+            return Tts::any;
         else if (languageCode == "c")
-            return Tts::C;
+            return Tts::c;
         else if (languageCode == "de")
-            return Tts::German;
+            return Tts::de;
         else if (languageCode == "en")
-            return Tts::English;
+            return Tts::en;
         else if (languageCode == "fr")
-            return Tts::French;
+            return Tts::fr;
         else if (languageCode == "it")
-            return Tts::Italian;
+            return Tts::it;
         else
             throw std::invalid_argument("Invalid language code \'"
                                         + languageCode + "\'");
-        return Tts::C;
+        return Tts::c;
     }
 
     static Territory territory(const std::string &territoryCode)
     {
         if (territoryCode == "")
-            return Tts::AnyTerritory;
+            return Tts::ANY;
         else if (territoryCode == "DE")
-            return Tts::Germany;
+            return Tts::DE;
         else if (territoryCode == "US")
-            return Tts::UnitedStates;
+            return Tts::US;
         else if (territoryCode == "UK")
-            return Tts::UnitedKingdom;
+            return Tts::UK;
         else if (territoryCode == "FR")
-            return Tts::France;
+            return Tts::FR;
         else if (territoryCode == "IT")
-            return Tts::Italy;
+            return Tts::IT;
         else
             throw std::invalid_argument("Invalid territory code \'"
                                         + territoryCode + "\'");
-        return Tts::AnyTerritory;
+        return Tts::ANY;
     }
 
     static std::string languageName(const Tts::Language &l)
     {
         switch (l) {
-        case Tts::AnyLanguage:
+        case Tts::any:
             return "";
-        case Tts::C:
+        case Tts::c:
             return "c";
-        case Tts::German:
+        case Tts::de:
             return "de";
-        case Tts::English:
+        case Tts::en:
             return "en";
-        case Tts::French:
+        case Tts::fr:
             return "fr";
-        case Tts::Italian:
+        case Tts::it:
             return "it";
         default:
             throw std::invalid_argument("Invalid language type \'"
@@ -117,17 +117,17 @@ public:
     static std::string territoryName(const Tts::Territory &t)
     {
         switch (t) {
-        case Tts::AnyTerritory:
+        case Tts::ANY:
             return "";
-        case Tts::Germany:
+        case Tts::DE:
             return "DE";
-        case Tts::UnitedStates:
+        case Tts::US:
             return "US";
-        case Tts::UnitedKingdom:
+        case Tts::UK:
             return "UK";
-        case Tts::France:
+        case Tts::FR:
             return "FR";
-        case Tts::Italy:
+        case Tts::IT:
             return "IT";
         default:
             throw std::invalid_argument("Invalid territory type \'"
@@ -150,13 +150,13 @@ public:
 
     static void setDefault(const Tts::Language &l, const Tts::Territory &t)
     {
-        if (l == Tts::C) {
+        if (l == Tts::c) {
             std::locale::global(std::locale::classic());
             return;
         }
 
         std::string name = Locale::languageName(l);
-        if (t != Tts::AnyTerritory)
+        if (t != Tts::ANY)
             name += "_" + Locale::territoryName(t);
 
         boost::locale::generator gen;

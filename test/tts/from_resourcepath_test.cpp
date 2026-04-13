@@ -23,6 +23,6 @@ TEST(FromResourcePathTest, ParsesValidPath)
     result = Tts::LocaleDescriptor::fromResourcePath(
         "test/en_DE." TRANSLATION_FILE_ENDING);
 
-    expected = Tts::LocaleDescriptor(Tts::English, Tts::Germany);
+    expected = Tts::LocaleDescriptor(Tts::en, Tts::DE);
     EXPECT_EQ(result, expected);
 }

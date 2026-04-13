@@ -9,21 +9,21 @@ namespace Tts {
 typedef QLocale BaseType;
 
 enum Language {
-    AnyLanguage = QLocale::AnyLanguage,
-    C = QLocale::C,
-    German = QLocale::German,
-    English = QLocale::English,
-    French = QLocale::French,
-    Italian = QLocale::Italian
+    any = QLocale::AnyLanguage,
+    c = QLocale::C,
+    de = QLocale::German,
+    en = QLocale::English,
+    fr = QLocale::French,
+    it = QLocale::Italian
 };
 
 enum Territory {
-    AnyTerritory = QLocale::AnyTerritory,
-    Germany = QLocale::Germany,
-    UnitedStates = QLocale::UnitedStates,
-    UnitedKingdom = QLocale::UnitedKingdom,
-    France = QLocale::France,
-    Italy = QLocale::Italy
+    ANY = QLocale::AnyTerritory,
+    DE = QLocale::Germany,
+    US = QLocale::UnitedStates,
+    UK = QLocale::UnitedKingdom,
+    FR = QLocale::France,
+    IT = QLocale::Italy
 };
 
 struct Locale

@@ -27,7 +27,7 @@ public:
     LocaleDescriptor &resolvedLocale()
     {
         locale_ = loadLocaleSetting();
-        if (loadAutoLocaleSetting() || locale_.language <= Tts::C) {
+        if (loadAutoLocaleSetting() || locale_.language <= Tts::c) {
             return autoLocale();
         }
 

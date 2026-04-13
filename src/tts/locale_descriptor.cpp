@@ -4,7 +4,7 @@
 #include <filesystem>
 
 Tts::LocaleDescriptor::LocaleDescriptor()
-    : language(Tts::C), territory(Tts::AnyTerritory)
+    : language(Tts::c), territory(Tts::ANY)
 {
 }
 
@@ -41,8 +41,8 @@ auto Tts::LocaleDescriptor::fromFileName(const std::string &fileName)
               "xx_XX." TRANSLATION_FILE_ENDING "/xx-XX." TRANSLATION_FILE_ENDING
               " with a third x/X also being valid.");
 
-    Tts::Language language = Tts::C;
-    Tts::Territory territory = Tts::AnyTerritory;
+    Tts::Language language = Tts::c;
+    Tts::Territory territory = Tts::ANY;
 
     // The first match contains the complete sequence; groups can be at
     // indices >= 1.

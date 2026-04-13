@@ -8,7 +8,7 @@ TEST(FromFileNameTest, ParsesNameWithLanguageOnly)
 {
     Tts::LocaleDescriptor result, expected;
     result = Tts::LocaleDescriptor::fromFileName("en." TRANSLATION_FILE_ENDING);
-    expected = Tts::LocaleDescriptor(Tts::English, Tts::AnyTerritory);
+    expected = Tts::LocaleDescriptor(Tts::en, Tts::ANY);
     EXPECT_EQ(result, expected);
 }
 
@@ -17,7 +17,7 @@ TEST(FromFileNameTest, ParsesNameWithLanguageAndTerritory)
     Tts::LocaleDescriptor result, expected;
     result =
         Tts::LocaleDescriptor::fromFileName("en_US." TRANSLATION_FILE_ENDING);
-    expected = Tts::LocaleDescriptor(Tts::English, Tts::UnitedStates);
+    expected = Tts::LocaleDescriptor(Tts::en, Tts::US);
 
     EXPECT_EQ(result, expected);
 
