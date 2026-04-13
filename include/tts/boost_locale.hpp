@@ -3,6 +3,7 @@
 
 #  include <locale>
 #  include <string>
+#  include <unordered_map>
 #  include <boost/locale.hpp>
 
 namespace Tts {
@@ -54,85 +55,69 @@ public:
 
     static Language language(const std::string &languageCode)
     {
-        if (languageCode == "")
-            return Tts::any;
-        else if (languageCode == "c")
-            return Tts::c;
-        else if (languageCode == "de")
-            return Tts::de;
-        else if (languageCode == "en")
-            return Tts::en;
-        else if (languageCode == "fr")
-            return Tts::fr;
-        else if (languageCode == "it")
-            return Tts::it;
-        else
+        static const std::unordered_map<std::string, Language> dict = {
+            { "", any },  { "c", c },   { "de", de },
+            { "en", en }, { "fr", fr }, { "it", it }
+        };
+
+        try {
+            return dict.at(languageCode);
+        } catch (const std::out_of_range &e) {
             throw std::invalid_argument("Invalid language code \'"
                                         + languageCode + "\'");
+        }
+
         return Tts::c;
     }
 
     static Territory territory(const std::string &territoryCode)
     {
-        if (territoryCode == "")
-            return Tts::ANY;
-        else if (territoryCode == "DE")
-            return Tts::DE;
-        else if (territoryCode == "US")
-            return Tts::US;
-        else if (territoryCode == "UK")
-            return Tts::UK;
-        else if (territoryCode == "FR")
-            return Tts::FR;
-        else if (territoryCode == "IT")
-            return Tts::IT;
-        else
+        static const std::unordered_map<std::string, Territory> dict = {
+            { "", ANY },  { "DE", DE }, { "US", US },
+            { "UK", UK }, { "FR", FR }, { "IT", IT }
+        };
+
+        try {
+            return dict.at(territoryCode);
+        } catch (const std::out_of_range &e) {
             throw std::invalid_argument("Invalid territory code \'"
                                         + territoryCode + "\'");
+        }
+
         return Tts::ANY;
     }
 
     static std::string languageName(const Tts::Language &l)
     {
-        switch (l) {
-        case Tts::any:
-            return "";
-        case Tts::c:
-            return "c";
-        case Tts::de:
-            return "de";
-        case Tts::en:
-            return "en";
-        case Tts::fr:
-            return "fr";
-        case Tts::it:
-            return "it";
-        default:
+        static std::unordered_map<Language, std::string> dict = {
+            { any, "" },  { c, "c" },   { de, "de" },
+            { en, "en" }, { fr, "fr" }, { it, "it" }
+        };
+
+        try {
+            return dict.at(l);
+        } catch (const std::out_of_range &e) {
             throw std::invalid_argument("Invalid language type \'"
                                         + std::to_string(l) + "\'");
         }
+
         return "c";
     }
 
     static std::string territoryName(const Tts::Territory &t)
     {
-        switch (t) {
-        case Tts::ANY:
-            return "";
-        case Tts::DE:
-            return "DE";
-        case Tts::US:
-            return "US";
-        case Tts::UK:
-            return "UK";
-        case Tts::FR:
-            return "FR";
-        case Tts::IT:
-            return "IT";
-        default:
+        static const std::unordered_map<Territory, std::string> dict = {
+            { ANY, "" },  { DE, "DE" }, { US, "US" },
+            { UK, "UK" }, { FR, "FR" }, { IT, "IT" }
+        };
+
+        try {
+            return dict.at(t);
+        } catch (const std::out_of_range &e) {
             throw std::invalid_argument("Invalid territory type \'"
                                         + std::to_string(t) + "\'");
         }
+
         return "";
     }
 
