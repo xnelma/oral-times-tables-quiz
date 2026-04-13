@@ -14,7 +14,7 @@ TEST(TestTranslatorTest, TestTranslatorWorks)
     translator.setup(translations, TtsTest::ResourcePaths::en);
 
     EXPECT_EQ(translator.localeDescriptor(),
-              Tts::LocaleDescriptor(Tts::en, Tts::ANY));
+              Tts::LocaleDescriptor(Tts::Language::en, Tts::Territory::ANY));
     EXPECT_EQ(translator.filePath(), TtsTest::ResourcePaths::en);
     std::string test = "test";
     std::string res = translator.translate(test);
@@ -24,7 +24,7 @@ TEST(TestTranslatorTest, TestTranslatorWorks)
     translator.load(TtsTest::ResourcePaths::de);
 
     EXPECT_EQ(translator.localeDescriptor(),
-              Tts::LocaleDescriptor(Tts::de, Tts::ANY));
+              Tts::LocaleDescriptor(Tts::Language::de, Tts::Territory::ANY));
     EXPECT_EQ(translator.filePath(), TtsTest::ResourcePaths::de);
     test = "test";
     res = translator.translate(test);
@@ -66,10 +66,10 @@ protected:
                                                 TtsTest::TranslationResources>>
         translator_;
 
-    Tts::LocaleDescriptor enUs_{ Tts::en, Tts::US };
-    Tts::LocaleDescriptor deDe_{ Tts::de, Tts::DE };
-    Tts::LocaleDescriptor enAny_{ Tts::en, Tts::ANY };
-    Tts::LocaleDescriptor deAny_{ Tts::de, Tts::ANY };
+    Tts::LocaleDescriptor enUs_{ Tts::Language::en, Tts::Territory::US };
+    Tts::LocaleDescriptor deDe_{ Tts::Language::de, Tts::Territory::DE };
+    Tts::LocaleDescriptor enAny_{ Tts::Language::en, Tts::Territory::ANY };
+    Tts::LocaleDescriptor deAny_{ Tts::Language::de, Tts::Territory::ANY };
 
     std::string test1_ = "test1";
     std::string test2_ = "test2";

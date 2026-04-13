@@ -43,8 +43,8 @@ static const QString voiceRate = prefix + "/voiceRate";
 
 namespace SettingsDefaults {
 
-static const Tts::Language language = Tts::any;
-static const Tts::Territory territory = Tts::ANY;
+static const Language::Code language = Language::any;
+static const Territory::Code territory = Territory::ANY;
 static const bool autoLocale = true;
 static const double voiceRate = 0;
 

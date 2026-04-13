@@ -15,7 +15,8 @@ struct LocaleDescriptor
     LocaleDescriptor();
     LocaleDescriptor(LocaleDescriptor const &other) = default;
     LocaleDescriptor(LocaleDescriptor &&) noexcept = default;
-    explicit LocaleDescriptor(const Tts::Language &l, const Tts::Territory &t);
+    explicit LocaleDescriptor(const Tts::Language::Code &l,
+                              const Tts::Territory::Code &t);
     explicit LocaleDescriptor(const Tts::Locale &l);
     virtual ~LocaleDescriptor() = default;
 
@@ -33,8 +34,8 @@ struct LocaleDescriptor
     // If the enum types would get abstracted by instead having a locale object
     // as class member of the descriptor, it would be against the point of
     // having the descriptor.
-    Tts::Language language;
-    Tts::Territory territory;
+    Tts::Language::Code language;
+    Tts::Territory::Code territory;
 };
 
 std::ostream &operator<<(std::ostream &os, const Tts::LocaleDescriptor &ld);

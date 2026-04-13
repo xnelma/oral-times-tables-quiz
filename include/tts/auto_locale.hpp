@@ -16,13 +16,13 @@ struct AutoLocale
 public:
     AutoLocale() { }
 
-    Language language()
+    Language::Code language()
     {
         descriptor_.update();
         return descriptor_.language;
     }
 
-    Territory territory()
+    Territory::Code territory()
     {
         descriptor_.update();
         return descriptor_.territory;

@@ -1,20 +1,20 @@
 #include "locale_descriptor.hpp"
 #include <regex>
-#include <exception>
+#include <stdexcept>
 #include <filesystem>
 
 Tts::LocaleDescriptor::LocaleDescriptor()
-    : language(Tts::c), territory(Tts::ANY)
+    : language(Language::c), territory(Territory::ANY)
 {
 }
 
-Tts::LocaleDescriptor::LocaleDescriptor(const Tts::Language &l,
-                                        const Tts::Territory &t)
+Tts::LocaleDescriptor::LocaleDescriptor(const Language::Code &l,
+                                        const Territory::Code &t)
     : language(l), territory(t)
 {
 }
 
-Tts::LocaleDescriptor::LocaleDescriptor(const Tts::Locale &l)
+Tts::LocaleDescriptor::LocaleDescriptor(const Locale &l)
     : language(l.language()), territory(l.territory())
 {
 }
@@ -41,20 +41,20 @@ auto Tts::LocaleDescriptor::fromFileName(const std::string &fileName)
               "xx_XX." TRANSLATION_FILE_ENDING "/xx-XX." TRANSLATION_FILE_ENDING
               " with a third x/X also being valid.");
 
-    Tts::Language language = Tts::c;
-    Tts::Territory territory = Tts::ANY;
+    Language::Code language = Language::c;
+    Territory::Code territory = Territory::ANY;
 
     // The first match contains the complete sequence; groups can be at
     // indices >= 1.
     if (match.size() > 1)
-        language = Tts::Locale::language(match[1]);
+        language = Language::fromString(match[1]);
     if (match.size() > 2) {
         // There could be an empty match for the second group.
         auto t = match[2].str();
         if (t.length() > 0) {
             // This group starts with the delimiter; remove the first character.
             t.erase(t.begin());
-            territory = Tts::Locale::territory(t);
+            territory = Territory::fromString(t);
         }
     }
 
@@ -65,25 +65,25 @@ auto Tts::LocaleDescriptor::fromResourcePath(const std::string &path)
     -> LocaleDescriptor
 {
     if (path.empty() || path.ends_with("/") /* C++20 */)
-        return Tts::LocaleDescriptor();
+        return LocaleDescriptor();
 
     std::string filename = std::filesystem::path(path).filename().string();
     return fromFileName(filename);
 }
 
-bool Tts::LocaleDescriptor::operator==(const Tts::LocaleDescriptor &ld) const
+bool Tts::LocaleDescriptor::operator==(const LocaleDescriptor &ld) const
 {
     return language == ld.language && territory == ld.territory;
 }
 
-bool Tts::LocaleDescriptor::operator<(const Tts::LocaleDescriptor &ld) const
+bool Tts::LocaleDescriptor::operator<(const LocaleDescriptor &ld) const
 {
     return language < ld.language
         || (language == ld.language && territory < ld.territory);
 }
 
-std::ostream &Tts::operator<<(std::ostream &os, const Tts::LocaleDescriptor &ld)
+std::ostream &Tts::operator<<(std::ostream &os, const LocaleDescriptor &ld)
 {
-    return os << "(" << Locale::languageName(ld.language) << ", "
-              << Locale::territoryName(ld.territory) << ")";
+    return os << "(" << Language::toString(ld.language) << ", "
+              << Territory::toString(ld.territory) << ")";
 }
