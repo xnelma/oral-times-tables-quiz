@@ -2,8 +2,6 @@
 #define OTTQ_20251202_1917_INCLUDE
 
 #include "locale_descriptor.hpp"
-// TODO #ifdef QT_TRANSLATOR
-#include "qt_translator.hpp"
 #include <vector>
 #include <string>
 #include <unordered_map>
