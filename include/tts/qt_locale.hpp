@@ -47,7 +47,6 @@ public:
         return static_cast<Tts::Territory>(qtLocale_.territory());
     }
 
-    // TODO move to free function?
     static Language language(const std::string &languageCode)
     {
         return static_cast<Language>(
