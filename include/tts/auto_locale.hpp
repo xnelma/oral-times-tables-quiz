@@ -34,11 +34,11 @@ public:
         return Tts::Locale(descriptor_.language, descriptor_.territory).name();
     }
 
-    explicit operator BaseType()
+    explicit operator Locale::BaseType()
     {
         descriptor_.update();
         auto l = Tts::Locale(descriptor_.language, descriptor_.territory);
-        return static_cast<BaseType>(l);
+        return static_cast<Locale::BaseType>(l);
     }
 
 private:

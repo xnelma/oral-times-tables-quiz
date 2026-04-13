@@ -6,8 +6,6 @@
 
 namespace Tts {
 
-typedef QLocale BaseType;
-
 enum Language {
     any = QLocale::AnyLanguage,
     c = QLocale::C,
@@ -29,6 +27,8 @@ enum Territory {
 struct Locale
 {
 public:
+    typedef QLocale BaseType;
+
     Locale() { }
 
     explicit Locale(const Tts::Language &l, const Tts::Territory &t)

@@ -8,8 +8,6 @@
 
 namespace Tts {
 
-typedef std::locale BaseType;
-
 enum Language {
     any, // ""
     c,
@@ -31,6 +29,8 @@ enum Territory {
 struct Locale
 {
 public:
+    typedef std::locale BaseType;
+
     Locale()
     {
         auto sys = std::locale();
