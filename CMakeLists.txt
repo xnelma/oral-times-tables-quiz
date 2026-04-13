@@ -11,7 +11,8 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON) # Needed by clang-tidy
 
 set(TranslatorImplementations QT_TRANSLATOR BOOST_TRANSLATOR)
-# Use capital letters for the names because they are used as cpp text macros.
+# Use capital letters for the names because they are used as cpp text macros
+# and should match their naming convention.
 set(Translator QT_TRANSLATOR)
 #set(Translator BOOST_TRANSLATOR)
 if(NOT ${Translator} IN_LIST TranslatorImplementations)
