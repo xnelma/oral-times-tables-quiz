@@ -1,10 +1,11 @@
 #if defined BOOST_TRANSLATOR // Needed for the linter.
 #  include "boost_translator.hpp"
+#  include "boost_translation_dir.hpp"
 #  include <filesystem>
 
 Tts::Translator::Translator()
 {
-    generator_.add_messages_path(TRANSLATION_DIR);
+    generator_.add_messages_path(Tts::translationDir());
     generator_.add_messages_domain(TRANSLATION_DOMAIN);
 }
 

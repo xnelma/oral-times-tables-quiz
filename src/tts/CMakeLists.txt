@@ -12,6 +12,7 @@ list(APPEND TtsSources
 elseif(${Translator} MATCHES BOOST_TRANSLATOR)
 list(APPEND TtsSources
     boost_translator.cpp
+    boost_translation_dir.cpp
 )
 endif()
 
