@@ -15,6 +15,12 @@ set(TranslatorImplementations QT_TRANSLATOR BOOST_TRANSLATOR)
 # and should match their naming convention.
 set(Translator QT_TRANSLATOR)
 #set(Translator BOOST_TRANSLATOR)
+if(${CMAKE_SYSTEM_NAME} STREQUAL "Android"
+   AND ${Translator} MATCHES BOOST_TRANSLATOR)
+    set(Translator QT_TRANSLATOR)
+    # Boost.locale will not work for cross compiling.
+endif()
+
 if(NOT ${Translator} IN_LIST TranslatorImplementations)
     message(FATAL_ERROR
             "-- Could NOT find translator implementation ${Translator} "
