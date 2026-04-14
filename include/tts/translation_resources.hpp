@@ -2,7 +2,8 @@
 #define OTTQ_20251202_1917_INCLUDE
 
 #include "locale_descriptor.hpp"
-#include <QStringList>
+#include <vector>
+#include <string>
 #include <unordered_map>
 
 template <>
@@ -19,15 +20,15 @@ struct std::hash<Tts::LocaleDescriptor>
 
 namespace Tts {
 
-typedef std::unordered_map<Tts::LocaleDescriptor, QString> ResourceMap;
-typedef std::pair<Tts::LocaleDescriptor, QString> ResourcePair;
+typedef std::unordered_map<Tts::LocaleDescriptor, std::string> ResourceMap;
+typedef std::pair<Tts::LocaleDescriptor, std::string> ResourcePair;
 
 // Use a struct instead of a namespace to be able to use it as type in
 // templates. Then it can be replaced for testing.
 struct TranslationResources
 {
     static ResourceMap &get();
-    static QStringList getLanguageNames();
+    static std::vector<Tts::Locale> getLocales();
     static long index(const Tts::LocaleDescriptor &key);
     static Tts::LocaleDescriptor locale(const long &index);
 

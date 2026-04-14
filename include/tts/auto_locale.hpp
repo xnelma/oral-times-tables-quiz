@@ -1,104 +1,50 @@
-#ifndef OTTQ_20250829_1806_INCLUDE
-#define OTTQ_20250829_1806_INCLUDE
+#ifndef OTTQ_20260313_1231_INCLUDE
+#define OTTQ_20260313_1231_INCLUDE
 
-#include "locale_descriptor.hpp"
-#include "translation_resources.hpp"
-#include <QLocale>
-#include <exception>
-#include <ostream>
+#if defined QT_TRANSLATOR
+#  include "qt_locale.hpp"
+#elif defined BOOST_TRANSLATOR
+#  include "boost_locale.hpp"
+#endif
+#include "auto_locale_descriptor.hpp"
 
 namespace Tts {
 
-#ifndef EXTENDS_RESOURCES
-#  define EXTENDS_RESOURCES
-template <typename T>
-concept ExtendsResources = std::is_base_of_v<Tts::TranslationResources, T>;
-// C++20
-#endif // EXTENDS_RESOURCES
-
 template <ExtendsResources TTranslationResources = Tts::TranslationResources>
-struct AutoLocale : public LocaleDescriptor
+struct AutoLocale
 {
-    AutoLocale() { set(); }
+public:
+    AutoLocale() { }
 
-    void update()
+    Language::Code language()
     {
-        QLocale updatedSystem;
-        if (updatedSystem.language() != language
-            || updatedSystem.territory() != territory)
-            set();
+        descriptor_.update();
+        return descriptor_.language;
     }
 
-    Tts::LocaleDescriptor resourceKey() const override { return resourceKey_; }
+    Territory::Code territory()
+    {
+        descriptor_.update();
+        return descriptor_.territory;
+    }
+
+    std::string name()
+    {
+        descriptor_.update();
+        return Tts::Locale(descriptor_.language, descriptor_.territory).name();
+    }
+
+    explicit operator Locale::BaseType()
+    {
+        descriptor_.update();
+        auto l = Tts::Locale(descriptor_.language, descriptor_.territory);
+        return static_cast<Locale::BaseType>(l);
+    }
 
 private:
-    Tts::LocaleDescriptor resourceKey_;
-
-    void set()
-    {
-        // Init with default constructor for QLocale instead of
-        // QLocale::system() to allow setting a different 'system' locale by
-        // setting a default locale, for example for unit testing.
-        Tts::LocaleDescriptor system = Tts::LocaleDescriptor(QLocale());
-
-        std::optional<Tts::LocaleDescriptor> fallback;
-
-        // T::resources() is not saved in a static local variable on purpose:
-        // it can change for unit tests.
-        // It can already have a state in the resources getter to avoid
-        // rebuilding the list on every call.
-        const Tts::ResourceMap resources = TTranslationResources::get();
-
-        // An empty translation resource list should not be possible. If the
-        // translations are id-based, there is not even a default English
-        // translation available, so allowing the c-locale as fallback would
-        // not make sense.
-        if (resources.size() == 0)
-            throw std::invalid_argument(
-                "No translation resource files found "
-                "to match against system locale for auto-resolving it.");
-
-        for (Tts::ResourcePair r : resources) {
-            Tts::LocaleDescriptor resource = r.first;
-
-            if (resource == system) {
-                language = system.language;
-                territory = system.territory;
-                resourceKey_ = resource;
-                return;
-            }
-
-            // The preferred fallback would be finding a translation resource
-            // with a matching language. Of those translation resources, take
-            // the first.
-            if (!fallback.has_value() && resource.language == system.language) {
-                fallback = system;
-                resourceKey_ = resource;
-            }
-        }
-
-        // If there is no translation available for the system language, use the
-        // first translation resource as 'automatic' tts locale.
-        // It can still be changed manually anyways.
-        if (!fallback.has_value()) {
-            fallback = resources.begin()->first;
-            resourceKey_ = *fallback;
-        }
-
-        language = fallback->language;
-        territory = fallback->territory;
-    }
+    Tts::AutoLocaleDescriptor<TTranslationResources> descriptor_;
 };
-
-template <
-    Tts::ExtendsResources TTranslationResources = Tts::TranslationResources>
-inline std::ostream &
-operator<<(std::ostream &os, const Tts::AutoLocale<TTranslationResources> &ld)
-{
-    return os << static_cast<Tts::LocaleDescriptor>(ld) << ", key "
-              << ld.resourceKey();
-}
 
 } // namespace Tts
 
-#endif // OTTQ_20250829_1806_INCLUDE
+#endif // OTTQ_20260313_1231_INCLUDE

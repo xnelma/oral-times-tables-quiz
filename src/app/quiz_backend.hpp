@@ -5,7 +5,6 @@
 #include "quiz_config.hpp"
 #include "tts/self_updating_translator.hpp"
 #include "tts/tts_settings.hpp"
-#include "tts/translator.hpp"
 #include "timestables/quiz.hpp"
 #include <QObject>
 #include <qqml.h>
@@ -68,14 +67,7 @@ private:
     // returning to the view. This would be handled inside the translator.
     Tts::SelfUpdatingTranslator<Tts::Translator> translator_;
     Tts::Settings settings_;
-    QString questionBase_;
+    std::string questionBase_;
 };
-
-namespace QuizConstants {
-
-static const char *const translationContext = "QuizView";
-static const char *const questionBase = "%1 times %2";
-
-} // namespace QuizConstants
 
 #endif // OTTQ_20250829_1810_INCLUDE

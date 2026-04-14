@@ -1,24 +1,25 @@
 #include "locale_descriptor.hpp"
 #include <regex>
-#include <exception>
+#include <stdexcept>
+#include <filesystem>
 
 Tts::LocaleDescriptor::LocaleDescriptor()
-    : language(QLocale::C), territory(QLocale::AnyTerritory)
+    : language(Language::c), territory(Territory::ANY)
 {
 }
 
-Tts::LocaleDescriptor::LocaleDescriptor(const QLocale::Language &l,
-                                        const QLocale::Territory &t)
+Tts::LocaleDescriptor::LocaleDescriptor(const Language::Code &l,
+                                        const Territory::Code &t)
     : language(l), territory(t)
 {
 }
 
-Tts::LocaleDescriptor::LocaleDescriptor(const QLocale &l)
+Tts::LocaleDescriptor::LocaleDescriptor(const Locale &l)
     : language(l.language()), territory(l.territory())
 {
 }
 
-auto Tts::LocaleDescriptor::fromFileName(const std::string &qmFileName)
+auto Tts::LocaleDescriptor::fromFileName(const std::string &fileName)
     -> LocaleDescriptor
 {
     // Regex for parsing the locale name from a translation resource file
@@ -29,63 +30,60 @@ auto Tts::LocaleDescriptor::fromFileName(const std::string &qmFileName)
     // A third letter for language or territory is also possible, and the
     // delimiter could also be '-'.
     // The file name is assumed to not contain a script code.
-    static const std::regex qmLocaleNameRegex(
-        "([a-z]{2,3})([_-][A-Z]{2,3})?\\.qm$");
+    static const std::regex localeNameRegex(
+        "([a-z]{2,3})([_-][A-Z]{2,3})?\\." TRANSLATION_FILE_ENDING "$");
 
     std::smatch match;
-    if (!std::regex_search(qmFileName, match, qmLocaleNameRegex))
+    if (!std::regex_search(fileName, match, localeNameRegex))
         throw std::invalid_argument(
-            "Invalid file name format. The expected format is xx.qm or"
-            "xx_XX.qm/xx-XX.qm with a third x/X also being valid.");
+            "Invalid file name format " + fileName
+            + ". The expected format is xx." TRANSLATION_FILE_ENDING " or "
+              "xx_XX." TRANSLATION_FILE_ENDING "/xx-XX." TRANSLATION_FILE_ENDING
+              " with a third x/X also being valid.");
 
-    QLocale::Language language = QLocale::C;
-    QLocale::Territory territory = QLocale::AnyTerritory;
+    Language::Code language = Language::c;
+    Territory::Code territory = Territory::ANY;
 
     // The first match contains the complete sequence; groups can be at
     // indices >= 1.
     if (match.size() > 1)
-        language = QLocale::codeToLanguage(QString::fromStdString(match[1]));
+        language = Language::fromString(match[1]);
     if (match.size() > 2) {
         // There could be an empty match for the second group.
         auto t = match[2].str();
         if (t.length() > 0) {
             // This group starts with the delimiter; remove the first character.
             t.erase(t.begin());
-            territory = QLocale::codeToTerritory(QString::fromStdString(t));
+            territory = Territory::fromString(t);
         }
     }
 
     return Tts::LocaleDescriptor(language, territory);
 }
 
-auto Tts::LocaleDescriptor::fromResourcePath(const QString &qmPath)
+auto Tts::LocaleDescriptor::fromResourcePath(const std::string &path)
     -> LocaleDescriptor
 {
-    if (qmPath.isEmpty() || qmPath.endsWith("/"))
-        return Tts::LocaleDescriptor();
+    if (path.empty() || path.ends_with("/") /* C++20 */)
+        return LocaleDescriptor();
 
-    // TODO if I don't use QFile for parsing, should I handle other
-    // separators than "/"?
-    QString fileName = *(--qmPath.split("/").end());
-    return fromFileName(fileName.toStdString());
+    std::string filename = std::filesystem::path(path).filename().string();
+    return fromFileName(filename);
 }
 
-bool Tts::LocaleDescriptor::operator==(const Tts::LocaleDescriptor &ld) const
+bool Tts::LocaleDescriptor::operator==(const LocaleDescriptor &ld) const
 {
     return language == ld.language && territory == ld.territory;
 }
 
-bool Tts::LocaleDescriptor::operator<(const Tts::LocaleDescriptor &ld) const
+bool Tts::LocaleDescriptor::operator<(const LocaleDescriptor &ld) const
 {
     return language < ld.language
         || (language == ld.language && territory < ld.territory);
 }
 
-std::ostream &Tts::operator<<(std::ostream &os, const Tts::LocaleDescriptor &ld)
+std::ostream &Tts::operator<<(std::ostream &os, const LocaleDescriptor &ld)
 {
-    auto languageStr = QLocale::languageToString(ld.language);
-    auto territoryStr = QLocale::territoryToString(ld.territory);
-
-    return os << "(" << languageStr.toUtf8().data() << ", "
-              << territoryStr.toUtf8().data() << ")";
+    return os << "(" << Language::toString(ld.language) << ", "
+              << Territory::toString(ld.territory) << ")";
 }

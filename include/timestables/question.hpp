@@ -1,7 +1,18 @@
 #ifndef OTTQ_20250901_2054_INCLUDE
 #define OTTQ_20250901_2054_INCLUDE
 
+#if defined BOOST_TRANSLATOR
+#  include <boost/locale.hpp>
+#endif
+
 namespace TimesTables {
+
+#if defined BOOST_TRANSLATOR
+static const boost::locale::basic_message<char> question =
+    boost::locale::translate("%1 times %2");
+#else
+static const char *const question = "%1 times %2";
+#endif
 
 struct Question
 {

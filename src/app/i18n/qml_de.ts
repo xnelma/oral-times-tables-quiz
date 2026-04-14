@@ -37,12 +37,15 @@
     </message>
 </context>
 <context>
-    <name>QuizView</name>
+    <name>Translator</name>
     <message>
-        <location filename="../quiz_backend.cpp" line="5"/>
+        <location filename="../quiz_backend.hpp" line="76"/>
         <source>%1 times %2</source>
         <translation>%1 mal %2</translation>
     </message>
+</context>
+<context>
+    <name>QuizView</name>
     <message>
         <location filename="../QuizView.qml" line="195"/>
         <source>Language Error</source>

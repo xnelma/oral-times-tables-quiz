@@ -1,5 +1,10 @@
 #include "translation_resources.hpp"
-#include <QDirIterator>
+#if defined QT_TRANSLATOR
+#  include <QDirIterator>
+#elif defined BOOST_TRANSLATOR
+#  include "boost_translation_dir.hpp"
+#  include <filesystem>
+#endif
 #include <algorithm>
 #include <iterator>
 #include <stdexcept>
@@ -12,34 +17,48 @@ Tts::ResourceMap &Tts::TranslationResources::get()
     if (resources.size() > 0)
         return resources;
 
+#if defined QT_TRANSLATOR
     // ":" is the base path for Qt Resource files.
     QDirIterator it(":", { "*.qm" }, QDir::Files, QDirIterator::Subdirectories);
     while (it.hasNext()) {
-        QString dir = it.next();
-        auto descriptor = LocaleDescriptor::fromResourcePath(dir);
+        auto dirStr = it.next().toStdString();
+        auto descriptor = LocaleDescriptor::fromResourcePath(dirStr);
 
-        resources.insert({ descriptor, dir });
+        resources.insert({ descriptor, dirStr });
     }
+#elif defined BOOST_TRANSLATOR
+    std::ranges::for_each(
+        std::filesystem::recursive_directory_iterator(Tts::translationDir()),
+        [](const auto &dirEntry) {
+            auto dir = dirEntry.path();
+            auto dirStr = dir.string();
+            if (dirStr.ends_with("." + std::string(TRANSLATION_FILE_ENDING))
+                /* C++20 */) {
+                auto descriptor =
+                    LocaleDescriptor::fromFileName(dir.filename().string());
+                resources.insert({ descriptor, dirStr });
+            }
+        });
+#endif
 
     return resources;
 }
 
-QStringList Tts::TranslationResources::getLanguageNames()
+std::vector<Tts::Locale> Tts::TranslationResources::getLocales()
 {
-    static QStringList languageNames;
-    if (languageNames.size() > 0)
-        return languageNames;
+    static std::vector<Tts::Locale> locales;
+    if (locales.size() > 0)
+        return locales;
 
     // C++20
-    std::ranges::transform(
-        TranslationResources::get(),
-        std::back_inserter(languageNames),
-        [](const ResourcePair &key) -> QString {
-            LocaleDescriptor ld = key.first;
-            return QLocale(ld.language, ld.territory).nativeLanguageName();
-        });
+    std::ranges::transform(TranslationResources::get(),
+                           std::back_inserter(locales),
+                           [](const ResourcePair &key) -> Tts::Locale {
+                               LocaleDescriptor ld = key.first;
+                               return Tts::Locale(ld.language, ld.territory);
+                           });
 
-    return languageNames;
+    return locales;
 }
 
 long Tts::TranslationResources::index(const Tts::LocaleDescriptor &key)

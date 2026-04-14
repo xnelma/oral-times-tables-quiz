@@ -1,14 +1,32 @@
 #include "settings_backend.hpp"
 #include "tts/auto_locale.hpp"
 #include "tts/translation_resources.hpp"
+#include <QString>
 #include <QtLogging>
 #include <stdexcept>
+#include <algorithm>
 
 SettingsBackend::SettingsBackend(QObject *parent) : QObject(parent) { }
 
 QStringList SettingsBackend::languages()
 {
-    return Tts::TranslationResources::getLanguageNames();
+    static QStringList languageNames;
+    if (languageNames.size() > 0)
+        return languageNames;
+
+    std::ranges::transform( // C++20
+        Tts::TranslationResources::getLocales(),
+        std::back_inserter(languageNames),
+        [](const Tts::Locale &l) -> QString {
+#ifdef QT_TRANSLATOR
+            QLocale ql = static_cast<QLocale>(l);
+#else
+            QLocale ql(QString::fromStdString(l.name()));
+#endif
+            return ql.nativeLanguageName();
+        });
+
+    return languageNames;
 }
 
 int SettingsBackend::languageIndex()
@@ -32,8 +50,13 @@ bool SettingsBackend::useAutoTtsLanguage()
 
 auto SettingsBackend::autoLanguage() -> LanguageName
 {
-    Tts::AutoLocale l;
-    LanguageName languageName(l);
+    Tts::AutoLocale al;
+#ifdef QT_TRANSLATOR
+    QLocale l = static_cast<QLocale>(al);
+#else
+    QLocale l(QString::fromStdString(al.name()));
+#endif
+    LanguageName languageName(l.nativeLanguageName(), l.nativeTerritoryName());
     return languageName;
 }
 

@@ -4,6 +4,7 @@ add_executable(AutoLocaleTest
 
 add_executable(LocaleDescriptorTest
     from_filename_test.cpp
+    from_resourcepath_test.cpp
 )
 
 add_executable(SelfUpdatingTranslatorTest
@@ -22,6 +23,12 @@ foreach(TestName IN LISTS TestNames)
         Tts
         GTest::gtest_main
     )
+
+    if(${Translator} MATCHES BOOST_TRANSLATOR)
+        target_link_libraries(${TestName} PRIVATE
+            Boost::locale
+        )
+    endif()
 
     target_include_directories(${TestName} PRIVATE
         "${PROJECT_SOURCE_DIR}/include/tts"

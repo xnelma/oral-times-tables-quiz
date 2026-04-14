@@ -6,8 +6,11 @@
 QuizBackend::QuizBackend(QObject *parent)
     : QObject(parent),
       tts_(std::make_shared<QTextToSpeech>(this)),
-      translator_(Tts::SelfUpdatingTranslator(this)),
-      questionBase_(QuizConstants::questionBase)
+#ifdef QT_TRANSLATOR
+      translator_(Tts::SelfUpdatingTranslator(this))
+#else
+      translator_(Tts::SelfUpdatingTranslator())
+#endif
 {
     setupStateMachine();
 }
@@ -40,8 +43,7 @@ void QuizBackend::setupStateMachine()
     };
     auto setupTranslation = [this]() {
         try {
-            questionBase_ = translator_.translate(
-                QuizConstants::translationContext, QuizConstants::questionBase);
+            questionBase_ = translator_.translate(TimesTables::question);
             emit localeNameChanged();
         } catch (const std::invalid_argument &e) {
             qCritical("Translation setup failed: %s", e.what());
@@ -57,15 +59,13 @@ void QuizBackend::setupStateMachine()
     });
 
     auto setupTts = [this]() {
-        auto locale = translator_.locale();
-        double rate = settings_.loadVoiceRateSetting();
-        tts_->setLocale(QLocale(locale.language(), locale.territory()));
-        // FIXME QLocale::system() and
-        // QLocale(l_sys.language(), l_sys.territory()) compare to different
-        // objects, and trying to set the former as tts locale causes tts to
-        // get into error state.
-        // Before I created a new object in qml anyways, so I did not notice it.
-        tts_->setRate(rate);
+#ifdef QT_TRANSLATOR
+        QLocale l = static_cast<QLocale>(translator_.locale());
+#else
+        QLocale l(QString::fromStdString(translator_.locale().name()));
+#endif
+        tts_->setLocale(l);
+        tts_->setRate(settings_.loadVoiceRateSetting());
         if (tts_->state() == QTextToSpeech::Error) {
             // couldn't set translation
             emit showLocaleError();
@@ -101,7 +101,9 @@ QString QuizBackend::question()
 {
     try {
         TimesTables::Question q = quiz_.question();
-        return questionBase_.arg(q.factor).arg(q.number);
+        return QString::fromStdString(questionBase_)
+            .arg(q.factor)
+            .arg(q.number);
     } catch (std::out_of_range &e) {
         qCritical("Could not get the question: %s", e.what());
         throw std::domain_error(e.what());
@@ -168,7 +170,7 @@ QString QuizBackend::state()
 
 QString QuizBackend::localeName()
 {
-    return translator_.locale().name();
+    return QString::fromStdString(translator_.locale().name());
 }
 
 int QuizBackend::numQuestionsRemaining()

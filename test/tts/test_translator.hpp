@@ -1,8 +1,12 @@
 #ifndef OTTQ_20260109_1448_INCLUDE
 #define OTTQ_20260109_1448_INCLUDE
 
+#ifdef BOOST_TRANSLATOR
+#  undef BOOST_TRANSLATOR
+#  define QT_TRANSLATOR // test only with std::string source text type
+#endif
+
 #include "abstract_translator.hpp"
-#include <QString>
 #include <string>
 
 namespace TtsTest {
@@ -11,22 +15,22 @@ enum Locale { En, De };
 
 namespace ResourcePaths {
 
-const QString en = "my/filepath/en";
-const QString de = "my/filepath/de";
+const std::string en = "my/filepath/en";
+const std::string de = "my/filepath/de";
 
 } // namespace ResourcePaths
 
 class Translator : public Tts::AbstractTranslator
 {
 private:
-    std::unordered_map<QString, Locale> translations_;
-    QString filePath_;
+    std::unordered_map<std::string, Locale> translations_;
+    std::string filePath_;
 
 public:
     Translator() { }
 
-    void setup(const std::unordered_map<QString, Locale> &translations,
-               const QString &filePath)
+    void setup(const std::unordered_map<std::string, Locale> &translations,
+               const std::string &filePath)
     {
         translations_ = std::move(translations);
         filePath_ = std::move(filePath);
@@ -38,48 +42,38 @@ public:
             std::ranges::next_permutation(str.begin(), str.end());
     }
 
-    QString filePath() override { return filePath_; }
+    std::string filePath() const override { return filePath_; }
 
-    Tts::LocaleDescriptor localeDescriptor() override
+    Tts::LocaleDescriptor localeDescriptor() const override
     {
         switch (translations_.at(filePath_)) {
         case Locale::En:
-            return Tts::LocaleDescriptor(QLocale::English,
-                                         QLocale::AnyTerritory);
+            return Tts::LocaleDescriptor(Tts::Language::en,
+                                         Tts::Territory::ANY);
         case Locale::De:
-            return Tts::LocaleDescriptor(QLocale::German,
-                                         QLocale::AnyTerritory);
+            return Tts::LocaleDescriptor(Tts::Language::de,
+                                         Tts::Territory::ANY);
         default: {
         }
         }
 
-        return Tts::LocaleDescriptor(QLocale::C, QLocale::AnyTerritory);
+        return Tts::LocaleDescriptor(Tts::Language::c, Tts::Territory::ANY);
     }
 
-    QLocale locale() override
+    std::string translate(const std::string &sourceText) const override
     {
-        auto ld = localeDescriptor();
-        return QLocale(ld.language, ld.territory);
+        std::string tmp{ sourceText };
+        permutate(tmp, translations_.at(filePath_));
+        return tmp;
     }
 
-    // NOLINTBEGIN(bugprone-easily-swappable-parameters)
-    QString translate(const char *context, const char *sourceText,
-                      const char *disambiguation = nullptr, int n = -1) override
-    // NOLINTEND(bugprone-easily-swappable-parameters)
+    bool load(const std::string &filePath) override
     {
-        std::string sourceTextStr{ sourceText };
-        permutate(sourceTextStr, translations_.at(filePath_));
-        return QString::fromStdString(sourceTextStr);
-    }
+        if (!translations_.contains(filePath))
+            throw std::invalid_argument("Resource path \"" + filePath
+                                        + "\" does not exist.");
 
-    bool load(const QString &filename) override
-    {
-        if (!translations_.contains(filename))
-            throw std::invalid_argument(
-                std::format("Resource path \"{}\" does not exist.",
-                            filename.toStdString()));
-
-        filePath_ = filename;
+        filePath_ = filePath;
         return true;
     }
 };

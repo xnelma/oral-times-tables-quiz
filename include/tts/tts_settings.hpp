@@ -5,7 +5,6 @@
 #include "locale_descriptor.hpp"
 #include <QString>
 #include <QSettings>
-#include <QLocale>
 
 namespace Tts {
 
@@ -25,7 +24,7 @@ public:
 private:
     QSettings settings_;
 
-    AutoLocale<Tts::TranslationResources> autoLocale_;
+    AutoLocaleDescriptor<Tts::TranslationResources> autoLocale_;
 
     LocaleDescriptor &autoLocale() override;
 };
@@ -44,8 +43,8 @@ static const QString voiceRate = prefix + "/voiceRate";
 
 namespace SettingsDefaults {
 
-static const QLocale::Language language = QLocale::AnyLanguage;
-static const QLocale::Territory territory = QLocale::AnyTerritory;
+static const Language::Code language = Language::any;
+static const Territory::Code territory = Territory::ANY;
 static const bool autoLocale = true;
 static const double voiceRate = 0;
 

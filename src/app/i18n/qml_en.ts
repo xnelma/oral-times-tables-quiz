@@ -2,10 +2,10 @@
 <!DOCTYPE TS>
 <TS version="2.1" language="en" sourcelanguage="en">
 <context>
-    <name>QuizView</name>
+    <name>Translator</name>
     <message>
         <!-- Needed in case the .qm file for en is loaded explicitly -->
-        <location filename="../quiz_backend.cpp" line="5"/>
+        <location filename="../quiz_backend.hpp" line="76"/>
         <source>%1 times %2</source>
         <translation>%1 times %2</translation>
     </message>

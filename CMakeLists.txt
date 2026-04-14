@@ -10,6 +10,23 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON) # Needed by clang-tidy
 
+set(TranslatorImplementations QT_TRANSLATOR BOOST_TRANSLATOR)
+# Use capital letters for the names because they are used as cpp text macros
+# and should match their naming convention.
+set(Translator QT_TRANSLATOR)
+#set(Translator BOOST_TRANSLATOR)
+if(${CMAKE_SYSTEM_NAME} STREQUAL "Android"
+   AND ${Translator} MATCHES BOOST_TRANSLATOR)
+    set(Translator QT_TRANSLATOR)
+    # Boost.locale will not work for cross compiling.
+endif()
+
+if(NOT ${Translator} IN_LIST TranslatorImplementations)
+    message(FATAL_ERROR
+            "-- Could NOT find translator implementation ${Translator} "
+            "(Should be one of ${TranslatorImplementations})")
+endif()
+
 find_package(Qt6
     REQUIRED COMPONENTS
         Quick
@@ -19,9 +36,28 @@ find_package(Qt6
         Test
         StateMachine
 )
+if(${Translator} MATCHES BOOST_TRANSLATOR)
+    find_package(Boost
+        REQUIRED COMPONENTS
+            locale
+    )
+endif()
 
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 set(CMAKE_AUTOMOC ON)
+
+# Set up translator:
+add_compile_definitions(${Translator})
+if(${Translator} MATCHES QT_TRANSLATOR)
+    set(TranslationDomain "Translator")
+    set(TranslationFileEnding "qm")
+elseif(${Translator} MATCHES BOOST_TRANSLATOR)
+    set(TranslationDir "src/timestables/i18n")
+    set(TranslationFileEnding "mo")
+endif()
+add_compile_definitions(TRANSLATION_DOMAIN="${TranslationDomain}")
+add_compile_definitions(TRANSLATION_DIR="${TranslationDir}")
+add_compile_definitions(TRANSLATION_FILE_ENDING="${TranslationFileEnding}")
 
 qt_standard_project_setup(
     REQUIRES 6.7 # Qt 6.8 upwards only supports Android 9 upwards
