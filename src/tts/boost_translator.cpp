@@ -13,7 +13,8 @@ std::string Tts::Translator::filePath() const
     if (localeName_.empty())
         return "";
 
-    return "/" + localeName_ + ".po";
+    std::string path = "/" + localeName_ + "." + TRANSLATION_FILE_ENDING;
+    return path;
 }
 
 auto Tts::Translator::localeDescriptor() const -> LocaleDescriptor

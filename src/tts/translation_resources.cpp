@@ -32,7 +32,8 @@ Tts::ResourceMap &Tts::TranslationResources::get()
         [](const auto &dirEntry) {
             auto dir = dirEntry.path();
             auto dirStr = dir.string();
-            if (dirStr.ends_with(".po") /* C++20 */) {
+            if (dirStr.ends_with("." + std::string(TRANSLATION_FILE_ENDING))
+                /* C++20 */) {
                 auto descriptor =
                     LocaleDescriptor::fromFileName(dir.filename().string());
                 resources.insert({ descriptor, dirStr });
