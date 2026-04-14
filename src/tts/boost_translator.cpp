@@ -6,7 +6,6 @@
 Tts::Translator::Translator()
 {
     generator_.add_messages_path(Tts::translationDir());
-    generator_.add_messages_domain(TRANSLATION_DOMAIN);
 }
 
 std::string Tts::Translator::filePath() const
@@ -45,6 +44,11 @@ bool Tts::Translator::load(const std::string &filePath)
     // Assume for now that the filename does not contain the encoding.
     assert(localeName_.find(".") == std::string::npos);
 
+    generator_.add_messages_domain(localeName_);
+    // This will not lead to adding the same domain twice, as the method
+    // contains a check.
+    // (See https://github.com/boostorg/locale/blob/
+    //  9d3c2c9faca0b478ebea424c0d3f9e79517d50e7/src/shared/generator.cpp#L64)
     locale_ = generator_(localeName_ + ".UTF-8");
 
     return true;
