@@ -35,6 +35,9 @@ find_package(Qt6
 )
 if(${Translator} MATCHES BOOST_TRANSLATOR)
     find_package(Boost
+        # Find boost via config file not FindBoost module.
+        # Requires minimum Boost 1.70.
+        CONFIG
         REQUIRED COMPONENTS
             locale
     )
