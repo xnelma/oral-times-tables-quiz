@@ -60,7 +60,8 @@ add_compile_definitions(TRANSLATION_DIR="${TranslationDir}")
 add_compile_definitions(TRANSLATION_FILE_ENDING="${TranslationFileEnding}")
 
 qt_standard_project_setup(
-    REQUIRES 6.7 # Qt 6.8 upwards only supports Android 9 upwards
+    REQUIRES 6.8
+    SUPPORTS_UP_TO 6.11
     I18N_TRANSLATED_LANGUAGES de
 )
 
