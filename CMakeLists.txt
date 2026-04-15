@@ -1,7 +1,4 @@
-cmake_minimum_required(VERSION 3.19)
-# Since 3.19 qt_finalize_target is called as part of qt_add_executable,
-# according to the documentation.
-# Don't allow for versions where the call needs to be done manually.
+cmake_minimum_required(VERSION 3.28)
 
 project(OralTimesTablesQuiz VERSION 0.1 LANGUAGES CXX)
 
@@ -38,6 +35,9 @@ find_package(Qt6
 )
 if(${Translator} MATCHES BOOST_TRANSLATOR)
     find_package(Boost
+        # Find boost via config file not FindBoost module.
+        # Requires minimum Boost 1.70.
+        CONFIG
         REQUIRED COMPONENTS
             locale
     )
@@ -60,7 +60,8 @@ add_compile_definitions(TRANSLATION_DIR="${TranslationDir}")
 add_compile_definitions(TRANSLATION_FILE_ENDING="${TranslationFileEnding}")
 
 qt_standard_project_setup(
-    REQUIRES 6.7 # Qt 6.8 upwards only supports Android 9 upwards
+    REQUIRES 6.8
+    SUPPORTS_UP_TO 6.11
     I18N_TRANSLATED_LANGUAGES de
 )
 
