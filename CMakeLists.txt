@@ -1,7 +1,4 @@
-cmake_minimum_required(VERSION 3.19)
-# Since 3.19 qt_finalize_target is called as part of qt_add_executable,
-# according to the documentation.
-# Don't allow for versions where the call needs to be done manually.
+cmake_minimum_required(VERSION 3.28)
 
 project(OralTimesTablesQuiz VERSION 0.1 LANGUAGES CXX)
 
