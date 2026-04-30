@@ -1,11 +1,49 @@
 import OttqApp
 import QtQuick
 import QtQuick.Controls.Basic
+import QtTextToSpeech
+import QtQml
 
 FocusScope {
     id: qRoot
 
     property quizConfiguration config
+
+    signal questionChanged
+    signal showLocaleError
+
+    function check(answer: string) {
+        if (answer === "")
+            return;
+
+        if (quizBackend.correct(parseInt(answer)))
+            nextQuestion();
+    }
+
+    function nextQuestion() {
+        if (quizBackend.next()) {
+            qRoot.questionChanged();
+            quizBackend.numQuestionsRemainingChanged();
+
+            qRoot.sayQuestion();
+        } else {
+            // Let last question fade out instead of stopping it.
+            quizBackend.quizCompleted();
+        }
+    }
+
+    function sayQuestion() {
+        // Stop current question and start next right away instead of
+        // enqueueing. This way the quiz would be more snappy.
+        if (tts.state === TextToSpeech.Speaking) {
+            tts.stop();
+            tts.say(quizBackend.question());
+        } else {
+            // Enqueue in case tts is not ready for reasons other than
+            // currently speaking.
+            tts.enqueue(quizBackend.question());
+        }
+    }
 
     state: quizBackend.state
 
@@ -115,15 +153,26 @@ FocusScope {
     StackView.onDeactivated: {
         quizBackend.stopStateMachine();
     }
+    onQuestionChanged: {
+        answerInput.text = "";
+    }
+    onShowLocaleError: {
+        dlgLocaleError.open();
+    }
 
     QuizBackend {
         id: quizBackend
 
-        onQuestionChanged: {
-            answerInput.text = "";
+        onFirstQuestion: {
+            qRoot.sayQuestion();
         }
-        onShowLocaleError: {
-            dlgLocaleError.open();
+        onSetup: {
+            tts.setLocale(Qt.locale(quizBackend.localeName));
+            tts.setRate(quizBackend.voiceRate);
+            if (tts.state === TextToSpeech.Error) {
+                // could not set translation
+                qRoot.showLocaleError();
+            }
         }
     }
 
@@ -168,7 +217,7 @@ FocusScope {
             if (focus && inputMethodHints == Qt.ImhDigitsOnly)
                 forceActiveFocus();
         }
-        onTextChanged: quizBackend.check(text)
+        onTextChanged: qRoot.check(text)
     }
 
     Button {
@@ -180,7 +229,7 @@ FocusScope {
         text: qsTr("Replay")
 
         onClicked: {
-            quizBackend.sayQuestion();
+            qRoot.sayQuestion();
             answerInput.focus = true;
         }
     }
@@ -223,5 +272,18 @@ FocusScope {
         anchors.rightMargin: 2
         opacity: 0.5
         text: quizBackend.localeName
+    }
+
+    TextToSpeech {
+        id: tts
+
+        onStateChanged: {
+            if (state === TextToSpeech.Ready)
+                quizBackend.ttsReady();
+            else if (state === TextToSpeech.Speaking)
+                quizBackend.ttsSpeaking();
+            else if (state === TextToSpeech.Error)
+                quizBackend.ttsError();
+        }
     }
 }

@@ -2,17 +2,9 @@
 #include <QTextToSpeech>
 #include <stdexcept>
 
-QuizStateMachine::QuizStateMachine(QObject *parent,
-                                   std::shared_ptr<const QTextToSpeech> tts)
-    : QStateMachine(parent),
-      tts_(tts),
-      state_("setting-up"),
-      ttsReady_(TtsStateTransition(tts, QTextToSpeech::Ready)),
-      ttsSpeaking_(TtsStateTransition(tts, QTextToSpeech::Speaking))
+QuizStateMachine::QuizStateMachine(QObject *parent)
+    : QStateMachine(parent), state_("setting-up")
 {
-    if (tts == nullptr)
-        throw std::domain_error("reference to tts not available in quiz SM");
-
     setup();
 }
 
@@ -48,7 +40,7 @@ void QuizStateMachine::setupTransitions()
     c_.addTransition(this, &QuizStateMachine::ttsAvailable, &synthesizing_);
 
     QObject::connect(&c_, &QState::entered, this, [this]() {
-        if (tts_->state() == QTextToSpeech::Error)
+        if (ttsError_)
             emit ttsUnavailable();
         else
             emit ttsAvailable();
@@ -56,11 +48,9 @@ void QuizStateMachine::setupTransitions()
     // TODO is there a better way to account for the tts state for the
     // transition?
 
-    ttsReady_.setTargetState(&synthesizing_);
-    loading_.addTransition(&ttsReady_);
-
-    ttsSpeaking_.setTargetState(&available_);
-    synthesizing_.addTransition(&ttsSpeaking_);
+    loading_.addTransition(this, &QuizStateMachine::ttsReady, &synthesizing_);
+    synthesizing_.addTransition(
+        this, &QuizStateMachine::ttsSpeaking, &available_);
 
     synthesizing_.addTransition(this, &QuizStateMachine::error, &unavailable_);
     available_.addTransition(this, &QuizStateMachine::error, &unavailable_);
@@ -102,6 +92,23 @@ void QuizStateMachine::setToError()
 void QuizStateMachine::setCompleted()
 {
     emit completed();
+}
+
+void QuizStateMachine::setToTtsReady()
+{
+    ttsError_ = false;
+    emit ttsReady();
+}
+
+void QuizStateMachine::setToTtsSpeaking()
+{
+    ttsError_ = false;
+    emit ttsSpeaking();
+}
+
+void QuizStateMachine::setToTtsError()
+{
+    ttsError_ = true;
 }
 
 void QuizStateMachine::stop()
