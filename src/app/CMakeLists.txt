@@ -28,7 +28,6 @@ qt_add_qml_module(OTTQ
         language_name.hpp
         factor_range.hpp
         factor_range.cpp
-        tts_state_transition.hpp
         quiz_state_machine.hpp
         quiz_state_machine.cpp
         quiz_config.hpp

@@ -5,7 +5,6 @@
 
 QuizBackend::QuizBackend(QObject *parent)
     : QObject(parent),
-      tts_(std::make_shared<QTextToSpeech>(this)),
 #ifdef QT_TRANSLATOR
       translator_(Tts::SelfUpdatingTranslator(this))
 #else
@@ -17,7 +16,7 @@ QuizBackend::QuizBackend(QObject *parent)
 
 void QuizBackend::setupStateMachine()
 {
-    machine_ = std::make_unique<QuizStateMachine>(this, tts_);
+    machine_ = std::make_unique<QuizStateMachine>(this);
 
     connect(machine_.get(),
             &QuizStateMachine::stateChanged,
@@ -58,21 +57,8 @@ void QuizBackend::setupStateMachine()
         setupTranslation();
     });
 
-    auto setupTts = [this]() {
-#ifdef QT_TRANSLATOR
-        QLocale l = static_cast<QLocale>(translator_.locale());
-#else
-        QLocale l(QString::fromStdString(translator_.locale().name()));
-#endif
-        tts_->setLocale(l);
-        tts_->setRate(settings_.loadVoiceRateSetting());
-        if (tts_->state() == QTextToSpeech::Error) {
-            // couldn't set translation
-            emit showLocaleError();
-            throw std::domain_error("could not set tts locale");
-        }
-    };
-    auto synthesizeFirstQuestion = [this]() { sayQuestion(); };
+    auto setupTts = [this]() { emit setup(); };
+    auto synthesizeFirstQuestion = [this]() { emit firstQuestion(); };
     machine_->setTtsInitFunc([this, setupTts, synthesizeFirstQuestion]() {
         setupTts();
         synthesizeFirstQuestion();
@@ -97,6 +83,26 @@ void QuizBackend::stopStateMachine()
     machine_->stop();
 }
 
+void QuizBackend::ttsReady()
+{
+    machine_->setToTtsReady();
+}
+
+void QuizBackend::ttsSpeaking()
+{
+    machine_->setToTtsSpeaking();
+}
+
+void QuizBackend::ttsError()
+{
+    machine_->setToError();
+}
+
+void QuizBackend::quizCompleted()
+{
+    machine_->setCompleted();
+}
+
 QString QuizBackend::question()
 {
     try {
@@ -114,49 +120,21 @@ QString QuizBackend::question()
 
 // behavior in state 'available':
 
-void QuizBackend::check(const QString input)
+bool QuizBackend::next()
 {
-    if (input == "")
-        return;
+    return quiz_.next();
+}
 
-    bool valid = false, correct = false;
-    int inputNum = input.toInt(&valid);
+bool QuizBackend::correct(const int answer)
+{
     try {
-        correct = quiz_.answerIsCorrect(inputNum);
+        return quiz_.answerIsCorrect(answer);
     } catch (std::out_of_range &e) {
         qCritical("Could not check input: %s", e.what());
         machine_->setToError();
     }
 
-    if (valid && correct)
-        nextQuestion();
-}
-
-void QuizBackend::nextQuestion()
-{
-    if (quiz_.next()) {
-        emit questionChanged();
-        emit numQuestionsRemainingChanged();
-
-        sayQuestion();
-    } else {
-        // Let last question fade out instead of stopping it.
-
-        machine_->setCompleted();
-    }
-}
-
-void QuizBackend::sayQuestion()
-{
-    // Stop current question and start next right away instead of
-    // enqueueing. This way the quiz can be faster.
-    if (tts_->state() == QTextToSpeech::Speaking) {
-        tts_->stop();
-        tts_->say(question());
-    } else {
-        // Enqueue in case tts is not ready (but not due to talking).
-        tts_->enqueue(question());
-    }
+    return false;
 }
 
 // getters and setters for properties:
@@ -171,6 +149,11 @@ QString QuizBackend::state()
 QString QuizBackend::localeName()
 {
     return QString::fromStdString(translator_.locale().name());
+}
+
+double QuizBackend::voiceRate()
+{
+    return settings_.loadVoiceRateSetting();
 }
 
 int QuizBackend::numQuestionsRemaining()

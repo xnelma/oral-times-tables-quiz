@@ -1,12 +1,10 @@
 #ifndef OTTQ_20102025_1743_INCLUDE
 #define OTTQ_20102025_1743_INCLUDE
 
-#include "tts_state_transition.hpp"
 #include <QStateMachine>
 #include <QState>
 #include <QFinalState>
 #include <QString>
-#include <memory>
 #include <functional>
 
 class QuizStateMachine : public QStateMachine
@@ -21,9 +19,7 @@ class QuizStateMachine : public QStateMachine
     // clang-format on
 
 public:
-    explicit QuizStateMachine(
-        QObject *parent = nullptr,
-        std::shared_ptr<const QTextToSpeech> tts = nullptr);
+    explicit QuizStateMachine(QObject *parent = nullptr);
 
     QString state();
     void setState(const QString &s);
@@ -32,6 +28,10 @@ public:
     void setTtsInitFunc(std::function<void()> func);
     void setToError();
     void setCompleted();
+
+    void setToTtsReady();
+    void setToTtsSpeaking();
+    void setToTtsError();
 
 public slots:
     void stop();
@@ -45,13 +45,16 @@ signals:
     void ttsAvailable();
     void completed();
 
+    void ttsReady();
+    void ttsSpeaking();
+
 private:
     void setup();
     void setupTransitions();
 
     QString state_;
 
-    std::shared_ptr<const QTextToSpeech> tts_;
+    bool ttsError_ = false;
 
     QState setup_;
     QState c_;
@@ -61,8 +64,6 @@ private:
     QState available_;
     QState completed_;
     QFinalState end_;
-    TtsStateTransition ttsReady_;
-    TtsStateTransition ttsSpeaking_;
 };
 
 #endif // OTTQ_20102025_1743_INCLUDE

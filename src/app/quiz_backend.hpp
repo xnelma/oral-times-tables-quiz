@@ -21,6 +21,10 @@ class QuizBackend : public QObject
                READ localeName
                NOTIFY localeNameChanged
                FINAL)
+    Q_PROPERTY(double voiceRate
+               READ voiceRate
+               NOTIFY voiceRateChanged
+               FINAL)
     Q_PROPERTY(int numQuestionsRemaining
                READ numQuestionsRemaining
                NOTIFY numQuestionsRemainingChanged
@@ -37,28 +41,34 @@ public:
 
     QString state();
     QString localeName();
+    double voiceRate();
     int numQuestionsRemaining();
 
     Q_INVOKABLE void startStateMachine(const QuizConfiguration &config);
-    Q_INVOKABLE void check(const QString input);
-    Q_INVOKABLE void sayQuestion();
     Q_INVOKABLE void stopStateMachine();
+
+    Q_INVOKABLE void ttsReady();
+    Q_INVOKABLE void ttsSpeaking();
+    Q_INVOKABLE void ttsError();
+    Q_INVOKABLE bool next();
+    Q_INVOKABLE bool correct(const int answer);
+    Q_INVOKABLE void quizCompleted();
+
+    Q_INVOKABLE QString question();
 
 signals:
     void localeNameChanged();
     void numQuestionsRemainingChanged();
     void questionChanged();
     void stateChanged();
-    void showLocaleError();
+    void setup();
+    void firstQuestion();
+    void voiceRateChanged();
 
 private:
     void setupStateMachine();
-    double voiceRate();
-    QString question();
-    void nextQuestion();
 
     std::unique_ptr<QuizStateMachine> machine_;
-    std::shared_ptr<QTextToSpeech> tts_;
     TimesTables::Quiz quiz_;
     QuizConfiguration quizConfig_;
 
