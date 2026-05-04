@@ -1,5 +1,4 @@
 #include "quiz_backend.hpp"
-#include "timestables/factor_range.hpp"
 #include "timestables/question.hpp"
 #include <QtLogging>
 
@@ -27,19 +26,6 @@ void QuizBackend::setupStateMachine()
             this,
             &QuizBackend::stateChanged);
 
-    auto setupQuiz = [this]() {
-        try {
-            auto t = quizConfig_.timesTables();
-            auto r = quizConfig_.factorRange();
-            quiz_.setup(t, TimesTables::FactorRange(r.first(), r.second()));
-
-            emit numQuestionsRemainingChanged();
-        } catch (const std::out_of_range &e) {
-            qCritical("Quiz setup failed: %s", e.what());
-            throw std::domain_error(e.what());
-            // TODO give information about error in UI
-        }
-    };
     auto setupTranslation = [this]() {
         try {
             questionBase_ = translator_.translate(TimesTables::question);
@@ -52,10 +38,7 @@ void QuizBackend::setupStateMachine()
             throw std::domain_error(e.what());
         }
     };
-    machine_->setSetupFunc([this, setupQuiz, setupTranslation]() {
-        setupQuiz();
-        setupTranslation();
-    });
+    machine_->setSetupFunc([this, setupTranslation]() { setupTranslation(); });
 
     auto setupTts = [this]() { emit setup(); };
     auto synthesizeFirstQuestion = [this]() { emit firstQuestion(); };
@@ -65,13 +48,12 @@ void QuizBackend::setupStateMachine()
     });
 }
 
-void QuizBackend::startStateMachine(const QuizConfiguration &config)
+void QuizBackend::startStateMachine()
 {
     if (!machine_)
         setupStateMachine();
     // TODO RAII
 
-    quizConfig_ = config;
     machine_->start();
 }
 

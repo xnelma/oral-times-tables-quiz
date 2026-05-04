@@ -32,6 +32,10 @@ qt_add_qml_module(OTTQ
         quiz_state_machine.cpp
         quiz_config.hpp
         quiz_config.cpp
+        quiz.hpp
+        quiz.cpp
+        question.hpp
+        question.cpp
 )
 
 qt_add_translations(OTTQ

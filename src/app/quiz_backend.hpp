@@ -2,7 +2,6 @@
 #define OTTQ_20250829_1810_INCLUDE
 
 #include "quiz_state_machine.hpp"
-#include "quiz_config.hpp"
 #include "tts/self_updating_translator.hpp"
 #include "tts/tts_settings.hpp"
 #include "timestables/quiz.hpp"
@@ -44,7 +43,7 @@ public:
     double voiceRate();
     int numQuestionsRemaining();
 
-    Q_INVOKABLE void startStateMachine(const QuizConfiguration &config);
+    Q_INVOKABLE void startStateMachine();
     Q_INVOKABLE void stopStateMachine();
 
     Q_INVOKABLE void ttsReady();
@@ -70,7 +69,6 @@ private:
 
     std::unique_ptr<QuizStateMachine> machine_;
     TimesTables::Quiz quiz_;
-    QuizConfiguration quizConfig_;
 
     // The class outlives QuizView being on top of the stack, so the locale
     // can be updated in the settings and would need to be applied when

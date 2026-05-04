@@ -8,23 +8,20 @@ FocusScope {
     id: qRoot
 
     property quizConfiguration config
+    property string questionBase: "%1 times %2"
 
-    signal questionChanged
     signal showLocaleError
 
     function check(answer: string) {
         if (answer === "")
             return;
 
-        if (quizBackend.correct(parseInt(answer)))
+        if (quiz.answerIsCorrect(parseInt(answer)))
             nextQuestion();
     }
 
     function nextQuestion() {
-        if (quizBackend.next()) {
-            qRoot.questionChanged();
-            quizBackend.numQuestionsRemainingChanged();
-
+        if (quiz.next()) {
             qRoot.sayQuestion();
         } else {
             // Let last question fade out instead of stopping it.
@@ -33,15 +30,17 @@ FocusScope {
     }
 
     function sayQuestion() {
+        var q = quiz.question();
+        var qStr = qRoot.questionBase.arg(q.number).arg(q.factor);
         // Stop current question and start next right away instead of
-        // enqueueing. This way the quiz would be more snappy.
+        // enqueueing. This way the quiz is more snappy.
         if (tts.state === TextToSpeech.Speaking) {
             tts.stop();
-            tts.say(quizBackend.question());
+            tts.say(qStr);
         } else {
             // Enqueue in case tts is not ready for reasons other than
             // currently speaking.
-            tts.enqueue(quizBackend.question());
+            tts.enqueue(qStr);
         }
     }
 
@@ -148,16 +147,22 @@ FocusScope {
     ]
 
     StackView.onActivated: {
-        quizBackend.startStateMachine(qRoot.config);
+        quizBackend.startStateMachine();
+        quiz.setup(qRoot.config);
     }
     StackView.onDeactivated: {
         quizBackend.stopStateMachine();
     }
-    onQuestionChanged: {
-        answerInput.text = "";
-    }
     onShowLocaleError: {
         dlgLocaleError.open();
+    }
+
+    Quiz {
+        id: quiz
+
+        onQuestionChanged: {
+            answerInput.text = "";
+        }
     }
 
     QuizBackend {
@@ -187,7 +192,7 @@ FocusScope {
         anchors.topMargin: 2
         opacity: 0.5
         text: {
-            var num = quizBackend.numQuestionsRemaining;
+            var num = quiz.numQuestionsRemaining;
             return num <= 0 ? qsTr("Last question") : num + " " + qsTr("left");
         }
     }
