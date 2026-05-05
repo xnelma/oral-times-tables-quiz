@@ -30,6 +30,7 @@ public:
 signals:
     void questionChanged();
     void numQuestionsRemainingChanged();
+    void error(const QString &msg);
 
 private:
     void generateQuestions(const QuizConfiguration &qc);

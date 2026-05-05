@@ -75,7 +75,7 @@ void QuizBackend::ttsSpeaking()
     machine_->setToTtsSpeaking();
 }
 
-void QuizBackend::ttsError()
+void QuizBackend::error()
 {
     machine_->setToError();
 }

@@ -48,7 +48,7 @@ public:
 
     Q_INVOKABLE void ttsReady();
     Q_INVOKABLE void ttsSpeaking();
-    Q_INVOKABLE void ttsError();
+    Q_INVOKABLE void error();
     Q_INVOKABLE bool next();
     Q_INVOKABLE bool correct(const int answer);
     Q_INVOKABLE void quizCompleted();

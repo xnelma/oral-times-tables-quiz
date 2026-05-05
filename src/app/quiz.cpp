@@ -8,9 +8,10 @@ void Quiz::setup(const QuizConfiguration &qc)
 {
     questions_.clear();
 
-    if (qc.timesTables().empty())
-        throw std::out_of_range("tables are empty");
-    // TODO handle exception
+    if (qc.timesTables().empty()) {
+        emit error("Tried to set up quiz, but tables are empty.");
+        return;
+    }
 
     generateQuestions(qc);
 }
@@ -24,7 +25,7 @@ void Quiz::generateQuestions(const QuizConfiguration &qc)
         std::ranges::iota_view{ range.first(), range.second() + 1 };
     for (const int number : tables)
         for (const int factor : factors)
-            questions_.push_back(Question(/*this,*/ number, factor));
+            questions_.push_back(Question(number, factor));
 
     std::mt19937 gen{ std::random_device{}() };
     std::ranges::shuffle(questions_, gen);
@@ -34,8 +35,11 @@ void Quiz::generateQuestions(const QuizConfiguration &qc)
 
 Question Quiz::question()
 {
-    if (questions_.empty())
-        throw std::out_of_range("questions_ is empty");
+    if (questions_.empty()) {
+        emit error("Tried to get question, but questions are empty.");
+        return Question(); // TODO how can I not return a default Question?
+    }
+
     return questions_.back();
 }
 
@@ -49,8 +53,11 @@ bool Quiz::next()
 
 bool Quiz::answerIsCorrect(const int answer)
 {
-    if (questions_.empty())
-        throw std::out_of_range("questions_ is empty");
+    if (questions_.empty()) {
+        emit error("Tried to check answer, but questions are empty.");
+        return false; // TODO should I really return a default value here?
+    }
+
     return questions_.back().check(answer);
 }
 

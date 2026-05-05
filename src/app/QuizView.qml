@@ -160,6 +160,10 @@ FocusScope {
     Quiz {
         id: quiz
 
+        onError: msg => {
+                     console.log(msg);
+                     quizBackend.error();
+                 }
         onQuestionChanged: {
             answerInput.text = "";
         }
@@ -169,7 +173,10 @@ FocusScope {
         id: quizBackend
 
         onFirstQuestion: {
-            qRoot.sayQuestion();
+            if (quiz.numQuestionsRemaining > 0)
+                qRoot.sayQuestion();
+            else
+                quizBackend.error();
         }
         onSetup: {
             tts.setLocale(Qt.locale(quizBackend.localeName));
@@ -288,7 +295,7 @@ FocusScope {
             else if (state === TextToSpeech.Speaking)
                 quizBackend.ttsSpeaking();
             else if (state === TextToSpeech.Error)
-                quizBackend.ttsError();
+                quizBackend.error();
         }
     }
 }
