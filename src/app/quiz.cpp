@@ -63,5 +63,9 @@ bool Quiz::answerIsCorrect(const int answer)
 
 qsizetype Quiz::numQuestionsRemaining()
 {
-    return questions_.empty() ? 0 : questions_.size() - 1;
+    // Returns -1 for empty questions, and 0 for "none left".
+    // The last question in the list is the current question.
+    // TODO should I instead just return the current question and save it
+    // in qml for replay and checking?
+    return questions_.size() - 1;
 }

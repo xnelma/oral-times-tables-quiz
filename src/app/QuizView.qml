@@ -173,7 +173,7 @@ FocusScope {
         id: quizBackend
 
         onFirstQuestion: {
-            if (quiz.numQuestionsRemaining > 0)
+            if (quiz.numQuestionsRemaining >= 0)
                 qRoot.sayQuestion();
             else
                 quizBackend.error();
@@ -200,7 +200,7 @@ FocusScope {
         opacity: 0.5
         text: {
             var num = quiz.numQuestionsRemaining;
-            return num <= 0 ? qsTr("Last question") : num + " " + qsTr("left");
+            return num === 0 ? qsTr("Last question") : num + " " + qsTr("left");
         }
     }
 
