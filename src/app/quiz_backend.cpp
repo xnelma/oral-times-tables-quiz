@@ -85,40 +85,6 @@ void QuizBackend::quizCompleted()
     machine_->setCompleted();
 }
 
-QString QuizBackend::question()
-{
-    try {
-        TimesTables::Question q = quiz_.question();
-        return QString::fromStdString(questionBase_)
-            .arg(q.factor)
-            .arg(q.number);
-    } catch (std::out_of_range &e) {
-        qCritical("Could not get the question: %s", e.what());
-        throw std::domain_error(e.what());
-    }
-
-    return "";
-}
-
-// behavior in state 'available':
-
-bool QuizBackend::next()
-{
-    return quiz_.next();
-}
-
-bool QuizBackend::correct(const int answer)
-{
-    try {
-        return quiz_.answerIsCorrect(answer);
-    } catch (std::out_of_range &e) {
-        qCritical("Could not check input: %s", e.what());
-        machine_->setToError();
-    }
-
-    return false;
-}
-
 // getters and setters for properties:
 
 QString QuizBackend::state()
@@ -136,15 +102,4 @@ QString QuizBackend::localeName()
 double QuizBackend::voiceRate()
 {
     return settings_.loadVoiceRateSetting();
-}
-
-int QuizBackend::numQuestionsRemaining()
-{
-    std::size_t num = quiz_.numQuestionsRemaining();
-    if (num <= INT_MAX)
-        return static_cast<int>(num);
-
-    qCritical("number of questions remaining is larger than INT_MAX");
-    // (shouldn't be possible)
-    return INT_MAX;
 }
