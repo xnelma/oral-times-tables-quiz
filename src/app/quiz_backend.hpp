@@ -2,7 +2,6 @@
 #define OTTQ_20250829_1810_INCLUDE
 
 #include "quiz_state_machine.hpp"
-#include "tts/self_updating_translator.hpp"
 #include "tts/tts_settings.hpp"
 #include <QObject>
 #include <qqml.h>
@@ -15,10 +14,6 @@ class QuizBackend : public QObject
 {
     Q_OBJECT
     // clang-format off
-    Q_PROPERTY(QString localeName
-               READ localeName
-               NOTIFY localeNameChanged
-               FINAL)
     Q_PROPERTY(double voiceRate
                READ voiceRate
                NOTIFY voiceRateChanged
@@ -34,7 +29,6 @@ public:
     explicit QuizBackend(QObject *parent = nullptr);
 
     QString state();
-    QString localeName();
     double voiceRate();
 
     Q_INVOKABLE void startStateMachine();
@@ -46,7 +40,6 @@ public:
     Q_INVOKABLE void quizCompleted();
 
 signals:
-    void localeNameChanged();
     void questionChanged();
     void stateChanged();
     void setup();
@@ -58,10 +51,6 @@ private:
 
     std::unique_ptr<QuizStateMachine> machine_;
 
-    // The class outlives QuizView being on top of the stack, so the locale
-    // can be updated in the settings and would need to be applied when
-    // returning to the view. This would be handled inside the translator.
-    Tts::SelfUpdatingTranslator<Tts::Translator> translator_;
     Tts::Settings settings_;
     std::string questionBase_;
 };

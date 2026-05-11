@@ -36,6 +36,8 @@ qt_add_qml_module(OTTQ
         quiz.cpp
         question.hpp
         question.cpp
+        self_updating_translator.hpp
+        self_updating_translator.cpp
 )
 
 qt_add_translations(OTTQ

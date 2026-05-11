@@ -1,14 +1,7 @@
 #include "quiz_backend.hpp"
-#include "timestables/question.hpp"
 #include <QtLogging>
 
-QuizBackend::QuizBackend(QObject *parent)
-    : QObject(parent),
-#ifdef QT_TRANSLATOR
-      translator_(Tts::SelfUpdatingTranslator(this))
-#else
-      translator_(Tts::SelfUpdatingTranslator())
-#endif
+QuizBackend::QuizBackend(QObject *parent) : QObject(parent)
 {
     setupStateMachine();
 }
@@ -26,18 +19,7 @@ void QuizBackend::setupStateMachine()
             this,
             &QuizBackend::stateChanged);
 
-    auto setupTranslation = [this]() {
-        try {
-            questionBase_ = translator_.translate(TimesTables::question);
-            emit localeNameChanged();
-        } catch (const std::invalid_argument &e) {
-            qCritical("Translation setup failed: %s", e.what());
-            throw std::domain_error(e.what());
-        } catch (const std::runtime_error &e) {
-            qCritical("Translation setup failed: %s", e.what());
-            throw std::domain_error(e.what());
-        }
-    };
+    auto setupTranslation = [this]() {};
     machine_->setSetupFunc([this, setupTranslation]() { setupTranslation(); });
 
     auto setupTts = [this]() { emit setup(); };
@@ -92,11 +74,6 @@ QString QuizBackend::state()
     return machine_ ? machine_->state() : "setting-up";
     // 'setting-up' not 'unavailable' because an empty SM pointer indicates
     // part of the setup: creating the SM instance.
-}
-
-QString QuizBackend::localeName()
-{
-    return QString::fromStdString(translator_.locale().name());
 }
 
 double QuizBackend::voiceRate()

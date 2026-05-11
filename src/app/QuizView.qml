@@ -31,7 +31,8 @@ FocusScope {
 
     function sayQuestion() {
         var q = quiz.question();
-        var qStr = qRoot.questionBase.arg(q.number).arg(q.factor);
+        var qStrBase = translator.translate(qRoot.questionBase);
+        var qStr = qStrBase.arg(q.number).arg(q.factor);
         // Stop current question and start next right away instead of
         // enqueueing. This way the quiz is more snappy.
         if (tts.state === TextToSpeech.Speaking) {
@@ -169,6 +170,18 @@ FocusScope {
         }
     }
 
+    // The state of QuizView is kept even if not on top of the stack, so the
+    // locale can be updated in the settings and would need to be applied when
+    // returning to the view. This would be handled inside the translator.
+    SelfUpdatingTranslator {
+        id: translator
+
+        onError: msg => {
+                     console.log(msg);
+                     quizBackend.error();
+                 }
+    }
+
     QuizBackend {
         id: quizBackend
 
@@ -179,7 +192,6 @@ FocusScope {
                 quizBackend.error();
         }
         onSetup: {
-            tts.setLocale(Qt.locale(quizBackend.localeName));
             tts.setRate(quizBackend.voiceRate);
             if (tts.state === TextToSpeech.Error) {
                 // could not set translation
@@ -283,11 +295,13 @@ FocusScope {
         anchors.right: parent.right
         anchors.rightMargin: 2
         opacity: 0.5
-        text: quizBackend.localeName
+        text: translator.localeName
     }
 
     TextToSpeech {
         id: tts
+
+        locale: Qt.locale(translator.localeName)
 
         onStateChanged: {
             if (state === TextToSpeech.Ready)
