@@ -192,7 +192,6 @@ FocusScope {
                 quizBackend.error();
         }
         onSetup: {
-            tts.setRate(quizBackend.voiceRate);
             if (tts.state === TextToSpeech.Error) {
                 // could not set translation
                 qRoot.showLocaleError();
@@ -302,6 +301,7 @@ FocusScope {
         id: tts
 
         locale: Qt.locale(translator.localeName)
+        rate: QuizSettings.voiceRate
 
         onStateChanged: {
             if (state === TextToSpeech.Ready)

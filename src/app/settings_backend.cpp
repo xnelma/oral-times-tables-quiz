@@ -60,11 +60,6 @@ auto SettingsBackend::autoLanguage() -> LanguageName
     return languageName;
 }
 
-double SettingsBackend::voiceRate()
-{
-    return settings_.loadVoiceRateSetting();
-}
-
 void SettingsBackend::setLanguageIndex(const int index)
 {
     if (languageIndex() == index)
@@ -86,13 +81,4 @@ void SettingsBackend::setUseAutoTtsLanguage(const bool useAutoTtsLanguage)
 
     settings_.saveAutoLocaleSetting(useAutoTtsLanguage);
     emit useAutoTtsLanguageChanged();
-}
-
-void SettingsBackend::setVoiceRate(const double rate)
-{
-    if (SettingsBackend::voiceRate() == rate)
-        return;
-
-    settings_.saveVoiceRateSetting(rate);
-    emit voiceRateChanged();
 }

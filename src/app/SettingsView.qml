@@ -8,7 +8,6 @@ Item {
 
     SettingsBackend {
         id: settingsBackend
-
     }
 
     Column {
@@ -75,9 +74,9 @@ Item {
                 return Number(rate).toLocaleString(Qt.locale("C"), 'f', 1);
             }
             to: 10
-            value: settingsBackend.voiceRate * 10
+            value: QuizSettings.voiceRate * 10
 
-            onValueChanged: settingsBackend.voiceRate = value / 10
+            onValueChanged: QuizSettings.voiceRate = value / 10
         }
     }
 }

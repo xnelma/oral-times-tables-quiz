@@ -29,11 +29,6 @@ class SettingsBackend : public QObject
                READ autoLanguage
                NOTIFY autoLanguageChanged
                FINAL)
-    Q_PROPERTY(double voiceRate
-               READ voiceRate
-               WRITE setVoiceRate
-               NOTIFY voiceRateChanged
-               FINAL)
     // clang-format on
     QML_ELEMENT
 
@@ -44,18 +39,15 @@ public:
     int languageIndex();
     bool useAutoTtsLanguage();
     LanguageName autoLanguage();
-    double voiceRate();
 
     void setLanguageIndex(const int index);
     void setUseAutoTtsLanguage(const bool useAutoTtsLanguage);
-    void setVoiceRate(const double rate);
 
 signals:
     void languagesChanged();
     void languageIndexChanged();
     void useAutoTtsLanguageChanged();
     void autoLanguageChanged();
-    void voiceRateChanged();
 
 private:
     Tts::Settings settings_;

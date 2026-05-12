@@ -12,6 +12,10 @@ target_include_directories(OTTQ PRIVATE
     "${PROJECT_SOURCE_DIR}/include"
 )
 
+set_source_files_properties(QuizSettings.qml PROPERTIES
+    QT_QML_SINGLETON_TYPE TRUE
+)
+
 qt_add_qml_module(OTTQ
     URI OttqApp
     VERSION 0.1
@@ -20,6 +24,7 @@ qt_add_qml_module(OTTQ
         QuizConfigView.qml
         QuizView.qml
         SettingsView.qml
+        QuizSettings.qml
     SOURCES
         quiz_backend.hpp
         quiz_backend.cpp

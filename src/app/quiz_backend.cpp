@@ -75,8 +75,3 @@ QString QuizBackend::state()
     // 'setting-up' not 'unavailable' because an empty SM pointer indicates
     // part of the setup: creating the SM instance.
 }
-
-double QuizBackend::voiceRate()
-{
-    return settings_.loadVoiceRateSetting();
-}

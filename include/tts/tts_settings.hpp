@@ -15,11 +15,9 @@ public:
 
     LocaleDescriptor loadLocaleSetting() override;
     bool loadAutoLocaleSetting() override;
-    double loadVoiceRateSetting() override;
 
     void saveLocaleSetting(const LocaleDescriptor &ld) override;
     void saveAutoLocaleSetting(const bool useAutoLocale) override;
-    void saveVoiceRateSetting(const double rate) override;
 
 private:
     QSettings settings_;
@@ -37,7 +35,6 @@ static const QString localePrefix = prefix + "Locale";
 static const QString language = localePrefix + "/language";
 static const QString territory = localePrefix + "/territory";
 static const QString autoLocale = localePrefix + "/useAutoLocale";
-static const QString voiceRate = prefix + "/voiceRate";
 
 } // namespace SettingsKeys
 
@@ -46,7 +43,6 @@ namespace SettingsDefaults {
 static const Language::Code language = Language::any;
 static const Territory::Code territory = Territory::ANY;
 static const bool autoLocale = true;
-static const double voiceRate = 0;
 
 } // namespace SettingsDefaults
 
