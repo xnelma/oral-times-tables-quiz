@@ -4,30 +4,8 @@
 #include <QString>
 #include <QtLogging>
 #include <stdexcept>
-#include <algorithm>
 
 SettingsBackend::SettingsBackend(QObject *parent) : QObject(parent) { }
-
-QStringList SettingsBackend::languages()
-{
-    static QStringList languageNames;
-    if (languageNames.size() > 0)
-        return languageNames;
-
-    std::ranges::transform( // C++20
-        Tts::TranslationResources::getLocales(),
-        std::back_inserter(languageNames),
-        [](const Tts::Locale &l) -> QString {
-#ifdef QT_TRANSLATOR
-            QLocale ql = static_cast<QLocale>(l);
-#else
-            QLocale ql(QString::fromStdString(l.name()));
-#endif
-            return ql.nativeLanguageName();
-        });
-
-    return languageNames;
-}
 
 int SettingsBackend::languageIndex()
 {

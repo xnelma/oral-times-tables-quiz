@@ -11,10 +11,6 @@ class SettingsBackend : public QObject
 {
     Q_OBJECT
     // clang-format off
-    Q_PROPERTY(QStringList languages
-               READ languages
-               NOTIFY languagesChanged
-               FINAL)
     Q_PROPERTY(int languageIndex
                READ languageIndex
                WRITE setLanguageIndex
@@ -35,7 +31,6 @@ class SettingsBackend : public QObject
 public:
     explicit SettingsBackend(QObject *parent = nullptr);
 
-    QStringList languages();
     int languageIndex();
     bool useAutoTtsLanguage();
     LanguageName autoLanguage();
@@ -44,7 +39,6 @@ public:
     void setUseAutoTtsLanguage(const bool useAutoTtsLanguage);
 
 signals:
-    void languagesChanged();
     void languageIndexChanged();
     void useAutoTtsLanguageChanged();
     void autoLanguageChanged();

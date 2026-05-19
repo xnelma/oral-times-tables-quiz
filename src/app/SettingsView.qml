@@ -55,7 +55,9 @@ Item {
                 Layout.row: 1
                 currentIndex: settingsBackend.languageIndex
                 enabled: !switchTtsLocale.checked
-                model: settingsBackend.languages
+
+                model: LanguageListModel {
+                }
 
                 onActivated: settingsBackend.languageIndex = currentIndex
             }
